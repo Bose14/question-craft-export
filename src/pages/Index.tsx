@@ -1,54 +1,78 @@
 
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Clock, Download, Users } from "lucide-react";
+import { FileText, Upload, Download, Zap, Users, Shield } from "lucide-react";
 
 const Index = () => {
-  const [recentPapers] = useState([
+  const recentPapers = [
     {
       id: 1,
-      title: "Mathematics - Calculus",
-      subject: "Mathematics",
-      date: "2025-06-20",
-      questions: 5,
-      marks: 10
+      subject: "MATRICES AND CALCULUS",
+      university: "Anna University",
+      date: "2025-01-15",
+      marks: 100,
+      sections: 3
     },
     {
       id: 2,
-      title: "Physics - Mechanics",
-      subject: "Physics", 
-      date: "2025-06-18",
-      questions: 8,
-      marks: 15
+      subject: "DATA STRUCTURES",
+      university: "VTU",
+      date: "2025-01-10",
+      marks: 80,
+      sections: 2
     },
     {
       id: 3,
-      title: "Chemistry - Organic",
-      subject: "Chemistry",
-      date: "2025-06-15",
-      questions: 6,
-      marks: 12
+      subject: "DIGITAL ELECTRONICS",
+      university: "Mumbai University",
+      date: "2025-01-08",
+      marks: 75,
+      sections: 4
     }
-  ]);
+  ];
+
+  const features = [
+    {
+      icon: <Upload className="w-6 h-6" />,
+      title: "Upload Syllabus",
+      description: "Simply upload your syllabus image and let AI understand the content"
+    },
+    {
+      icon: <Zap className="w-6 h-6" />,
+      title: "AI Generation",
+      description: "Our advanced AI generates relevant questions based on your requirements"
+    },
+    {
+      icon: <Download className="w-6 h-6" />,
+      title: "Export Options",
+      description: "Download your question papers in PDF or Word format instantly"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Navigation */}
-      <nav className="bg-white border-b border-slate-200">
+      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="text-3xl font-bold">📝</div>
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="text-3xl">📝</div>
               <span className="text-xl font-semibold text-slate-900">QuestionPaper AI</span>
+            </Link>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <Link to="/" className="text-slate-600 hover:text-slate-900">Home</Link>
+              <Link to="/generator" className="text-slate-600 hover:text-slate-900">Generator</Link>
+              <Link to="/pricing" className="text-slate-600 hover:text-slate-900">Pricing</Link>
             </div>
+            
             <div className="flex items-center space-x-4">
               <Link to="/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="outline">Sign In</Button>
               </Link>
               <Link to="/signup">
-                <Button>Sign Up</Button>
+                <Button className="bg-slate-900 hover:bg-slate-800">Get Started</Button>
               </Link>
             </div>
           </div>
@@ -56,103 +80,105 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <div className="mb-8">
-            <div className="text-6xl mb-6">📝</div>
-            <h1 className="text-5xl font-bold text-slate-900 mb-6">
-              AI Question Paper Generator
-            </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-              Upload your syllabus and generate perfectly structured exam question papers in seconds. 
-              Effortless, intelligent, and designed for educators.
-            </p>
+      <section className="pt-20 pb-16 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Generate Question Papers with{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              AI Magic
+            </span>
+          </h1>
+          <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+            Transform your teaching workflow with our AI-powered question paper generator. 
+            Upload your syllabus, configure your requirements, and get professional question papers in minutes.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link to="/generator">
-              <Button size="lg" className="text-lg px-8 py-3 bg-slate-900 hover:bg-slate-800">
-                Start Now
+              <Button size="lg" className="px-8 py-3 bg-slate-900 hover:bg-slate-800">
+                <FileText className="w-5 h-5 mr-2" />
+                Start Generating
               </Button>
             </Link>
+            <Link to="/pricing">
+              <Button size="lg" variant="outline" className="px-8 py-3">
+                View Pricing
+              </Button>
+            </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-slate-900">50,000+</div>
+              <div className="text-slate-600">Question Papers Generated</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-slate-900">5,000+</div>
+              <div className="text-slate-600">Happy Educators</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-slate-900">99.9%</div>
+              <div className="text-slate-600">Uptime</div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">
-            Why Choose Our Platform?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center">
-              <CardHeader>
-                <FileText className="w-12 h-12 mx-auto text-slate-600 mb-4" />
-                <CardTitle>Smart Generation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  AI-powered question generation based on your syllabus content and difficulty preferences.
-                </CardDescription>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <Download className="w-12 h-12 mx-auto text-slate-600 mb-4" />
-                <CardTitle>Multiple Formats</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Export your question papers in PDF or Word format for easy sharing and printing.
-                </CardDescription>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <Users className="w-12 h-12 mx-auto text-slate-600 mb-4" />
-                <CardTitle>Educator Focused</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Designed specifically for teachers and educational institutions with intuitive workflows.
-                </CardDescription>
-              </CardContent>
-            </Card>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">How It Works</h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+              Our simple 3-step process makes question paper generation effortless
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    {feature.icon}
+                  </div>
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Recent Papers Section */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-slate-900">Recently Created Papers</h2>
+            <h2 className="text-3xl font-bold text-slate-900">Recently Created</h2>
             <Link to="/generator">
-              <Button variant="outline">Create New Paper</Button>
+              <Button variant="outline">Create New</Button>
             </Link>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {recentPapers.map((paper) => (
-              <Card key={paper.id} className="hover:shadow-md transition-shadow cursor-pointer">
+              <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg">{paper.title}</CardTitle>
-                      <CardDescription className="text-sm text-slate-500">
-                        {paper.subject}
-                      </CardDescription>
-                    </div>
-                    <FileText className="w-5 h-5 text-slate-400" />
-                  </div>
+                  <CardTitle className="text-lg">{paper.subject}</CardTitle>
+                  <CardDescription>{paper.university}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm text-slate-600">
-                    <div className="flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{paper.date}</span>
-                    </div>
-                    <div className="flex space-x-4">
-                      <span>{paper.questions} questions</span>
-                      <span>{paper.marks} marks</span>
-                    </div>
+                  <div className="flex justify-between text-sm text-slate-600 mb-4">
+                    <span>Marks: {paper.marks}</span>
+                    <span>Sections: {paper.sections}</span>
+                  </div>
+                  <div className="text-sm text-slate-500">
+                    Created: {new Date(paper.date).toLocaleDateString()}
                   </div>
                 </CardContent>
               </Card>
@@ -161,10 +187,40 @@ const Index = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-20 bg-slate-900">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Ready to Transform Your Question Paper Creation?
+          </h2>
+          <p className="text-xl text-slate-300 mb-8">
+            Join thousands of educators who have already made the switch to AI-powered question generation.
+          </p>
+          <Link to="/generator">
+            <Button size="lg" className="px-8 py-3 bg-white text-slate-900 hover:bg-slate-100">
+              Get Started for Free
+            </Button>
+          </Link>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-slate-400">Generated using AI by Lovable</p>
+      <footer className="bg-white border-t border-slate-200 py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <div className="text-2xl">📝</div>
+              <span className="text-lg font-semibold text-slate-900">QuestionPaper AI</span>
+            </div>
+            <div className="flex items-center space-x-6 text-slate-600">
+              <Link to="/pricing" className="hover:text-slate-900">Pricing</Link>
+              <Link to="/login" className="hover:text-slate-900">Sign In</Link>
+              <Link to="/signup" className="hover:text-slate-900">Sign Up</Link>
+            </div>
+          </div>
+          <div className="border-t border-slate-200 mt-8 pt-8 text-center text-slate-500">
+            <p>&copy; 2025 QuestionPaper AI. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

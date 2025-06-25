@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Plus, Trash2, Upload, FileText } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Upload, FileText, Image } from "lucide-react";
 import { toast } from "sonner";
 
 interface Section {
@@ -21,6 +20,11 @@ interface Section {
 const Generator = () => {
   const navigate = useNavigate();
   const [subjectName, setSubjectName] = useState("");
+  const [university, setUniversity] = useState("");
+  const [examDate, setExamDate] = useState("");
+  const [duration, setDuration] = useState("");
+  const [headerImage, setHeaderImage] = useState<string | null>(null);
+  const [syllabusImage, setSyllabusImage] = useState<string | null>(null);
   const [sections, setSections] = useState<Section[]>([
     {
       id: "1",
@@ -31,6 +35,30 @@ const Generator = () => {
       units: ["UNIT I"]
     }
   ]);
+
+  const handleHeaderImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setHeaderImage(e.target?.result as string);
+        toast.success("Header image uploaded successfully!");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSyllabusImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSyllabusImage(e.target?.result as string);
+        toast.success("Syllabus image uploaded successfully!");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const addSection = () => {
     const newSection: Section = {
@@ -78,7 +106,19 @@ const Generator = () => {
       return;
     }
     
-    console.log("Generating question paper with:", { subjectName, sections });
+    // Store configuration in sessionStorage to pass to result page
+    const config = {
+      subjectName,
+      university,
+      examDate,
+      duration,
+      headerImage,
+      sections,
+      totalMarks
+    };
+    sessionStorage.setItem('questionPaperConfig', JSON.stringify(config));
+    
+    console.log("Generating question paper with:", config);
     toast.success("Question paper generated successfully!");
     navigate("/result");
   };
@@ -100,19 +140,72 @@ const Generator = () => {
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Upload Header Image */}
+        <Card className="mb-8">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center space-x-2">
+              <Image className="w-5 h-5" />
+              <span>Upload Custom Header Image (Optional)</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleHeaderImageUpload}
+                className="hidden"
+                id="header-upload"
+              />
+              <label htmlFor="header-upload" className="cursor-pointer">
+                {headerImage ? (
+                  <div className="space-y-4">
+                    <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded" />
+                    <p className="text-green-600">Header image uploaded!</p>
+                  </div>
+                ) : (
+                  <>
+                    <Image className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                    <p className="text-slate-600">Click to upload your university/institution header</p>
+                    <p className="text-sm text-slate-500 mt-2">PNG, JPG up to 10MB</p>
+                  </>
+                )}
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Upload Syllabus */}
         <Card className="mb-8">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center space-x-2">
               <Upload className="w-5 h-5" />
-              <span>Upload Syllabus Image</span>
+              <span>Upload Syllabus Image (Optional)</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors cursor-pointer">
-              <Upload className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-              <p className="text-slate-600">Click to upload or drag and drop your syllabus image</p>
-              <p className="text-sm text-slate-500 mt-2">PNG, JPG up to 10MB</p>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleSyllabusImageUpload}
+                className="hidden"
+                id="syllabus-upload"
+              />
+              <label htmlFor="syllabus-upload" className="cursor-pointer">
+                {syllabusImage ? (
+                  <div className="space-y-4">
+                    <img src={syllabusImage} alt="Syllabus preview" className="max-h-32 mx-auto rounded" />
+                    <p className="text-green-600">Syllabus uploaded!</p>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                    <p className="text-slate-600">Click to upload or drag and drop your syllabus image</p>
+                    <p className="text-sm text-slate-500 mt-2">PNG, JPG up to 10MB</p>
+                  </>
+                )}
+              </label>
             </div>
           </CardContent>
         </Card>
@@ -126,15 +219,44 @@ const Generator = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Subject Name */}
-            <div className="space-y-2">
-              <Label htmlFor="subject">Subject Name</Label>
-              <Input
-                id="subject"
-                placeholder="Enter subject name"
-                value={subjectName}
-                onChange={(e) => setSubjectName(e.target.value)}
-              />
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="university">University/Institution</Label>
+                <Input
+                  id="university"
+                  placeholder="e.g., Anna University"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="subject">Subject Name</Label>
+                <Input
+                  id="subject"
+                  placeholder="e.g., MATRICES AND CALCULUS"
+                  value={subjectName}
+                  onChange={(e) => setSubjectName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date">Exam Date</Label>
+                <Input
+                  id="date"
+                  type="date"
+                  value={examDate}
+                  onChange={(e) => setExamDate(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="duration">Duration</Label>
+                <Input
+                  id="duration"
+                  placeholder="e.g., 3 Hours"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                />
+              </div>
             </div>
 
             {/* Sections Configuration */}
