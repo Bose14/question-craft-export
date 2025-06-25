@@ -1,8 +1,7 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Upload, Download, Zap, Users, Shield } from "lucide-react";
+import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen } from "lucide-react";
 
 const Index = () => {
   const recentPapers = [
@@ -51,28 +50,32 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Navigation */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="text-3xl">📝</div>
-              <span className="text-xl font-semibold text-slate-900">QuestionPaper AI</span>
-            </Link>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-slate-600 hover:text-slate-900">Home</Link>
-              <Link to="/generator" className="text-slate-600 hover:text-slate-900">Generator</Link>
-              <Link to="/pricing" className="text-slate-600 hover:text-slate-900">Pricing</Link>
+            <div className="flex items-center space-x-2">
+              <FileText className="w-8 h-8 text-slate-900" />
+              <span className="text-xl font-bold text-slate-900">QuestionCraft</span>
             </div>
-            
+            <div className="hidden md:flex items-center space-x-8">
+              <Link to="/pricing" className="text-slate-700 hover:text-slate-900 transition-colors">
+                Pricing
+              </Link>
+              <Link to="/generator" className="text-slate-700 hover:text-slate-900 transition-colors">
+                Generator
+              </Link>
+              <Link to="/mcq-generator" className="text-slate-700 hover:text-slate-900 transition-colors">
+                MCQ Generator
+              </Link>
+            </div>
             <div className="flex items-center space-x-4">
               <Link to="/login">
-                <Button variant="outline">Sign In</Button>
+                <Button variant="outline">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-slate-900 hover:bg-slate-800">Get Started</Button>
+                <Button className="bg-slate-900 hover:bg-slate-800">Sign Up</Button>
               </Link>
             </div>
           </div>
@@ -80,77 +83,93 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-4">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
             Generate Question Papers with{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              AI Magic
+              AI Precision
             </span>
           </h1>
           <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
-            Transform your teaching workflow with our AI-powered question paper generator. 
-            Upload your syllabus, configure your requirements, and get professional question papers in minutes.
+            Create professional question papers instantly with customizable sections, difficulty levels, 
+            and automated answer keys. Perfect for educators and institutions.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/generator">
-              <Button size="lg" className="px-8 py-3 bg-slate-900 hover:bg-slate-800">
+              <Button size="lg" className="bg-slate-900 hover:bg-slate-800 px-8 py-3">
                 <FileText className="w-5 h-5 mr-2" />
                 Start Generating
               </Button>
             </Link>
-            <Link to="/pricing">
+            <Link to="/mcq-generator">
               <Button size="lg" variant="outline" className="px-8 py-3">
-                View Pricing
+                <Brain className="w-5 h-5 mr-2" />
+                MCQ Generator
               </Button>
             </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900">50,000+</div>
-              <div className="text-slate-600">Question Papers Generated</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900">5,000+</div>
-              <div className="text-slate-600">Happy Educators</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900">99.9%</div>
-              <div className="text-slate-600">Uptime</div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* Features Grid */}
+      <section className="py-20 bg-white/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">How It Works</h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Our simple 3-step process makes question paper generation effortless
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              Everything You Need for Question Paper Creation
+            </h2>
+            <p className="text-xl text-slate-600">
+              Powerful features designed for modern education
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <FeatureCard
+              icon={<Zap />}
+              title="AI-Powered Generation"
+              description="Leverage advanced AI to create relevant, well-structured questions tailored to your syllabus"
+            />
+            <FeatureCard
+              icon={<Settings />}
+              title="Customizable Sections"
+              description="Configure multiple sections with different difficulty levels, marks, and question counts"
+            />
+            <FeatureCard
+              icon={<Download />}
+              title="Multiple Export Formats"
+              description="Download your question papers as PDF or Word documents with professional formatting"
+            />
+            <FeatureCard
+              icon={<Image />}
+              title="Custom Headers"
+              description="Upload your institution's logo and create branded question papers"
+            />
+            <FeatureCard
+              icon={<FileKey />}
+              title="Answer Key Generation"
+              description="Automatically generate comprehensive answer keys with explanations"
+            />
+            <FeatureCard
+              icon={<Brain />}
+              title="MCQ Generator"
+              description="Specialized tool for creating multiple choice question papers with options"
+            />
+            <FeatureCard
+              icon={<Share />}
+              title="Easy Sharing"
+              description="Share question papers via email, WhatsApp, or export to Google Drive"
+            />
+            <FeatureCard
+              icon={<Clock />}
+              title="Time Configuration"
+              description="Set exam duration and dates with automatic formatting"
+            />
+            <FeatureCard
+              icon={<BookOpen />}
+              title="Unit-wise Questions"
+              description="Organize questions by syllabus units for comprehensive coverage"
+            />
           </div>
         </div>
       </section>
