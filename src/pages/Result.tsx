@@ -226,7 +226,7 @@ const Result = () => {
                   <div className="flex-1 pr-4">
                     <p className="text-slate-800 leading-relaxed">
                       {index + 1}. {question.text}{" "}
-                      {config.type === 'mcq' && question.options && (
+                      {config.type === 'mcq' && 'options' in question && question.options && (
                         <div className="mt-2 ml-4">
                           {question.options.map((option, optIndex) => (
                             <div key={optIndex} className="mb-1">{option}</div>
