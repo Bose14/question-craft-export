@@ -7,6 +7,7 @@ import { ArrowLeft, Edit, Download, Upload, FileKey } from "lucide-react";
 import { toast } from "sonner";
 import AnswerKeyGenerator from "@/components/AnswerKeyGenerator";
 import ShareDialog from "@/components/ShareDialog";
+import EditableQuestionPaper from "@/components/EditableQuestionPaper";
 
 interface QuestionPaperConfig {
   subjectName: string;
@@ -86,7 +87,6 @@ const Result = () => {
   ];
 
   const generatePDF = () => {
-    // Create a printable version
     const printContent = document.getElementById('question-paper-content');
     if (printContent) {
       const printWindow = window.open('', '_blank');
@@ -118,22 +118,11 @@ const Result = () => {
   const generateWord = () => {
     if (!config) return;
     
-    // Create Word document content
     let wordContent = `
       <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
         <head>
           <meta charset="utf-8">
           <title>${config.subjectName}</title>
-          <!--[if gte mso 9]>
-          <xml>
-            <w:WordDocument>
-              <w:View>Print</w:View>
-              <w:Zoom>90</w:Zoom>
-              <w:DoNotPromptForConvert/>
-              <w:DoNotShowInsertAsIcon/>
-            </w:WordDocument>
-          </xml>
-          <![endif]-->
           <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             .header { text-align: center; margin-bottom: 30px; }
@@ -174,89 +163,20 @@ const Result = () => {
     navigate('/generator');
   };
 
+  const handleQuestionsSave = (updatedQuestions: any[]) => {
+    // Save updated questions to session storage or state
+    if (config) {
+      const updatedConfig = { ...config };
+      sessionStorage.setItem('questionPaperConfig', JSON.stringify(updatedConfig));
+      toast.success("Question paper saved successfully!");
+    }
+  };
+
   if (!config) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "Date: ___________";
-    const date = new Date(dateString);
-    return `Date: ${date.toLocaleDateString()}`;
-  };
-
-  const questionPaperContent = () => {
-    const questionsToShow = config.type === 'mcq' ? sampleMCQs : sampleQuestions;
-    
-    return (
-      <div id="question-paper-content">
-        {config.headerImage && (
-          <div className="text-center mb-6">
-            <img 
-              src={config.headerImage} 
-              alt="Institution Header" 
-              className="max-h-24 mx-auto"
-            />
-          </div>
-        )}
-
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            {config.university || "University Name"}
-          </h2>
-          <h3 className="text-xl font-semibold text-slate-700 mb-6">
-            {config.subjectName}
-          </h3>
-          
-          <div className="flex justify-between items-center text-sm text-slate-600 border-b border-slate-300 pb-4">
-            <span>{formatDate(config.examDate)}</span>
-            <span>Time: {config.duration || "Duration: ___________"}</span>
-            <span>Total Marks: {config.totalMarks}</span>
-          </div>
-        </div>
-
-        {config.sections.map((section, sectionIndex) => (
-          <div key={section.id} className="mb-8">
-            <h4 className="text-lg font-semibold text-slate-900 mb-6 underline">
-              {section.name}
-            </h4>
-            
-            <div className="space-y-6">
-              {questionsToShow.slice(0, section.questions).map((question, index) => (
-                <div key={index} className="flex justify-between items-start">
-                  <div className="flex-1 pr-4">
-                    <p className="text-slate-800 leading-relaxed">
-                      {index + 1}. {question.text}{" "}
-                      {config.type === 'mcq' && 'options' in question && question.options && (
-                        <div className="mt-2 ml-4">
-                          {question.options.map((option, optIndex) => (
-                            <div key={optIndex} className="mb-1">{option}</div>
-                          ))}
-                        </div>
-                      )}
-                      <span className="text-sm text-slate-500">
-                        (From {question.unit})
-                      </span>
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-medium text-slate-900">
-                      [{section.marksPerQuestion} Marks]
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-
-        <div className="mt-12 pt-4 border-t border-slate-200 text-center">
-          <p className="text-sm text-slate-500">
-            Generated using AI Question Paper Generator • {config.university || "University"} Format
-          </p>
-        </div>
-      </div>
-    );
-  };
+  const questionsToShow = config.type === 'mcq' ? sampleMCQs : sampleQuestions;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -265,42 +185,50 @@ const Result = () => {
           <div className="flex items-center justify-between h-16">
             <Link to="/generator" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Generator</span>
+              <span className="hidden sm:inline">Back to Generator</span>
+              <span className="sm:hidden">Back</span>
             </Link>
             <div className="flex items-center space-x-2">
               <Upload className="w-5 h-5" />
-              <span>Generated Question Paper</span>
+              <span className="hidden sm:inline">Generated Question Paper</span>
+              <span className="sm:hidden">Paper</span>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Generated Question Paper</h1>
-          <div className="flex items-center space-x-3">
+      <div className="max-w-6xl mx-auto px-4 py-4 sm:py-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Generated Question Paper</h1>
+          <div className="flex flex-wrap items-center gap-2">
             <Button 
               onClick={() => setShowAnswerKey(!showAnswerKey)} 
               variant="outline"
+              size="sm"
+              className="text-xs sm:text-sm"
             >
-              <FileKey className="w-4 h-4 mr-2" />
-              {showAnswerKey ? 'Hide' : 'Generate'} Answer Key
+              <FileKey className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">{showAnswerKey ? 'Hide' : 'Generate'} Answer Key</span>
+              <span className="sm:hidden">Answer Key</span>
             </Button>
             <ShareDialog 
               title={config.subjectName} 
               content="Question paper generated successfully" 
             />
-            <Button onClick={handleEditConfiguration} variant="outline">
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Configuration
+            <Button onClick={handleEditConfiguration} variant="outline" size="sm" className="text-xs sm:text-sm">
+              <Edit className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Edit Config</span>
+              <span className="sm:hidden">Config</span>
             </Button>
-            <Button onClick={generateWord} variant="outline">
-              <Download className="w-4 h-4 mr-2" />
-              Download Word
+            <Button onClick={generateWord} variant="outline" size="sm" className="text-xs sm:text-sm">
+              <Download className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Word</span>
+              <span className="sm:hidden">DOC</span>
             </Button>
-            <Button onClick={generatePDF} className="bg-slate-900 hover:bg-slate-800">
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
+            <Button onClick={generatePDF} className="bg-slate-900 hover:bg-slate-800" size="sm">
+              <Download className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">PDF</span>
+              <span className="sm:hidden">PDF</span>
             </Button>
           </div>
         </div>
@@ -314,12 +242,12 @@ const Result = () => {
 
         {answerKey.length > 0 && (
           <Card className="mb-8">
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <h3 className="text-xl font-bold mb-6">Answer Key</h3>
               <div className="space-y-4">
                 {answerKey.map((answer, index) => (
                   <div key={answer.id} className="border-b border-slate-200 pb-4">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
                       <span className="font-medium">{answer.question}</span>
                       <span className="text-sm text-slate-500">[{answer.marks} Marks]</span>
                     </div>
@@ -339,8 +267,12 @@ const Result = () => {
         )}
 
         <Card className="bg-white shadow-lg">
-          <CardContent className="p-8">
-            {questionPaperContent()}
+          <CardContent className="p-4 sm:p-8">
+            <EditableQuestionPaper
+              config={config}
+              questions={questionsToShow}
+              onSave={handleQuestionsSave}
+            />
           </CardContent>
         </Card>
       </div>
