@@ -47,27 +47,36 @@ const Result = () => {
     {
       text: "State the limit definition of the derivative of a function f(x).",
       marks: 2,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Easy' as const
     },
     {
       text: "What condition must be met for a function to be continuous at a point 'c'?",
       marks: 2,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Medium' as const
     },
     {
       text: "Provide the formula for the derivative of the product of two functions, f(x) and g(x).",
       marks: 2,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Medium' as const
     },
     {
       text: "Explain what is meant by implicit differentiation.",
       marks: 2,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Hard' as const
     },
     {
       text: "How can logarithmic differentiation simplify the process of finding the derivative of a function involving products, quotients, and powers?",
       marks: 2,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Hard' as const,
+      subQuestions: [
+        { id: '1', text: 'Define logarithmic differentiation', marks: 1 },
+        { id: '2', text: 'Provide an example with step-by-step solution', marks: 1 }
+      ]
     }
   ];
 
@@ -76,17 +85,39 @@ const Result = () => {
       text: "What is the derivative of x²?",
       options: ["A) x", "B) 2x", "C) x²", "D) 2x²"],
       marks: 1,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Easy' as const
     },
     {
       text: "Which of the following is a continuous function?",
       options: ["A) f(x) = 1/x", "B) f(x) = |x|", "C) f(x) = [x]", "D) f(x) = tan(x)"],
       marks: 1,
-      unit: "UNIT I"
+      unit: "UNIT I",
+      difficulty: 'Medium' as const
     }
   ];
 
   const generatePDF = () => {
+    // Add print styles
+    const printCSS = `
+      <style>
+        @media print {
+          .no-print { display: none !important; }
+          body { margin: 0; font-family: Arial, sans-serif; }
+          .question-paper-content { padding: 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .question { margin-bottom: 20px; page-break-inside: avoid; }
+          .section-title { font-weight: bold; text-decoration: underline; margin: 25px 0 15px 0; }
+          .sub-question { margin-left: 30px; margin-top: 10px; }
+          .difficulty-badge { background: #f3f4f6; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+          h2, h3 { margin-bottom: 10px; }
+          .question-text { line-height: 1.6; }
+          @page { margin: 2cm; }
+        }
+        .no-print { display: none; }
+      </style>
+    `;
+
     const printContent = document.getElementById('question-paper-content');
     if (printContent) {
       const printWindow = window.open('', '_blank');
@@ -95,13 +126,7 @@ const Result = () => {
           <html>
             <head>
               <title>${config?.subjectName || 'Question Paper'}</title>
-              <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                .header { text-align: center; margin-bottom: 30px; }
-                .question { margin-bottom: 15px; }
-                .section-title { font-weight: bold; text-decoration: underline; margin: 20px 0 10px 0; }
-                @media print { body { margin: 0; } }
-              </style>
+              ${printCSS}
             </head>
             <body>
               ${printContent.innerHTML}
@@ -109,8 +134,13 @@ const Result = () => {
           </html>
         `);
         printWindow.document.close();
-        printWindow.print();
-        toast.success("PDF generation started - use your browser's print dialog");
+        
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.close();
+        }, 250);
+        
+        toast.success("PDF export initiated - check your downloads folder");
       }
     }
   };
@@ -227,7 +257,7 @@ const Result = () => {
             </Button>
             <Button onClick={generatePDF} className="bg-slate-900 hover:bg-slate-800" size="sm">
               <Download className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">PDF</span>
+              <span className="hidden sm:inline">Export PDF</span>
               <span className="sm:hidden">PDF</span>
             </Button>
           </div>
@@ -276,6 +306,14 @@ const Result = () => {
           </CardContent>
         </Card>
       </div>
+
+      <style jsx global>{`
+        @media print {
+          .no-print { display: none !important; }
+          body { margin: 0; }
+          .question-paper-content { padding: 20px; }
+        }
+      `}</style>
     </div>
   );
 };
