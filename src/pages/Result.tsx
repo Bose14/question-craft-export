@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -43,60 +44,6 @@ const Result = () => {
     }
   }, [navigate]);
 
-  const sampleQuestions = [
-    {
-      text: "State the limit definition of the derivative of a function f(x).",
-      marks: 2,
-      unit: "UNIT I",
-      difficulty: 'Easy' as const
-    },
-    {
-      text: "What condition must be met for a function to be continuous at a point 'c'?",
-      marks: 2,
-      unit: "UNIT I",
-      difficulty: 'Medium' as const
-    },
-    {
-      text: "Provide the formula for the derivative of the product of two functions, f(x) and g(x).",
-      marks: 2,
-      unit: "UNIT I",
-      difficulty: 'Medium' as const
-    },
-    {
-      text: "Explain what is meant by implicit differentiation.",
-      marks: 2,
-      unit: "UNIT I",
-      difficulty: 'Hard' as const
-    },
-    {
-      text: "How can logarithmic differentiation simplify the process of finding the derivative of a function involving products, quotients, and powers?",
-      marks: 2,
-      unit: "UNIT I",
-      difficulty: 'Hard' as const,
-      subQuestions: [
-        { id: '1', text: 'Define logarithmic differentiation', marks: 1 },
-        { id: '2', text: 'Provide an example with step-by-step solution', marks: 1 }
-      ]
-    }
-  ];
-
-  const sampleMCQs = [
-    {
-      text: "What is the derivative of x²?",
-      options: ["A) x", "B) 2x", "C) x²", "D) 2x²"],
-      marks: 1,
-      unit: "UNIT I",
-      difficulty: 'Easy' as const
-    },
-    {
-      text: "Which of the following is a continuous function?",
-      options: ["A) f(x) = 1/x", "B) f(x) = |x|", "C) f(x) = [x]", "D) f(x) = tan(x)"],
-      marks: 1,
-      unit: "UNIT I",
-      difficulty: 'Medium' as const
-    }
-  ];
-
   const handlePDFGenerate = () => {
     const filename = config?.subjectName || 'Question Paper';
     generatePDF('question-paper-content', filename);
@@ -120,7 +67,6 @@ const Result = () => {
   };
 
   const handleQuestionsSave = (updatedQuestions: any[]) => {
-    // Save updated questions to session storage or state
     if (config) {
       const updatedConfig = { ...config };
       sessionStorage.setItem('questionPaperConfig', JSON.stringify(updatedConfig));
@@ -131,8 +77,6 @@ const Result = () => {
   if (!config) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
-
-  const questionsToShow = config.type === 'mcq' ? sampleMCQs : sampleQuestions;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -226,7 +170,6 @@ const Result = () => {
           <CardContent className="p-4 sm:p-8">
             <EditableQuestionPaper
               config={config}
-              questions={questionsToShow}
               onSave={handleQuestionsSave}
             />
           </CardContent>
