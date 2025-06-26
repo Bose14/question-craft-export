@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,15 +7,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Plus, Trash2, Upload, FileText, Image, Settings } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Upload, FileText, Image, Settings, Wand2, Brain } from "lucide-react";
 import { toast } from "sonner";
 
 interface QuestionConfig {
   id: string;
-  text: string;
+  text?: string; // Optional for AI-generated questions
   marks: number;
   difficulty: string;
   unit: string;
+  subQuestionsCount: number;
+  isAIGenerated: boolean;
   subQuestions?: SubQuestion[];
 }
 
@@ -40,8 +41,6 @@ interface Section {
   isAutoGenerate: boolean;
   autoConfig: AutoGenConfig;
   questions: QuestionConfig[];
-  difficulty: string;
-  units: string[];
 }
 
 const Generator = () => {
@@ -63,9 +62,7 @@ const Generator = () => {
         units: ["UNIT I"],
         subQuestionsCount: 0
       },
-      questions: [],
-      difficulty: "Easy",
-      units: ["UNIT I"]
+      questions: []
     }
   ]);
 
@@ -93,9 +90,7 @@ const Generator = () => {
         units: ["UNIT I"],
         subQuestionsCount: 0
       },
-      questions: [],
-      difficulty: "Medium",
-      units: []
+      questions: []
     };
     setSections([...sections, newSection]);
   };
@@ -139,8 +134,29 @@ const Generator = () => {
     }));
   };
 
-  // Manual configuration functions
-  const addQuestion = (sectionId: string) => {
+  // Smart AI Question Configuration
+  const generateSmartQuestions = (sectionId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        const questions: QuestionConfig[] = [];
+        for (let i = 0; i < section.autoConfig.questionCount; i++) {
+          questions.push({
+            id: `smart-${Date.now()}-${i}`,
+            marks: section.autoConfig.marksPerQuestion,
+            difficulty: section.autoConfig.difficulty,
+            unit: section.autoConfig.units[0] || "UNIT I",
+            subQuestionsCount: section.autoConfig.subQuestionsCount,
+            isAIGenerated: true
+          });
+        }
+        return { ...section, questions };
+      }
+      return section;
+    }));
+    toast.success("Smart question configuration generated!");
+  };
+
+  const addManualQuestion = (sectionId: string) => {
     setSections(sections.map(section => {
       if (section.id === sectionId) {
         const newQuestion: QuestionConfig = {
@@ -149,6 +165,8 @@ const Generator = () => {
           marks: 2,
           difficulty: "Medium",
           unit: "UNIT I",
+          subQuestionsCount: 0,
+          isAIGenerated: false,
           subQuestions: []
         };
         return { ...section, questions: [...section.questions, newQuestion] };
@@ -159,7 +177,7 @@ const Generator = () => {
 
   const removeQuestion = (sectionId: string, questionId: string) => {
     setSections(sections.map(section => {
-      if (section.id === sectionId && section.questions.length > 1) {
+      if (section.id === sectionId) {
         return {
           ...section,
           questions: section.questions.filter(q => q.id !== questionId)
@@ -183,96 +201,33 @@ const Generator = () => {
     }));
   };
 
-  const addSubQuestion = (sectionId: string, questionId: string) => {
-    setSections(sections.map(section => {
-      if (section.id === sectionId) {
-        return {
-          ...section,
-          questions: section.questions.map(q => {
-            if (q.id === questionId) {
-              const newSubQuestion: SubQuestion = {
-                id: Date.now().toString(),
-                text: "",
-                marks: 1
-              };
-              return { 
-                ...q, 
-                subQuestions: [...(q.subQuestions || []), newSubQuestion] 
-              };
-            }
-            return q;
-          })
-        };
-      }
-      return section;
-    }));
-  };
-
-  const removeSubQuestion = (sectionId: string, questionId: string, subQuestionId: string) => {
-    setSections(sections.map(section => {
-      if (section.id === sectionId) {
-        return {
-          ...section,
-          questions: section.questions.map(q => {
-            if (q.id === questionId) {
-              return {
-                ...q,
-                subQuestions: (q.subQuestions || []).filter(sq => sq.id !== subQuestionId)
-              };
-            }
-            return q;
-          })
-        };
-      }
-      return section;
-    }));
-  };
-
-  const updateSubQuestion = (sectionId: string, questionId: string, subQuestionId: string, field: keyof SubQuestion, value: any) => {
-    setSections(sections.map(section => {
-      if (section.id === sectionId) {
-        return {
-          ...section,
-          questions: section.questions.map(q => {
-            if (q.id === questionId) {
-              return {
-                ...q,
-                subQuestions: (q.subQuestions || []).map(sq =>
-                  sq.id === subQuestionId ? { ...sq, [field]: value } : sq
-                )
-              };
-            }
-            return q;
-          })
-        };
-      }
-      return section;
-    }));
-  };
-
   const generateAutoQuestions = (section: Section) => {
     const questions: QuestionConfig[] = [];
-    for (let i = 0; i < section.autoConfig.questionCount; i++) {
-      const question: QuestionConfig = {
-        id: `auto-${Date.now()}-${i}`,
-        text: `Auto-generated question ${i + 1} from ${section.autoConfig.units.join(', ')}`,
-        marks: section.autoConfig.marksPerQuestion,
-        difficulty: section.autoConfig.difficulty,
-        unit: section.autoConfig.units[0] || "UNIT I",
-        subQuestions: []
-      };
-
-      // Add sub-questions if specified
-      for (let j = 0; j < section.autoConfig.subQuestionsCount; j++) {
-        question.subQuestions!.push({
-          id: `auto-sub-${Date.now()}-${i}-${j}`,
-          text: `Sub-question ${String.fromCharCode(97 + j)}`,
-          marks: 1
+    
+    if (section.isAutoGenerate) {
+      // Use bulk auto-generation
+      for (let i = 0; i < section.autoConfig.questionCount; i++) {
+        const unitIndex = i % section.autoConfig.units.length;
+        questions.push({
+          id: `auto-${Date.now()}-${i}`,
+          text: `AI will generate a ${section.autoConfig.difficulty.toLowerCase()} level question from ${section.autoConfig.units[unitIndex]}`,
+          marks: section.autoConfig.marksPerQuestion,
+          difficulty: section.autoConfig.difficulty,
+          unit: section.autoConfig.units[unitIndex],
+          subQuestionsCount: section.autoConfig.subQuestionsCount,
+          isAIGenerated: true
         });
       }
-
-      questions.push(question);
+    } else {
+      // Use individual question configurations
+      questions.push(...section.questions.map(q => ({
+        ...q,
+        text: q.isAIGenerated 
+          ? `AI will generate a ${q.difficulty.toLowerCase()} level question from ${q.unit} (${q.marks} marks)${q.subQuestionsCount > 0 ? ` with ${q.subQuestionsCount} sub-questions` : ''}`
+          : q.text || ""
+      })));
     }
+    
     return questions;
   };
 
@@ -282,9 +237,11 @@ const Generator = () => {
       const subMarks = section.autoConfig.questionCount * section.autoConfig.subQuestionsCount;
       return total + baseMarks + subMarks;
     } else {
-      return total + section.questions.reduce((sectionTotal, question) => 
-        sectionTotal + question.marks + (question.subQuestions?.reduce((subTotal, sq) => subTotal + sq.marks, 0) || 0), 0
-      );
+      return total + section.questions.reduce((sectionTotal, question) => {
+        const baseMarks = question.marks;
+        const subMarks = question.subQuestionsCount || 0;
+        return sectionTotal + baseMarks + subMarks;
+      }, 0);
     }
   }, 0);
 
@@ -294,16 +251,10 @@ const Generator = () => {
       return;
     }
     
-    // Generate auto questions for sections that need them
-    const processedSections = sections.map(section => {
-      if (section.isAutoGenerate) {
-        return {
-          ...section,
-          questions: generateAutoQuestions(section)
-        };
-      }
-      return section;
-    });
+    const processedSections = sections.map(section => ({
+      ...section,
+      questions: generateAutoQuestions(section)
+    }));
     
     const config = {
       subjectName,
@@ -315,8 +266,8 @@ const Generator = () => {
       totalMarks,
       type: 'descriptive'
     };
-    sessionStorage.setItem('questionPaperConfig', JSON.stringify(config));
     
+    sessionStorage.setItem('questionPaperConfig', JSON.stringify(config));
     console.log("Generating question paper with:", config);
     toast.success("Question paper generated successfully!");
     navigate("/result");
@@ -469,18 +420,19 @@ const Generator = () => {
                           onCheckedChange={(checked) => updateSection(section.id, 'isAutoGenerate', checked)}
                         />
                         <Label className="text-sm">
-                          {section.isAutoGenerate ? 'Auto-Generate Questions' : 'Manual Configuration'}
+                          {section.isAutoGenerate ? 'Bulk AI Generation' : 'Individual Question Config'}
                         </Label>
                       </div>
                     </div>
 
                     {section.isAutoGenerate ? (
-                      /* Auto-Generation Configuration */
+                      /* Bulk AI Generation */
                       <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
                         <h5 className="font-medium text-blue-900 flex items-center">
-                          <Settings className="w-4 h-4 mr-2" />
-                          Auto-Generation Settings
+                          <Wand2 className="w-4 h-4 mr-2" />
+                          Bulk AI Generation Settings
                         </h5>
+                        <p className="text-sm text-blue-700">Configure common settings for all questions in this section</p>
                         
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <div>
@@ -552,57 +504,74 @@ const Generator = () => {
                         </div>
                       </div>
                     ) : (
-                      /* Manual Configuration */
+                      /* Individual Question Configuration */
                       <div>
                         <div className="flex items-center justify-between mb-4">
-                          <h5 className="font-medium">Configure Questions Manually</h5>
-                          <Button
-                            onClick={() => addQuestion(section.id)}
-                            size="sm"
-                            variant="outline"
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add Question
-                          </Button>
+                          <h5 className="font-medium flex items-center">
+                            <Brain className="w-4 h-4 mr-2" />
+                            Smart Question Configuration
+                          </h5>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => generateSmartQuestions(section.id)}
+                              size="sm"
+                              variant="outline"
+                              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                            >
+                              <Wand2 className="w-4 h-4 mr-2" />
+                              Generate Smart Config
+                            </Button>
+                            <Button
+                              onClick={() => addManualQuestion(section.id)}
+                              size="sm"
+                              variant="outline"
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Add Manual Question
+                            </Button>
+                          </div>
                         </div>
                         
                         {section.questions.length === 0 && (
-                          <div className="text-center py-8 text-slate-500">
-                            <p>No questions configured yet. Click "Add Question" to start.</p>
+                          <div className="text-center py-8 text-slate-500 bg-slate-50 rounded-lg">
+                            <Brain className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                            <p className="mb-2">No questions configured yet</p>
+                            <p className="text-sm">Use "Generate Smart Config" for AI-powered questions or "Add Manual Question" to write your own</p>
                           </div>
                         )}
                         
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                           {section.questions.map((question, questionIndex) => (
-                            <div key={question.id} className="border border-slate-100 rounded p-4 bg-slate-50">
+                            <div key={question.id} className={`border rounded p-4 ${question.isAIGenerated ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
                               <div className="flex justify-between items-start mb-3">
-                                <h6 className="text-sm font-medium text-slate-700">
-                                  Question {questionIndex + 1}
+                                <h6 className="text-sm font-medium text-slate-700 flex items-center">
+                                  {question.isAIGenerated && <Wand2 className="w-4 h-4 mr-1 text-blue-600" />}
+                                  Question {questionIndex + 1} {question.isAIGenerated ? '(AI Generated)' : '(Manual)'}
                                 </h6>
-                                {section.questions.length > 1 && (
-                                  <Button
-                                    onClick={() => removeQuestion(section.id, question.id)}
-                                    size="sm"
-                                    variant="ghost"
-                                    className="text-red-600 hover:text-red-700"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
-                                )}
+                                <Button
+                                  onClick={() => removeQuestion(section.id, question.id)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
                               </div>
                               
                               <div className="space-y-4">
-                                <div>
-                                  <Label>Question Text</Label>
-                                  <Textarea
-                                    value={question.text}
-                                    onChange={(e) => updateQuestion(section.id, question.id, 'text', e.target.value)}
-                                    placeholder="Enter your question here..."
-                                    className="min-h-[80px]"
-                                  />
-                                </div>
+                                {!question.isAIGenerated && (
+                                  <div>
+                                    <Label>Question Text</Label>
+                                    <Textarea
+                                      value={question.text || ""}
+                                      onChange={(e) => updateQuestion(section.id, question.id, 'text', e.target.value)}
+                                      placeholder="Enter your question here..."
+                                      className="min-h-[80px]"
+                                    />
+                                  </div>
+                                )}
                                 
-                                <div className="grid grid-cols-3 gap-3">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                   <div>
                                     <Label>Marks</Label>
                                     <Input
@@ -646,56 +615,28 @@ const Generator = () => {
                                       </SelectContent>
                                     </Select>
                                   </div>
+                                  
+                                  <div>
+                                    <Label>Sub-questions</Label>
+                                    <Input
+                                      type="number"
+                                      value={question.subQuestionsCount}
+                                      onChange={(e) => updateQuestion(section.id, question.id, 'subQuestionsCount', parseInt(e.target.value) || 0)}
+                                      min="0"
+                                      max="5"
+                                    />
+                                  </div>
                                 </div>
 
-                                {/* Sub-questions */}
-                                <div>
-                                  <div className="flex items-center justify-between mb-3">
-                                    <Label>Sub-questions (Optional)</Label>
-                                    <Button
-                                      onClick={() => addSubQuestion(section.id, question.id)}
-                                      size="sm"
-                                      variant="outline"
-                                    >
-                                      <Plus className="w-4 h-4 mr-1" />
-                                      Add Sub-question
-                                    </Button>
+                                {question.isAIGenerated && (
+                                  <div className="bg-white p-3 rounded border border-blue-200">
+                                    <p className="text-sm text-blue-700">
+                                      🎯 <strong>AI will generate:</strong> A {question.difficulty.toLowerCase()} level question from {question.unit} 
+                                      worth {question.marks} marks
+                                      {question.subQuestionsCount > 0 && ` with ${question.subQuestionsCount} sub-questions`}
+                                    </p>
                                   </div>
-                                  
-                                  {question.subQuestions && question.subQuestions.length > 0 && (
-                                    <div className="space-y-3">
-                                      {question.subQuestions.map((subQ, subIndex) => (
-                                        <div key={subQ.id} className="flex gap-2 items-start bg-white p-3 rounded border">
-                                          <div className="flex-1 space-y-2">
-                                            <Label className="text-xs">Sub-question {String.fromCharCode(97 + subIndex)}</Label>
-                                            <Textarea
-                                              value={subQ.text}
-                                              onChange={(e) => updateSubQuestion(section.id, question.id, subQ.id, 'text', e.target.value)}
-                                              placeholder={`Sub-question ${String.fromCharCode(97 + subIndex)}`}
-                                              className="min-h-[60px]"
-                                            />
-                                            <Input
-                                              type="number"
-                                              value={subQ.marks}
-                                              onChange={(e) => updateSubQuestion(section.id, question.id, subQ.id, 'marks', parseInt(e.target.value) || 1)}
-                                              placeholder="Marks"
-                                              className="w-20"
-                                              min="1"
-                                            />
-                                          </div>
-                                          <Button
-                                            onClick={() => removeSubQuestion(section.id, question.id, subQ.id)}
-                                            variant="outline"
-                                            size="sm"
-                                            className="text-red-600 hover:text-red-700"
-                                          >
-                                            <Trash2 className="w-4 h-4" />
-                                          </Button>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
+                                )}
                               </div>
                             </div>
                           ))}
