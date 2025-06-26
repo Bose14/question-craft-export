@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -305,14 +306,6 @@ const Result = () => {
           </CardContent>
         </Card>
       </div>
-
-      <style jsx global>{`
-        @media print {
-          .no-print { display: none !important; }
-          body { margin: 0; }
-          .question-paper-content { padding: 20px; }
-        }
-      `}</style>
     </div>
   );
 };
