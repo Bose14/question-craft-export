@@ -5,8 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Plus, Trash2, Upload, FileText, Image } from "lucide-react";
 import { toast } from "sonner";
+
+interface QuestionConfig {
+  id: string;
+  text: string;
+  marks: number;
+  difficulty: string;
+  unit: string;
+}
 
 interface Section {
   id: string;
@@ -15,6 +24,7 @@ interface Section {
   marksPerQuestion: number;
   difficulty: string;
   units: string[];
+  customQuestions: QuestionConfig[];
 }
 
 const Generator = () => {
@@ -32,7 +42,8 @@ const Generator = () => {
       questions: 5,
       marksPerQuestion: 2,
       difficulty: "Easy",
-      units: ["UNIT I"]
+      units: ["UNIT I"],
+      customQuestions: []
     }
   ]);
 
@@ -67,7 +78,8 @@ const Generator = () => {
       questions: 1,
       marksPerQuestion: 1,
       difficulty: "Easy",
-      units: []
+      units: [],
+      customQuestions: []
     };
     setSections([...sections, newSection]);
   };
@@ -91,6 +103,52 @@ const Generator = () => {
           ? section.units.filter(u => u !== unit)
           : [...section.units, unit];
         return { ...section, units };
+      }
+      return section;
+    }));
+  };
+
+  const addCustomQuestion = (sectionId: string) => {
+    const newQuestion: QuestionConfig = {
+      id: Date.now().toString(),
+      text: "",
+      marks: 2,
+      difficulty: "Medium",
+      unit: "UNIT I"
+    };
+    
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: [...section.customQuestions, newQuestion]
+        };
+      }
+      return section;
+    }));
+  };
+
+  const removeCustomQuestion = (sectionId: string, questionId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: section.customQuestions.filter(q => q.id !== questionId)
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateCustomQuestion = (sectionId: string, questionId: string, field: keyof QuestionConfig, value: any) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: section.customQuestions.map(q =>
+            q.id === questionId ? { ...q, [field]: value } : q
+          )
+        };
       }
       return section;
     }));
@@ -334,6 +392,99 @@ const Generator = () => {
                           </SelectContent>
                         </Select>
                       </div>
+                    </div>
+
+                    {/* Custom Questions */}
+                    <div className="mt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h5 className="font-medium">Custom Questions (Optional)</h5>
+                        <Button
+                          onClick={() => addCustomQuestion(section.id)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Question
+                        </Button>
+                      </div>
+                      
+                      {section.customQuestions.length > 0 && (
+                        <div className="space-y-4">
+                          {section.customQuestions.map((question) => (
+                            <div key={question.id} className="border border-slate-100 rounded p-4 bg-slate-50">
+                              <div className="flex justify-between items-start mb-3">
+                                <h6 className="text-sm font-medium text-slate-700">Custom Question</h6>
+                                <Button
+                                  onClick={() => removeCustomQuestion(section.id, question.id)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              
+                              <div className="space-y-3">
+                                <div>
+                                  <Label>Question Text</Label>
+                                  <Textarea
+                                    value={question.text}
+                                    onChange={(e) => updateCustomQuestion(section.id, question.id, 'text', e.target.value)}
+                                    placeholder="Enter your question here..."
+                                    className="min-h-[80px]"
+                                  />
+                                </div>
+                                
+                                <div className="grid grid-cols-3 gap-3">
+                                  <div>
+                                    <Label>Marks</Label>
+                                    <Input
+                                      type="number"
+                                      value={question.marks}
+                                      onChange={(e) => updateCustomQuestion(section.id, question.id, 'marks', parseInt(e.target.value) || 1)}
+                                      min="1"
+                                    />
+                                  </div>
+                                  
+                                  <div>
+                                    <Label>Difficulty</Label>
+                                    <Select
+                                      value={question.difficulty}
+                                      onValueChange={(value) => updateCustomQuestion(section.id, question.id, 'difficulty', value)}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="Easy">Easy</SelectItem>
+                                        <SelectItem value="Medium">Medium</SelectItem>
+                                        <SelectItem value="Hard">Hard</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  
+                                  <div>
+                                    <Label>Unit</Label>
+                                    <Select
+                                      value={question.unit}
+                                      onValueChange={(value) => updateCustomQuestion(section.id, question.id, 'unit', value)}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {units.map((unit) => (
+                                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div>

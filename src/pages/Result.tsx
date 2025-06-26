@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { toast } from "sonner";
 import AnswerKeyGenerator from "@/components/AnswerKeyGenerator";
 import ShareDialog from "@/components/ShareDialog";
 import EditableQuestionPaper from "@/components/EditableQuestionPaper";
+import { generatePDF, generateWordDocument } from "@/utils/pdfGenerator";
 
 interface QuestionPaperConfig {
   subjectName: string;
@@ -97,89 +97,15 @@ const Result = () => {
     }
   ];
 
-  const generatePDF = () => {
-    // Add print styles
-    const printCSS = `
-      <style>
-        @media print {
-          .no-print { display: none !important; }
-          body { margin: 0; font-family: Arial, sans-serif; }
-          .question-paper-content { padding: 20px; }
-          .header { text-align: center; margin-bottom: 30px; }
-          .question { margin-bottom: 20px; page-break-inside: avoid; }
-          .section-title { font-weight: bold; text-decoration: underline; margin: 25px 0 15px 0; }
-          .sub-question { margin-left: 30px; margin-top: 10px; }
-          .difficulty-badge { background: #f3f4f6; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
-          h2, h3 { margin-bottom: 10px; }
-          .question-text { line-height: 1.6; }
-          @page { margin: 2cm; }
-        }
-        .no-print { display: none; }
-      </style>
-    `;
-
-    const printContent = document.getElementById('question-paper-content');
-    if (printContent) {
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>${config?.subjectName || 'Question Paper'}</title>
-              ${printCSS}
-            </head>
-            <body>
-              ${printContent.innerHTML}
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-        
-        setTimeout(() => {
-          printWindow.print();
-          printWindow.close();
-        }, 250);
-        
-        toast.success("PDF export initiated - check your downloads folder");
-      }
-    }
+  const handlePDFGenerate = () => {
+    const filename = config?.subjectName || 'Question Paper';
+    generatePDF('question-paper-content', filename);
+    toast.success("PDF export initiated - check your downloads folder");
   };
 
-  const generateWord = () => {
-    if (!config) return;
-    
-    let wordContent = `
-      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-        <head>
-          <meta charset="utf-8">
-          <title>${config.subjectName}</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            .header { text-align: center; margin-bottom: 30px; }
-            .question { margin-bottom: 15px; }
-            .section-title { font-weight: bold; text-decoration: underline; margin: 20px 0 10px 0; }
-          </style>
-        </head>
-        <body>
-    `;
-    
-    const printContent = document.getElementById('question-paper-content');
-    if (printContent) {
-      wordContent += printContent.innerHTML;
-    }
-    
-    wordContent += '</body></html>';
-    
-    const blob = new Blob([wordContent], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${config.subjectName || 'question-paper'}.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
+  const handleWordGenerate = () => {
+    const filename = config?.subjectName || 'question-paper';
+    generateWordDocument('question-paper-content', filename);
     toast.success("Word document downloaded successfully!");
   };
 
@@ -250,12 +176,12 @@ const Result = () => {
               <span className="hidden sm:inline">Edit Config</span>
               <span className="sm:hidden">Config</span>
             </Button>
-            <Button onClick={generateWord} variant="outline" size="sm" className="text-xs sm:text-sm">
+            <Button onClick={handleWordGenerate} variant="outline" size="sm" className="text-xs sm:text-sm">
               <Download className="w-4 h-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Word</span>
               <span className="sm:hidden">DOC</span>
             </Button>
-            <Button onClick={generatePDF} className="bg-slate-900 hover:bg-slate-800" size="sm">
+            <Button onClick={handlePDFGenerate} className="bg-slate-900 hover:bg-slate-800" size="sm">
               <Download className="w-4 h-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Export PDF</span>
               <span className="sm:hidden">PDF</span>

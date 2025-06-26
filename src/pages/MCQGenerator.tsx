@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,8 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Plus, Trash2, FileText, Image } from "lucide-react";
 import { toast } from "sonner";
+
+interface MCQQuestionConfig {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswer: number;
+  marks: number;
+  difficulty: string;
+  unit: string;
+}
 
 interface MCQSection {
   id: string;
@@ -16,6 +26,7 @@ interface MCQSection {
   marksPerQuestion: number;
   difficulty: string;
   units: string[];
+  customQuestions: MCQQuestionConfig[];
 }
 
 const MCQGenerator = () => {
@@ -32,7 +43,8 @@ const MCQGenerator = () => {
       questions: 10,
       marksPerQuestion: 1,
       difficulty: "Easy",
-      units: ["UNIT I"]
+      units: ["UNIT I"],
+      customQuestions: []
     }
   ]);
 
@@ -55,7 +67,8 @@ const MCQGenerator = () => {
       questions: 5,
       marksPerQuestion: 1,
       difficulty: "Easy",
-      units: []
+      units: [],
+      customQuestions: []
     };
     setSections([...sections, newSection]);
   };
@@ -79,6 +92,73 @@ const MCQGenerator = () => {
           ? section.units.filter(u => u !== unit)
           : [...section.units, unit];
         return { ...section, units };
+      }
+      return section;
+    }));
+  };
+
+  const addCustomMCQ = (sectionId: string) => {
+    const newQuestion: MCQQuestionConfig = {
+      id: Date.now().toString(),
+      text: "",
+      options: ["", "", "", ""],
+      correctAnswer: 0,
+      marks: 1,
+      difficulty: "Medium",
+      unit: "UNIT I"
+    };
+    
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: [...section.customQuestions, newQuestion]
+        };
+      }
+      return section;
+    }));
+  };
+
+  const removeCustomMCQ = (sectionId: string, questionId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: section.customQuestions.filter(q => q.id !== questionId)
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateCustomMCQ = (sectionId: string, questionId: string, field: keyof MCQQuestionConfig, value: any) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: section.customQuestions.map(q =>
+            q.id === questionId ? { ...q, [field]: value } : q
+          )
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateMCQOption = (sectionId: string, questionId: string, optionIndex: number, value: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          customQuestions: section.customQuestions.map(q => {
+            if (q.id === questionId) {
+              const newOptions = [...q.options];
+              newOptions[optionIndex] = value;
+              return { ...q, options: newOptions };
+            }
+            return q;
+          })
+        };
       }
       return section;
     }));
@@ -299,6 +379,122 @@ const MCQGenerator = () => {
                           </Button>
                         ))}
                       </div>
+                    </div>
+
+                    {/* Custom MCQ Questions */}
+                    <div className="mt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h5 className="font-medium">Custom MCQ Questions (Optional)</h5>
+                        <Button
+                          onClick={() => addCustomMCQ(section.id)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add MCQ
+                        </Button>
+                      </div>
+                      
+                      {section.customQuestions.length > 0 && (
+                        <div className="space-y-4">
+                          {section.customQuestions.map((question) => (
+                            <div key={question.id} className="border border-slate-100 rounded p-4 bg-slate-50">
+                              <div className="flex justify-between items-start mb-3">
+                                <h6 className="text-sm font-medium text-slate-700">Custom MCQ Question</h6>
+                                <Button
+                                  onClick={() => removeCustomMCQ(section.id, question.id)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              
+                              <div className="space-y-3">
+                                <div>
+                                  <Label>Question Text</Label>
+                                  <Textarea
+                                    value={question.text}
+                                    onChange={(e) => updateCustomMCQ(section.id, question.id, 'text', e.target.value)}
+                                    placeholder="Enter your MCQ question here..."
+                                    className="min-h-[80px]"
+                                  />
+                                </div>
+                                
+                                <div>
+                                  <Label>Options</Label>
+                                  <div className="space-y-2">
+                                    {question.options.map((option, optionIndex) => (
+                                      <div key={optionIndex} className="flex items-center space-x-2">
+                                        <Input
+                                          value={option}
+                                          onChange={(e) => updateMCQOption(section.id, question.id, optionIndex, e.target.value)}
+                                          placeholder={`Option ${String.fromCharCode(65 + optionIndex)}`}
+                                        />
+                                        <Button
+                                          variant={question.correctAnswer === optionIndex ? "default" : "outline"}
+                                          size="sm"
+                                          onClick={() => updateCustomMCQ(section.id, question.id, 'correctAnswer', optionIndex)}
+                                          className="whitespace-nowrap"
+                                        >
+                                          {question.correctAnswer === optionIndex ? "Correct" : "Mark Correct"}
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                
+                                <div className="grid grid-cols-3 gap-3">
+                                  <div>
+                                    <Label>Marks</Label>
+                                    <Input
+                                      type="number"
+                                      value={question.marks}
+                                      onChange={(e) => updateCustomMCQ(section.id, question.id, 'marks', parseInt(e.target.value) || 1)}
+                                      min="1"
+                                    />
+                                  </div>
+                                  
+                                  <div>
+                                    <Label>Difficulty</Label>
+                                    <Select
+                                      value={question.difficulty}
+                                      onValueChange={(value) => updateCustomMCQ(section.id, question.id, 'difficulty', value)}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="Easy">Easy</SelectItem>
+                                        <SelectItem value="Medium">Medium</SelectItem>
+                                        <SelectItem value="Hard">Hard</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  
+                                  <div>
+                                    <Label>Unit</Label>
+                                    <Select
+                                      value={question.unit}
+                                      onValueChange={(value) => updateCustomMCQ(section.id, question.id, 'unit', value)}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {units.map((unit) => (
+                                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
