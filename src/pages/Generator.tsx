@@ -49,6 +49,7 @@ const Generator = () => {
   const [university, setUniversity] = useState("");
   const [examDate, setExamDate] = useState("");
   const [duration, setDuration] = useState("");
+  const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
   const [headerImage, setHeaderImage] = useState<string | null>(null);
   const [sections, setSections] = useState<Section[]>([
     {
@@ -65,6 +66,14 @@ const Generator = () => {
       questions: []
     }
   ]);
+
+  const handleSyllabusUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSyllabusFile(file);
+      toast.success("Syllabus uploaded successfully!");
+    }
+  };
 
   const handleHeaderImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -261,6 +270,7 @@ const Generator = () => {
       university,
       examDate,
       duration,
+      syllabusFile: syllabusFile?.name || null,
       headerImage,
       sections: processedSections,
       totalMarks,
@@ -276,11 +286,11 @@ const Generator = () => {
   const units = ["UNIT I", "UNIT II", "UNIT III", "UNIT IV", "UNIT V"];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <nav className="bg-white border-b border-slate-200">
+    <div className="min-h-screen bg-background">
+      <nav className="bg-gradient-primary text-white border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+            <Link to="/" className="flex items-center space-x-2 text-white hover:text-white/80">
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Home</span>
             </Link>
@@ -289,6 +299,43 @@ const Generator = () => {
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Upload Syllabus */}
+        <Card className="mb-8">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center space-x-2">
+              <Upload className="w-5 h-5" />
+              <span>Upload Syllabus</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                onChange={handleSyllabusUpload}
+                className="hidden"
+                id="syllabus-upload"
+              />
+              <label htmlFor="syllabus-upload" className="cursor-pointer">
+                {syllabusFile ? (
+                  <div className="space-y-4">
+                    <FileText className="w-12 h-12 mx-auto text-success" />
+                    <p className="text-success">Syllabus uploaded: {syllabusFile.name}</p>
+                    <p className="text-sm text-muted-foreground">AI will generate questions based on your syllabus</p>
+                  </div>
+                ) : (
+                  <>
+                    <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-foreground">Click to upload your course syllabus</p>
+                    <p className="text-sm text-muted-foreground mt-2">PDF, DOC, DOCX, TXT up to 10MB</p>
+                    <p className="text-xs text-accent mt-2">This helps AI generate relevant questions for your course</p>
+                  </>
+                )}
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Upload Header Image */}
         <Card className="mb-8">
           <CardHeader className="text-center">
@@ -298,7 +345,7 @@ const Generator = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
               <input
                 type="file"
                 accept="image/*"
@@ -310,13 +357,13 @@ const Generator = () => {
                 {headerImage ? (
                   <div className="space-y-4">
                     <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded" />
-                    <p className="text-green-600">Header image uploaded!</p>
+                    <p className="text-success">Header image uploaded!</p>
                   </div>
                 ) : (
                   <>
-                    <Image className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-                    <p className="text-slate-600">Click to upload your university/institution header</p>
-                    <p className="text-sm text-slate-500 mt-2">PNG, JPG up to 10MB</p>
+                    <Image className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-foreground">Click to upload your university/institution header</p>
+                    <p className="text-sm text-muted-foreground mt-2">PNG, JPG up to 10MB</p>
                   </>
                 )}
               </label>
@@ -378,7 +425,7 @@ const Generator = () => {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Sections Configuration</h3>
                 <div className="flex items-center space-x-4">
-                  <span className="text-sm text-green-600 font-medium">
+                  <span className="text-sm text-success font-medium">
                     Total Marks: {totalMarks}
                   </span>
                   <Button onClick={addSection} size="sm" variant="outline">
@@ -390,7 +437,7 @@ const Generator = () => {
 
               <div className="space-y-6">
                 {sections.map((section, index) => (
-                  <div key={section.id} className="border border-slate-200 rounded-lg p-6">
+                  <div key={section.id} className="border border-border rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Section Configuration</h4>
                       {sections.length > 1 && (
@@ -427,12 +474,12 @@ const Generator = () => {
 
                     {section.isAutoGenerate ? (
                       /* Bulk AI Generation */
-                      <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
-                        <h5 className="font-medium text-blue-900 flex items-center">
-                          <Wand2 className="w-4 h-4 mr-2" />
+                      <div className="space-y-4 bg-gradient-hero p-4 rounded-lg border border-accent/20">
+                        <h5 className="font-medium text-foreground flex items-center">
+                          <Wand2 className="w-4 h-4 mr-2 text-accent" />
                           Bulk AI Generation Settings
                         </h5>
-                        <p className="text-sm text-blue-700">Configure common settings for all questions in this section</p>
+                        <p className="text-sm text-muted-foreground">Configure common settings for all questions in this section</p>
                         
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <div>
@@ -495,7 +542,7 @@ const Generator = () => {
                                 onClick={() => toggleAutoUnit(section.id, unit)}
                                 variant={section.autoConfig.units.includes(unit) ? "default" : "outline"}
                                 size="sm"
-                                className={section.autoConfig.units.includes(unit) ? "bg-slate-900" : ""}
+                                className={section.autoConfig.units.includes(unit) ? "bg-primary" : ""}
                               >
                                 {unit}
                               </Button>
@@ -516,7 +563,7 @@ const Generator = () => {
                               onClick={() => generateSmartQuestions(section.id)}
                               size="sm"
                               variant="outline"
-                              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                              className="text-accent border-accent/30 hover:bg-accent/10"
                             >
                               <Wand2 className="w-4 h-4 mr-2" />
                               Generate Smart Config
@@ -533,8 +580,8 @@ const Generator = () => {
                         </div>
                         
                         {section.questions.length === 0 && (
-                          <div className="text-center py-8 text-slate-500 bg-slate-50 rounded-lg">
-                            <Brain className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                          <div className="text-center py-8 text-muted-foreground bg-muted rounded-lg">
+                            <Brain className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                             <p className="mb-2">No questions configured yet</p>
                             <p className="text-sm">Use "Generate Smart Config" for AI-powered questions or "Add Manual Question" to write your own</p>
                           </div>
@@ -542,10 +589,10 @@ const Generator = () => {
                         
                         <div className="space-y-4">
                           {section.questions.map((question, questionIndex) => (
-                            <div key={question.id} className={`border rounded p-4 ${question.isAIGenerated ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                            <div key={question.id} className={`border rounded p-4 ${question.isAIGenerated ? 'bg-gradient-hero border-accent/30' : 'bg-muted border-border'}`}>
                               <div className="flex justify-between items-start mb-3">
-                                <h6 className="text-sm font-medium text-slate-700 flex items-center">
-                                  {question.isAIGenerated && <Wand2 className="w-4 h-4 mr-1 text-blue-600" />}
+                                <h6 className="text-sm font-medium text-foreground flex items-center">
+                                  {question.isAIGenerated && <Wand2 className="w-4 h-4 mr-1 text-accent" />}
                                   Question {questionIndex + 1} {question.isAIGenerated ? '(AI Generated)' : '(Manual)'}
                                 </h6>
                                 <Button
@@ -629,8 +676,8 @@ const Generator = () => {
                                 </div>
 
                                 {question.isAIGenerated && (
-                                  <div className="bg-white p-3 rounded border border-blue-200">
-                                    <p className="text-sm text-blue-700">
+                                  <div className="bg-card p-3 rounded border border-accent/30">
+                                    <p className="text-sm text-accent">
                                       🎯 <strong>AI will generate:</strong> A {question.difficulty.toLowerCase()} level question from {question.unit} 
                                       worth {question.marks} marks
                                       {question.subQuestionsCount > 0 && ` with ${question.subQuestionsCount} sub-questions`}
@@ -655,7 +702,7 @@ const Generator = () => {
           <Button 
             onClick={handleGenerate}
             size="lg" 
-            className="px-8 py-3 bg-slate-900 hover:bg-slate-800"
+            className="px-8 py-3 bg-gradient-primary hover:opacity-90 text-white"
           >
             <FileText className="w-5 h-5 mr-2" />
             Generate Question Paper
