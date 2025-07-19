@@ -6,40 +6,43 @@
 
 @layer base {
   :root {
-    --background: 220 43% 97%; /* Ghost White */
-    --foreground: 0 0% 18%; /* Charcoal Gray */
+    /* Exact color palette from user specifications */
+    --background: 217 33% 97%; /* Ghost White #F8F9FC */
+    --foreground: 0 0% 18%; /* Charcoal Gray #2E2E2E */
 
-    --card: 0 0% 100%;
+    --card: 0 0% 100%; /* Pure white for cards */
     --card-foreground: 0 0% 18%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 18%;
 
-    --primary: 246 30% 28%; /* Indigo Deep */
+    --primary: 242 27% 31%; /* Indigo Deep #3F3D56 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 43% 97%; /* Ghost White */
-    --secondary-foreground: 246 30% 28%;
+    --secondary: 217 33% 97%; /* Ghost White */
+    --secondary-foreground: 242 27% 31%;
 
-    --muted: 220 43% 95%;
-    --muted-foreground: 220 13% 46%; /* Cool Gray */
+    --muted: 217 33% 95%;
+    --muted-foreground: 220 13% 46%; /* Cool Gray #6B7280 */
 
-    --accent: 211 100% 50%; /* Electric Blue */
+    --accent: 212 100% 50%; /* Electric Blue #007AFF */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%; /* Coral Red */
+    --destructive: 0 84% 60%; /* Coral Red #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%; /* Emerald Green */
+    --success: 160 84% 39%; /* Emerald Green #10B981 */
     --success-foreground: 0 0% 100%;
 
-    --border: 220 43% 91%;
-    --input: 220 43% 91%;
-    --ring: 211 100% 50%;
+    --border: 217 33% 91%;
+    --input: 217 33% 91%;
+    --ring: 212 100% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(246 30% 28%), hsl(211 100% 50%));
-    --gradient-accent: linear-gradient(135deg, hsl(211 100% 50%), hsl(160 84% 39%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 43% 97%), hsl(220 43% 95%));
+    /* Professional gradients using the color palette */
+    --gradient-primary: linear-gradient(135deg, hsl(242 27% 31%), hsl(212 100% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(212 100% 50%), hsl(160 84% 39%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 33% 97%), hsl(217 33% 95%));
+    --gradient-cta: linear-gradient(135deg, hsl(242 27% 31%), hsl(242 27% 28%));
 
     --radius: 0.5rem;
 
@@ -61,31 +64,32 @@
   }
 
   .dark {
-    --background: 246 30% 15%;
+    /* Dark mode using the same color palette principles */
+    --background: 242 27% 15%; /* Dark Indigo base */
     --foreground: 0 0% 98%;
 
-    --card: 246 30% 18%;
+    --card: 242 27% 18%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 246 30% 18%;
+    --popover: 242 27% 18%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 211 100% 50%;
+    --primary: 212 100% 50%; /* Electric Blue for dark mode primary */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 246 30% 20%;
+    --secondary: 242 27% 20%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 246 30% 20%;
+    --muted: 242 27% 20%;
     --muted-foreground: 220 13% 65%;
 
-    --accent: 160 84% 39%;
+    --accent: 160 84% 39%; /* Emerald Green accent */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 60%; /* Same Coral Red */
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 160 84% 39%; /* Same Emerald Green */
     --success-foreground: 0 0% 100%;
 
     --border: 217.2 32.6% 17.5%;

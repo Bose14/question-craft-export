@@ -26,6 +26,7 @@ export default {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-accent': 'var(--gradient-accent)',
 				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-cta': 'var(--gradient-cta)',
 			},
 			colors: {
 				border: 'hsl(var(--border))',

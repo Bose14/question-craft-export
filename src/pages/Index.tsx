@@ -51,23 +51,23 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-hero">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+      <nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">
-              <FileText className="w-8 h-8 text-slate-900" />
-              <span className="text-xl font-bold text-slate-900">QuestionCraft</span>
+              <FileText className="w-8 h-8 text-primary" />
+              <span className="text-xl font-bold text-foreground">QuestionCraft</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/pricing" className="text-slate-700 hover:text-slate-900 transition-colors">
+              <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
               </Link>
-              <Link to="/generator" className="text-slate-700 hover:text-slate-900 transition-colors">
+              <Link to="/generator" className="text-muted-foreground hover:text-foreground transition-colors">
                 Generator
               </Link>
-              <Link to="/mcq-generator" className="text-slate-700 hover:text-slate-900 transition-colors">
+              <Link to="/mcq-generator" className="text-muted-foreground hover:text-foreground transition-colors">
                 MCQ Generator
               </Link>
             </div>
@@ -76,7 +76,7 @@ const Index = () => {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-slate-900 hover:bg-slate-800">Sign Up</Button>
+                <Button>Sign Up</Button>
               </Link>
             </div>
           </div>
@@ -86,25 +86,25 @@ const Index = () => {
       {/* Hero Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
             Generate Question Papers with{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
               AI Precision
             </span>
           </h1>
-          <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Create professional question papers instantly with customizable sections, difficulty levels, 
             and automated answer keys. Perfect for educators and institutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/generator">
-              <Button size="lg" className="bg-slate-900 hover:bg-slate-800 px-8 py-3">
+              <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90">
                 <FileText className="w-5 h-5 mr-2" />
                 Start Generating
               </Button>
             </Link>
             <Link to="/mcq-generator">
-              <Button size="lg" variant="outline" className="px-8 py-3">
+              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 <Brain className="w-5 h-5 mr-2" />
                 MCQ Generator
               </Button>
@@ -114,13 +114,13 @@ const Index = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-white/50">
+      <section className="py-20 bg-card/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Everything You Need for Question Paper Creation
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-xl text-muted-foreground">
               Powerful features designed for modern education
             </p>
           </div>
@@ -176,10 +176,10 @@ const Index = () => {
       </section>
 
       {/* Recent Papers Section */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-slate-900">Recently Created</h2>
+            <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
             <Link to="/generator">
               <Button variant="outline">Create New</Button>
             </Link>
@@ -193,11 +193,11 @@ const Index = () => {
                   <CardDescription>{paper.university}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex justify-between text-sm text-slate-600 mb-4">
+                  <div className="flex justify-between text-sm text-muted-foreground mb-4">
                     <span>Marks: {paper.marks}</span>
                     <span>Sections: {paper.sections}</span>
                   </div>
-                  <div className="text-sm text-slate-500">
+                  <div className="text-sm text-muted-foreground/80">
                     Created: {new Date(paper.date).toLocaleDateString()}
                   </div>
                 </CardContent>
@@ -208,16 +208,16 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-20 bg-gradient-cta">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Transform Your Question Paper Creation?
           </h2>
-          <p className="text-xl text-slate-300 mb-8">
+          <p className="text-xl text-white/80 mb-8">
             Join thousands of educators who have already made the switch to AI-powered question generation.
           </p>
           <Link to="/generator">
-            <Button size="lg" className="px-8 py-3 bg-white text-slate-900 hover:bg-slate-100">
+            <Button size="lg" className="px-8 py-3 bg-white text-primary hover:bg-white/90">
               Get Started for Free
             </Button>
           </Link>
@@ -225,20 +225,20 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-12">
+      <footer className="bg-card border-t border-border py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="text-2xl">📝</div>
-              <span className="text-lg font-semibold text-slate-900">QuestionPaper AI</span>
+              <span className="text-lg font-semibold text-foreground">QuestionPaper AI</span>
             </div>
-            <div className="flex items-center space-x-6 text-slate-600">
-              <Link to="/pricing" className="hover:text-slate-900">Pricing</Link>
-              <Link to="/login" className="hover:text-slate-900">Sign In</Link>
-              <Link to="/signup" className="hover:text-slate-900">Sign Up</Link>
+            <div className="flex items-center space-x-6 text-muted-foreground">
+              <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+              <Link to="/login" className="hover:text-foreground transition-colors">Sign In</Link>
+              <Link to="/signup" className="hover:text-foreground transition-colors">Sign Up</Link>
             </div>
           </div>
-          <div className="border-t border-slate-200 mt-8 pt-8 text-center text-slate-500">
+          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
             <p>&copy; 2025 QuestionPaper AI. All rights reserved.</p>
           </div>
         </div>
