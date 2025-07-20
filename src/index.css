@@ -43,6 +43,21 @@
     --gradient-accent: linear-gradient(135deg, hsl(212 100% 50%), hsl(160 84% 39%));
     --gradient-hero: linear-gradient(135deg, hsl(217 33% 97%), hsl(217 33% 95%));
     --gradient-cta: linear-gradient(135deg, hsl(242 27% 31%), hsl(242 27% 28%));
+    --gradient-card: linear-gradient(135deg, hsl(var(--card)), hsl(var(--card) / 0.8));
+    --gradient-subtle: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
+    --gradient-features: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--secondary)) 100%);
+
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--accent) / 0.4);
+
+    /* Animation utilities */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Text colors for semantic use */
+    --text-primary: var(--foreground);
+    --text-secondary: var(--muted-foreground);
+    --error: var(--destructive);
 
     --radius: 0.5rem;
 

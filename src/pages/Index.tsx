@@ -113,8 +113,83 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Recent Papers Section */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
+            <Link to="/generator">
+              <Button variant="outline">Create New</Button>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {recentPapers.map((paper) => (
+              <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="text-lg">{paper.subject}</CardTitle>
+                  <CardDescription>{paper.university}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between text-sm text-muted-foreground mb-4">
+                    <span>Marks: {paper.marks}</span>
+                    <span>Sections: {paper.sections}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground/80">
+                    Created: {new Date(paper.date).toLocaleDateString()}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Default Question Papers Section */}
+      <section className="py-20 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
+            <p className="text-xl text-muted-foreground">Get started with these commonly used subjects</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { subject: "Mathematics", topic: "Calculus & Linear Algebra", difficulty: "Medium", duration: "3 Hours" },
+              { subject: "Computer Science", topic: "Data Structures & Algorithms", difficulty: "Hard", duration: "3 Hours" },
+              { subject: "Physics", topic: "Mechanics & Thermodynamics", difficulty: "Medium", duration: "3 Hours" },
+              { subject: "Chemistry", topic: "Organic & Inorganic Chemistry", difficulty: "Medium", duration: "3 Hours" },
+              { subject: "English", topic: "Literature & Grammar", difficulty: "Easy", duration: "2 Hours" },
+              { subject: "Economics", topic: "Microeconomics & Macroeconomics", difficulty: "Medium", duration: "3 Hours" }
+            ].map((template, index) => (
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20">
+                <CardHeader>
+                  <CardTitle className="text-lg text-primary">{template.subject}</CardTitle>
+                  <CardDescription className="text-text-secondary">{template.topic}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-center mb-4">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      template.difficulty === 'Easy' ? 'bg-success/20 text-success' :
+                      template.difficulty === 'Medium' ? 'bg-accent/20 text-accent' :
+                      'bg-error/20 text-error'
+                    }`}>
+                      {template.difficulty}
+                    </span>
+                    <span className="text-sm text-text-secondary">{template.duration}</span>
+                  </div>
+                  <Link to="/generator">
+                    <Button size="sm" className="w-full">Use This Template</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
-      <section className="py-20 bg-card/50">
+      <section className="py-20 bg-gradient-features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">
@@ -171,38 +246,6 @@ const Index = () => {
               title="Unit-wise Questions"
               description="Organize questions by syllabus units for comprehensive coverage"
             />
-          </div>
-        </div>
-      </section>
-
-      {/* Recent Papers Section */}
-      <section className="py-20 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
-            <Link to="/generator">
-              <Button variant="outline">Create New</Button>
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {recentPapers.map((paper) => (
-              <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">{paper.subject}</CardTitle>
-                  <CardDescription>{paper.university}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between text-sm text-muted-foreground mb-4">
-                    <span>Marks: {paper.marks}</span>
-                    <span>Sections: {paper.sections}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground/80">
-                    Created: {new Date(paper.date).toLocaleDateString()}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
