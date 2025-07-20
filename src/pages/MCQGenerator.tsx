@@ -35,6 +35,7 @@ const MCQGenerator = () => {
   const [university, setUniversity] = useState("");
   const [examDate, setExamDate] = useState("");
   const [duration, setDuration] = useState("");
+  const [syllabusImage, setSyllabusImage] = useState<string | null>(null);
   const [headerImage, setHeaderImage] = useState<string | null>(null);
   const [sections, setSections] = useState<MCQSection[]>([
     {
@@ -47,6 +48,18 @@ const MCQGenerator = () => {
       customQuestions: []
     }
   ]);
+
+  const handleSyllabusUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSyllabusImage(e.target?.result as string);
+        toast.success("Syllabus uploaded successfully!");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleHeaderImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -194,28 +207,62 @@ const MCQGenerator = () => {
   const units = ["UNIT I", "UNIT II", "UNIT III", "UNIT IV", "UNIT V"];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <nav className="bg-white border-b border-slate-200">
+    <div className="min-h-screen bg-gradient-hero">
+      <nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+            <Link to="/" className="flex items-center space-x-2 text-primary hover:text-accent transition-colors">
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
+              <span className="font-medium">Back to Home</span>
             </Link>
           </div>
         </div>
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <Card className="mb-8">
+        <Card className="mb-8 bg-gradient-card border-accent/20">
           <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center space-x-2">
+            <CardTitle className="flex items-center justify-center space-x-2 text-primary">
+              <FileText className="w-5 h-5" />
+              <span>Upload Syllabus (Optional)</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleSyllabusUpload}
+                className="hidden"
+                id="syllabus-upload"
+              />
+              <label htmlFor="syllabus-upload" className="cursor-pointer">
+                {syllabusImage ? (
+                  <div className="space-y-4">
+                    <img src={syllabusImage} alt="Syllabus preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
+                    <p className="text-success font-medium">Syllabus uploaded successfully!</p>
+                  </div>
+                ) : (
+                  <>
+                    <FileText className="w-12 h-12 mx-auto text-accent mb-4" />
+                    <p className="text-text-primary font-medium">Click to upload your syllabus</p>
+                    <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
+                  </>
+                )}
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-8 bg-gradient-card border-accent/20">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center space-x-2 text-primary">
               <Image className="w-5 h-5" />
               <span>Upload Custom Header Image (Optional)</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
               <input
                 type="file"
                 accept="image/*"
@@ -226,14 +273,14 @@ const MCQGenerator = () => {
               <label htmlFor="header-upload" className="cursor-pointer">
                 {headerImage ? (
                   <div className="space-y-4">
-                    <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded" />
-                    <p className="text-green-600">Header image uploaded!</p>
+                    <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
+                    <p className="text-success font-medium">Header image uploaded successfully!</p>
                   </div>
                 ) : (
                   <>
-                    <Image className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-                    <p className="text-slate-600">Click to upload your university/institution header</p>
-                    <p className="text-sm text-slate-500 mt-2">PNG, JPG up to 10MB</p>
+                    <Image className="w-12 h-12 mx-auto text-accent mb-4" />
+                    <p className="text-text-primary font-medium">Click to upload your university/institution header</p>
+                    <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
                   </>
                 )}
               </label>

@@ -10,17 +10,17 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
-          <div className="text-slate-900">
+    <Card className="h-full hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-card border-accent/20 group">
+      <CardHeader className="relative">
+        <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-elegant">
+          <div className="text-white">
             {icon}
           </div>
         </div>
-        <CardTitle className="text-xl">{title}</CardTitle>
+        <CardTitle className="text-xl font-semibold text-primary group-hover:text-accent transition-colors">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-slate-600">{description}</p>
+        <p className="text-text-secondary leading-relaxed">{description}</p>
       </CardContent>
     </Card>
   );

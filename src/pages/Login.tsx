@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, FileText } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,19 +17,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 text-slate-900 hover:text-slate-700">
-            <div className="text-3xl">📝</div>
-            <span className="text-xl font-semibold">QuestionPaper AI</span>
+          <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors">
+            <FileText className="w-8 h-8" />
+            <span className="text-xl font-semibold">QuestionCraft</span>
+          </Link>
+          <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors mt-4">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm">Back to Home</span>
           </Link>
         </div>
         
-        <Card>
+        <Card className="bg-gradient-card border-accent/20 shadow-elegant">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl text-primary">Welcome Back</CardTitle>
+            <CardDescription className="text-text-secondary">
               Sign in to your account to continue creating question papers
             </CardDescription>
           </CardHeader>
@@ -56,15 +61,15 @@ const Login = () => {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full bg-slate-900 hover:bg-slate-800">
+              <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90">
                 Sign In
               </Button>
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-text-secondary">
                 Don't have an account?{" "}
-                <Link to="/signup" className="text-slate-900 hover:underline font-medium">
+                <Link to="/signup" className="text-primary hover:text-accent font-medium transition-colors">
                   Sign up
                 </Link>
               </p>
