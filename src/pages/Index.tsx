@@ -61,9 +61,9 @@ const Index = () => {
               <span className="text-xl font-bold text-foreground">QuestionCraft</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+              {/* <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
-              </Link>
+              </Link> */}
               <Link to="/generator" className="text-muted-foreground hover:text-foreground transition-colors">
                 Generator
               </Link>
@@ -84,34 +84,35 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Generate Question Papers with{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
-              AI Precision
-            </span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Create professional question papers instantly with customizable sections, difficulty levels, 
-            and automated answer keys. Perfect for educators and institutions.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/generator">
-              <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90">
-                <FileText className="w-5 h-5 mr-2" />
-                Start Generating
-              </Button>
-            </Link>
-            <Link to="/mcq-generator">
-              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Brain className="w-5 h-5 mr-2" />
-                MCQ Generator
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+     <section className="min-h-screen py-20 flex items-center">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
+      Generate Question Papers with{" "}
+      <span className="bg-gradient-primary bg-clip-text text-transparent">
+        AI Precision
+      </span>
+    </h1>
+    <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+      Create professional question papers instantly with customizable sections, difficulty levels, 
+      and automated answer keys. Perfect for educators and institutions.
+    </p>
+    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <Link to="/generator">
+        <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90">
+          <FileText className="w-5 h-5 mr-2" />
+          Start Generating
+        </Button>
+      </Link>
+      <Link to="/mcq-generator">
+        <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Brain className="w-5 h-5 mr-2" />
+          MCQ Generator
+        </Button>
+      </Link>
+    </div>
+  </div>
+</section>
+
 
       {/* Features Grid */}
       <section className="py-20 bg-card/50">
