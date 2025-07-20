@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const recentPapers = [
@@ -267,25 +268,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="text-2xl">📝</div>
-              <span className="text-lg font-semibold text-foreground">QuestionPaper AI</span>
-            </div>
-            <div className="flex items-center space-x-6 text-muted-foreground">
-              <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
-              <Link to="/login" className="hover:text-foreground transition-colors">Sign In</Link>
-              <Link to="/signup" className="hover:text-foreground transition-colors">Sign Up</Link>
-            </div>
-          </div>
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2025 QuestionPaper AI. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

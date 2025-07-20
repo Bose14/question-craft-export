@@ -115,11 +115,6 @@ const Result = () => {
               title={config.subjectName} 
               content="Question paper generated successfully" 
             />
-            <Button onClick={handleEditConfiguration} variant="outline" size="sm" className="text-xs sm:text-sm">
-              <Edit className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Edit Config</span>
-              <span className="sm:hidden">Config</span>
-            </Button>
             <Button onClick={handleWordGenerate} variant="outline" size="sm" className="text-xs sm:text-sm">
               <Download className="w-4 h-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Word</span>
