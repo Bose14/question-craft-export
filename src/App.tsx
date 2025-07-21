@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Generator from "./pages/Generator";
 import MCQGenerator from "./pages/MCQGenerator";
 import Result from "./pages/Result";
+import AnswerKey from "./pages/AnswerKey";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/generator" element={<Generator />} />
           <Route path="/mcq-generator" element={<MCQGenerator />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/answer-key" element={<AnswerKey />} />
           <Route path="/pricing" element={<Pricing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
