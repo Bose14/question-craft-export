@@ -35,11 +35,21 @@ interface AutoGenConfig {
   subQuestionsCount: number;
 }
 
+interface IndividualConfig {
+  aiQuestionCount: number;
+  manualQuestionCount: number;
+  defaultMarks: number;
+  defaultDifficulty: string;
+  defaultUnit: string;
+  defaultSubQuestionsCount: number;
+}
+
 interface Section {
   id: string;
   name: string;
   isAutoGenerate: boolean;
   autoConfig: AutoGenConfig;
+  individualConfig: IndividualConfig;
   questions: QuestionConfig[];
 }
 
@@ -62,6 +72,14 @@ const Generator = () => {
         difficulty: "Easy",
         units: ["UNIT I"],
         subQuestionsCount: 0
+      },
+      individualConfig: {
+        aiQuestionCount: 3,
+        manualQuestionCount: 2,
+        defaultMarks: 2,
+        defaultDifficulty: "Medium",
+        defaultUnit: "UNIT I",
+        defaultSubQuestionsCount: 0
       },
       questions: []
     }
@@ -99,9 +117,67 @@ const Generator = () => {
         units: ["UNIT I"],
         subQuestionsCount: 0
       },
+      individualConfig: {
+        aiQuestionCount: 3,
+        manualQuestionCount: 2,
+        defaultMarks: 2,
+        defaultDifficulty: "Medium",
+        defaultUnit: "UNIT I",
+        defaultSubQuestionsCount: 0
+      },
       questions: []
     };
     setSections([...sections, newSection]);
+  };
+
+  const updateIndividualConfig = (sectionId: string, field: keyof IndividualConfig, value: any) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        const newSection = {
+          ...section,
+          individualConfig: { ...section.individualConfig, [field]: value }
+        };
+        // Auto-generate questions when counts change
+        if (field === 'aiQuestionCount' || field === 'manualQuestionCount') {
+          newSection.questions = generateIndividualQuestions(newSection);
+        }
+        return newSection;
+      }
+      return section;
+    }));
+  };
+
+  const generateIndividualQuestions = (section: Section): QuestionConfig[] => {
+    const questions: QuestionConfig[] = [];
+    const { aiQuestionCount, manualQuestionCount, defaultMarks, defaultDifficulty, defaultUnit, defaultSubQuestionsCount } = section.individualConfig;
+    
+    // Generate AI questions
+    for (let i = 0; i < aiQuestionCount; i++) {
+      questions.push({
+        id: `ai-${Date.now()}-${i}`,
+        marks: defaultMarks,
+        difficulty: defaultDifficulty,
+        unit: defaultUnit,
+        subQuestionsCount: defaultSubQuestionsCount,
+        isAIGenerated: true
+      });
+    }
+    
+    // Generate manual questions
+    for (let i = 0; i < manualQuestionCount; i++) {
+      questions.push({
+        id: `manual-${Date.now()}-${i}`,
+        text: "",
+        marks: defaultMarks,
+        difficulty: defaultDifficulty,
+        unit: defaultUnit,
+        subQuestionsCount: defaultSubQuestionsCount,
+        isAIGenerated: false,
+        subQuestions: []
+      });
+    }
+    
+    return questions;
   };
 
   const removeSection = (id: string) => {
@@ -552,38 +628,108 @@ const Generator = () => {
                       </div>
                     ) : (
                       /* Individual Question Configuration */
-                      <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <h5 className="font-medium flex items-center">
-                            <Brain className="w-4 h-4 mr-2" />
-                            Smart Question Configuration
-                          </h5>
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => generateSmartQuestions(section.id)}
-                              size="sm"
-                              variant="outline"
-                              className="text-accent border-accent/30 hover:bg-accent/10"
+                      <div className="space-y-4 bg-gradient-hero p-4 rounded-lg border border-accent/20">
+                        <h5 className="font-medium text-foreground flex items-center">
+                          <Brain className="w-4 h-4 mr-2 text-accent" />
+                          Individual Question Configuration
+                        </h5>
+                        <p className="text-sm text-muted-foreground">Specify how many AI and manual questions you need, then configure each one individually</p>
+                        
+                        {/* Question Count Configuration */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-card/50 p-4 rounded-lg">
+                          <div>
+                            <Label>AI Questions</Label>
+                            <Input
+                              type="number"
+                              value={section.individualConfig.aiQuestionCount}
+                              onChange={(e) => updateIndividualConfig(section.id, 'aiQuestionCount', parseInt(e.target.value) || 0)}
+                              min="0"
+                              max="20"
+                              placeholder="0"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>Manual Questions</Label>
+                            <Input
+                              type="number"
+                              value={section.individualConfig.manualQuestionCount}
+                              onChange={(e) => updateIndividualConfig(section.id, 'manualQuestionCount', parseInt(e.target.value) || 0)}
+                              min="0"
+                              max="20"
+                              placeholder="0"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>Default Marks</Label>
+                            <Input
+                              type="number"
+                              value={section.individualConfig.defaultMarks}
+                              onChange={(e) => updateIndividualConfig(section.id, 'defaultMarks', parseInt(e.target.value) || 1)}
+                              min="1"
+                              max="20"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>Default Difficulty</Label>
+                            <Select
+                              value={section.individualConfig.defaultDifficulty}
+                              onValueChange={(value) => updateIndividualConfig(section.id, 'defaultDifficulty', value)}
                             >
-                              <Wand2 className="w-4 h-4 mr-2" />
-                              Generate Smart Config
-                            </Button>
-                            <Button
-                              onClick={() => addManualQuestion(section.id)}
-                              size="sm"
-                              variant="outline"
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Easy">Easy</SelectItem>
+                                <SelectItem value="Medium">Medium</SelectItem>
+                                <SelectItem value="Hard">Hard</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          
+                          <div>
+                            <Label>Default Unit</Label>
+                            <Select
+                              value={section.individualConfig.defaultUnit}
+                              onValueChange={(value) => updateIndividualConfig(section.id, 'defaultUnit', value)}
                             >
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Manual Question
-                            </Button>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {units.map((unit) => (
+                                  <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          
+                          <div>
+                            <Label>Default Sub-questions</Label>
+                            <Input
+                              type="number"
+                              value={section.individualConfig.defaultSubQuestionsCount}
+                              onChange={(e) => updateIndividualConfig(section.id, 'defaultSubQuestionsCount', parseInt(e.target.value) || 0)}
+                              min="0"
+                              max="5"
+                            />
                           </div>
                         </div>
                         
-                        {section.questions.length === 0 && (
-                          <div className="text-center py-8 text-muted-foreground bg-muted rounded-lg">
+                        {section.questions.length === 0 ? (
+                          <div className="text-center py-8 text-muted-foreground bg-card/30 rounded-lg">
                             <Brain className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                            <p className="mb-2">No questions configured yet</p>
-                            <p className="text-sm">Use "Generate Smart Config" for AI-powered questions or "Add Manual Question" to write your own</p>
+                            <p className="mb-2">Set AI and Manual question counts above</p>
+                            <p className="text-sm">Questions will appear automatically for individual configuration</p>
+                          </div>
+                        ) : (
+                          <div className="bg-card/30 p-3 rounded-lg">
+                            <p className="text-sm text-accent">
+                              <strong>Total Questions:</strong> {section.questions.length} 
+                              ({section.questions.filter(q => q.isAIGenerated).length} AI + {section.questions.filter(q => !q.isAIGenerated).length} Manual)
+                            </p>
                           </div>
                         )}
                         
