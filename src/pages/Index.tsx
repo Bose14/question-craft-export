@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen, ChevronDown } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import Footer from "@/components/Footer";
 
@@ -62,15 +63,35 @@ const Index = () => {
               <span className="text-xl font-bold text-foreground">Vinathaal</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              {/* <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+               <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
-              </Link> */}
-              <Link to="/generator" className="text-muted-foreground hover:text-foreground transition-colors">
-                Generator
               </Link>
-              <Link to="/mcq-generator" className="text-muted-foreground hover:text-foreground transition-colors">
-                MCQ Generator
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <span>Generator</span>
+                  <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem asChild>
+                    <Link to="/mcq-generator" className="flex items-center">
+                      <Brain className="w-4 h-4 mr-2" />
+                      MCQ Generator
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/generator" className="flex items-center">
+                      <Upload className="w-4 h-4 mr-2" />
+                      Generator using Syllabus
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/generator" className="flex items-center">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Generator using Question Bank
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div className="flex items-center space-x-4">
               <Link to="/login">
