@@ -1,9 +1,12 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen, ChevronDown } from "lucide-react";
+import { FileText, Upload, Download, Zap, Users, Shield, Brain, Settings, Image, FileKey, Share, Clock, BookOpen, ChevronDown, ArrowRight, Star } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
+import DashboardStats from "@/components/DashboardStats";
+import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -92,6 +95,9 @@ const Index = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Link to="/support" className="text-muted-foreground hover:text-foreground transition-colors">
+                Support
+              </Link>
             </div>
             <div className="flex items-center space-x-4">
               <Link to="/login">
@@ -135,6 +141,138 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Dashboard Stats Section */}
+      <DashboardStats />
+
+      {/* Popular Question Papers Section - Enhanced */}
+      <section className="py-20 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
+            <p className="text-xl text-muted-foreground">Get started with these commonly used subjects and boost your productivity</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { 
+                subject: "Mathematics", 
+                topic: "Calculus & Linear Algebra", 
+                difficulty: "Medium", 
+                duration: "3 Hours",
+                questions: 15,
+                rating: 4.8,
+                downloads: "2.1k"
+              },
+              { 
+                subject: "Computer Science", 
+                topic: "Data Structures & Algorithms", 
+                difficulty: "Hard", 
+                duration: "3 Hours",
+                questions: 12,
+                rating: 4.9,
+                downloads: "1.8k"
+              },
+              { 
+                subject: "Physics", 
+                topic: "Mechanics & Thermodynamics", 
+                difficulty: "Medium", 
+                duration: "3 Hours",
+                questions: 18,
+                rating: 4.7,
+                downloads: "1.5k"
+              },
+              { 
+                subject: "Chemistry", 
+                topic: "Organic & Inorganic Chemistry", 
+                difficulty: "Medium", 
+                duration: "3 Hours",
+                questions: 16,
+                rating: 4.6,
+                downloads: "1.3k"
+              },
+              { 
+                subject: "English", 
+                topic: "Literature & Grammar", 
+                difficulty: "Easy", 
+                duration: "2 Hours",
+                questions: 20,
+                rating: 4.5,
+                downloads: "2.5k"
+              },
+              { 
+                subject: "Economics", 
+                topic: "Microeconomics & Macroeconomics", 
+                difficulty: "Medium", 
+                duration: "3 Hours",
+                questions: 14,
+                rating: 4.8,
+                downloads: "1.1k"
+              }
+            ].map((template, index) => (
+              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20 bg-gradient-card group relative overflow-hidden">
+                <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  <span className="text-xs font-medium text-foreground">{template.rating}</span>
+                </div>
+                
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg text-primary group-hover:text-accent transition-colors">
+                    {template.subject}
+                  </CardTitle>
+                  <CardDescription className="text-text-secondary">
+                    {template.topic}
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent>
+                  <div className="space-y-3 mb-6">
+                    <div className="flex justify-between items-center">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        template.difficulty === 'Easy' ? 'bg-success/20 text-success' :
+                        template.difficulty === 'Medium' ? 'bg-accent/20 text-accent' :
+                        'bg-error/20 text-error'
+                      }`}>
+                        {template.difficulty}
+                      </span>
+                      <span className="text-sm text-text-secondary">{template.duration}</span>
+                    </div>
+                    
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>{template.questions} Questions</span>
+                      <span>{template.downloads} Downloads</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Link to="/generator">
+                      <Button size="sm" className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all">
+                        Use This Template
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                    <Button variant="outline" size="sm" className="w-full text-xs">
+                      Preview Template
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Link to="/generator">
+              <Button variant="outline" size="lg" className="px-8">
+                View All Templates
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <HowItWorks />
+
       {/* Recent Papers Section */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4">
@@ -160,49 +298,6 @@ const Index = () => {
                   <div className="text-sm text-muted-foreground/80">
                     Created: {new Date(paper.date).toLocaleDateString()}
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Default Question Papers Section */}
-      <section className="py-20 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
-            <p className="text-xl text-muted-foreground">Get started with these commonly used subjects</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { subject: "Mathematics", topic: "Calculus & Linear Algebra", difficulty: "Medium", duration: "3 Hours" },
-              { subject: "Computer Science", topic: "Data Structures & Algorithms", difficulty: "Hard", duration: "3 Hours" },
-              { subject: "Physics", topic: "Mechanics & Thermodynamics", difficulty: "Medium", duration: "3 Hours" },
-              { subject: "Chemistry", topic: "Organic & Inorganic Chemistry", difficulty: "Medium", duration: "3 Hours" },
-              { subject: "English", topic: "Literature & Grammar", difficulty: "Easy", duration: "2 Hours" },
-              { subject: "Economics", topic: "Microeconomics & Macroeconomics", difficulty: "Medium", duration: "3 Hours" }
-            ].map((template, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20">
-                <CardHeader>
-                  <CardTitle className="text-lg text-primary">{template.subject}</CardTitle>
-                  <CardDescription className="text-text-secondary">{template.topic}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      template.difficulty === 'Easy' ? 'bg-success/20 text-success' :
-                      template.difficulty === 'Medium' ? 'bg-accent/20 text-accent' :
-                      'bg-error/20 text-error'
-                    }`}>
-                      {template.difficulty}
-                    </span>
-                    <span className="text-sm text-text-secondary">{template.duration}</span>
-                  </div>
-                  <Link to="/generator">
-                    <Button size="sm" className="w-full">Use This Template</Button>
-                  </Link>
                 </CardContent>
               </Card>
             ))}
