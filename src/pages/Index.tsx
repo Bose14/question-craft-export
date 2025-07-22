@@ -152,7 +152,7 @@ const Index = () => {
             <p className="text-xl text-muted-foreground">Get started with these commonly used subjects and boost your productivity</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { 
                 subject: "Mathematics", 
@@ -161,7 +161,8 @@ const Index = () => {
                 duration: "3 Hours",
                 questions: 15,
                 rating: 4.8,
-                downloads: "2.1k"
+                downloads: "2.1k",
+                preview: "/placeholder.svg"
               },
               { 
                 subject: "Computer Science", 
@@ -170,7 +171,8 @@ const Index = () => {
                 duration: "3 Hours",
                 questions: 12,
                 rating: 4.9,
-                downloads: "1.8k"
+                downloads: "1.8k",
+                preview: "/placeholder.svg"
               },
               { 
                 subject: "Physics", 
@@ -179,7 +181,8 @@ const Index = () => {
                 duration: "3 Hours",
                 questions: 18,
                 rating: 4.7,
-                downloads: "1.5k"
+                downloads: "1.5k",
+                preview: "/placeholder.svg"
               },
               { 
                 subject: "Chemistry", 
@@ -188,7 +191,8 @@ const Index = () => {
                 duration: "3 Hours",
                 questions: 16,
                 rating: 4.6,
-                downloads: "1.3k"
+                downloads: "1.3k",
+                preview: "/placeholder.svg"
               },
               { 
                 subject: "English", 
@@ -197,7 +201,8 @@ const Index = () => {
                 duration: "2 Hours",
                 questions: 20,
                 rating: 4.5,
-                downloads: "2.5k"
+                downloads: "2.5k",
+                preview: "/placeholder.svg"
               },
               { 
                 subject: "Economics", 
@@ -206,51 +211,70 @@ const Index = () => {
                 duration: "3 Hours",
                 questions: 14,
                 rating: 4.8,
-                downloads: "1.1k"
+                downloads: "1.1k",
+                preview: "/placeholder.svg"
               }
             ].map((template, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20 bg-gradient-card group relative overflow-hidden">
-                <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs font-medium text-foreground">{template.rating}</span>
+              <Card key={index} className="hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20 bg-white group relative overflow-hidden">
+                {/* Template Preview Image */}
+                <div className="relative h-48 bg-gradient-to-br from-primary/10 to-accent/10 overflow-hidden">
+                  <img 
+                    src={template.preview} 
+                    alt={`${template.subject} template preview`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  
+                  {/* Rating Badge */}
+                  <div className="absolute top-3 right-3 flex items-center space-x-1 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                    <span className="text-xs font-semibold text-foreground">{template.rating}</span>
+                  </div>
+                  
+                  {/* Difficulty Badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
+                      template.difficulty === 'Easy' ? 'bg-success/90 text-white' :
+                      template.difficulty === 'Medium' ? 'bg-accent/90 text-white' :
+                      'bg-error/90 text-white'
+                    }`}>
+                      {template.difficulty}
+                    </span>
+                  </div>
                 </div>
                 
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-primary group-hover:text-accent transition-colors">
+                  <CardTitle className="text-xl text-primary group-hover:text-accent transition-colors">
                     {template.subject}
                   </CardTitle>
-                  <CardDescription className="text-text-secondary">
+                  <CardDescription className="text-text-secondary font-medium">
                     {template.topic}
                   </CardDescription>
                 </CardHeader>
                 
                 <CardContent>
-                  <div className="space-y-3 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        template.difficulty === 'Easy' ? 'bg-success/20 text-success' :
-                        template.difficulty === 'Medium' ? 'bg-accent/20 text-accent' :
-                        'bg-error/20 text-error'
-                      }`}>
-                        {template.difficulty}
-                      </span>
-                      <span className="text-sm text-text-secondary">{template.duration}</span>
+                  <div className="space-y-4 mb-6">
+                    <div className="flex justify-between items-center text-sm">
+                      <div className="flex items-center space-x-1 text-muted-foreground">
+                        <Clock className="w-4 h-4" />
+                        <span>{template.duration}</span>
+                      </div>
+                      <span className="text-muted-foreground">{template.downloads} Downloads</span>
                     </div>
                     
-                    <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>{template.questions} Questions</span>
-                      <span>{template.downloads} Downloads</span>
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">{template.questions}</span> Questions
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Link to="/generator">
-                      <Button size="sm" className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all">
-                        Use This Template
+                      <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5">
+                        Choose Template
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
-                    <Button variant="outline" size="sm" className="w-full text-xs">
+                    <Button variant="outline" size="sm" className="w-full text-sm border-primary/20 hover:border-primary/40">
                       Preview Template
                     </Button>
                   </div>
@@ -259,9 +283,9 @@ const Index = () => {
             ))}
           </div>
           
-          <div className="text-center mt-8">
+          <div className="text-center mt-12">
             <Link to="/generator">
-              <Button variant="outline" size="lg" className="px-8">
+              <Button variant="outline" size="lg" className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5">
                 View All Templates
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
