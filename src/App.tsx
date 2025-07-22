@@ -12,6 +12,7 @@ import MCQGenerator from "./pages/MCQGenerator";
 import Result from "./pages/Result";
 import AnswerKey from "./pages/AnswerKey";
 import Pricing from "./pages/Pricing";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/result" element={<Result />} />
           <Route path="/answer-key" element={<AnswerKey />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/support" element={<Support />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
