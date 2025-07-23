@@ -61,9 +61,9 @@ const Generator = () => {
   useEffect(() => {
     const checkAuth = () => {
       const authToken = localStorage.getItem('authToken');
-      const userSession = sessionStorage.getItem('userSession');
+      const userData = localStorage.getItem('user');
       
-      if (!authToken && !userSession) {
+      if (!authToken || !userData) {
         // Store current path for redirect after login
         sessionStorage.setItem('redirectAfterLogin', '/generator');
         navigate('/login');

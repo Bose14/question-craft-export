@@ -54,10 +54,18 @@ const Signup = () => {
 
       if (res.ok) {
         toast.success("Account created successfully! Welcome to QuestionCraft.");
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ name: formData.name, email: formData.email })
-        );
+        
+        // Store user data consistently
+        const userData = {
+          name: formData.name,
+          email: formData.email,
+          token: "demo-token-" + Date.now(),
+          loginTime: new Date().toISOString(),
+        };
+        
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("authToken", userData.token);
+        
         navigate("/");
       } else {
         toast.error(data.message || "Signup failed. Please try again.");

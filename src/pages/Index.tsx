@@ -15,14 +15,25 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    const checkAuthStatus = () => {
+      const userData = localStorage.getItem("user");
+      const authToken = localStorage.getItem("authToken");
+      
+      if (userData && authToken) {
+        setUser(JSON.parse(userData));
+      } else {
+        setUser(null);
+      }
+    };
 
-    const handleStorageChange = () => {
-      const updatedUser = localStorage.getItem("user");
-      setUser(updatedUser ? JSON.parse(updatedUser) : null);
+    // Check auth status on component mount
+    checkAuthStatus();
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "user" || e.key === "authToken") {
+        checkAuthStatus();
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -30,6 +41,7 @@ const Index = () => {
   }, []);
 
   const handleLogout = () => {
+    localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     setUser(null);
     toast.success("Logged out successfully");
@@ -37,11 +49,22 @@ const Index = () => {
   };
 
   const handleGeneratorClick = (path: string) => {
+    const authToken = localStorage.getItem("authToken");
+    const userData = localStorage.getItem("user");
+    
     if (!user) {
       sessionStorage.setItem("redirectAfterLogin", path);
       navigate("/login");
       return;
     }
+    
+    // Double check authentication before allowing access
+    if (!authToken || !userData) {
+      sessionStorage.setItem("redirectAfterLogin", path);
+      navigate("/login");
+      return;
+    }
+    
     navigate(path);
   };
 

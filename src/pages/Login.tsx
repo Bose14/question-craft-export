@@ -41,14 +41,16 @@ const Login = () => {
       if (res.ok) {
         toast.success("Login successful! Welcome back.");
 
-        localStorage.setItem("authToken", data.token || "demo-token-" + Date.now());
-        sessionStorage.setItem(
-          "userSession",
-          JSON.stringify({
-            email,
-            loginTime: new Date().toISOString(),
-          })
-        );
+        // Store user data in localStorage for persistence
+        const userData = {
+          name: data.user?.name || email.split('@')[0],
+          email: email,
+          token: data.token || "demo-token-" + Date.now(),
+          loginTime: new Date().toISOString(),
+        };
+        
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("authToken", userData.token);
 
         const redirectPath = sessionStorage.getItem("redirectAfterLogin");
         if (redirectPath) {
