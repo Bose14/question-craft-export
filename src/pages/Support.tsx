@@ -12,6 +12,9 @@ import { z } from "zod";
 import { FileText, Mail, Phone, MessageCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
 
 const contactFormSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -92,13 +95,35 @@ const Support = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
+      {/* Navigation */}
+<nav className="bg-white border-b border-slate-200 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      {/* Left - Back link */}
+      <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back to Home</span>
+      </Link>
+
+      {/* Right - Logo */}
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal%20logo.jpg"
+          alt="Vinathaal Logo"
+          className="h-16 w-auto object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+
       {/* Hero Section */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold text-foreground mb-6">
             How Can We <span className="bg-gradient-primary bg-clip-text text-transparent">Help You?</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-xl text-muted-foreground mb-3">
             Find answers to common questions or get in touch with our support team
           </p>
         </div>

@@ -32,90 +32,102 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors">
-            <FileText className="w-8 h-8" />
-            <span className="text-xl font-semibold">QuestionCraft</span>
-          </Link>
-          <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors mt-4">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Home</span>
-          </Link>
-        </div>
-        
-        <Card className="bg-gradient-card border-accent/20 shadow-elegant">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-primary">Create Account</CardTitle>
-            <CardDescription className="text-text-secondary">
-              Join thousands of educators using AI to create better question papers
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Create a password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="Confirm your password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90">
-                Create Account
-              </Button>
-            </form>
-            
-            <div className="mt-6 text-center">
-              <p className="text-sm text-text-secondary">
-                Already have an account?{" "}
-                <Link to="/login" className="text-primary hover:text-accent font-medium transition-colors">
-                  Sign in
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+  <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4 relative">
+    
+    {/* Back to Home - Top Left Corner */}
+    <Link
+      to="/"
+      className="absolute top-4 left-4 inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors"
+    >
+      <ArrowLeft className="w-4 h-4" />
+      <span className="text-sm">Back to Home</span>
+    </Link>
+
+    <div className="w-full max-w-md">
+      <div className="text-center mb-8">
+        <Link
+          to="/"
+          className="inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors"
+        >
+          <FileText className="w-8 h-8" />
+          <span className="text-xl font-semibold">QuestionCraft</span>
+        </Link>
       </div>
+
+      <Card className="bg-gradient-card border-accent/20 shadow-elegant">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl text-primary">Create Account</CardTitle>
+          <CardDescription className="text-text-secondary">
+            Join thousands of educators using AI to create better question papers
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Create a password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90">
+              Create Account
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-text-secondary">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:text-accent font-medium transition-colors"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  );
-};
+  </div>
+);
+}
 
 export default Signup;

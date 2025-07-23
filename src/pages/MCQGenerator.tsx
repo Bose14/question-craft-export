@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Plus, Trash2, FileText, Image } from "lucide-react";
 import { toast } from "sonner";
 
+
 interface MCQQuestionConfig {
   id: string;
   text: string;
@@ -208,87 +209,104 @@ const MCQGenerator = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
-      <nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
-            <Link to="/" className="flex items-center space-x-2 text-primary hover:text-accent transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">Back to Home</span>
-            </Link>
-          </div>
+<nav className="bg-white border-b border-slate-200 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      {/* Left - Back link */}
+      <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back to Home</span>
+      </Link>
+
+      {/* Right - Logo */}
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal%20logo.jpg"
+          alt="Vinathaal Logo"
+          className="h-16 w-auto object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {/* Syllabus Upload Card */}
+    <Card className="bg-gradient-card border-accent/20">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center space-x-2 text-primary">
+          <FileText className="w-5 h-5" />
+          <span>Upload Syllabus (Optional)</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleSyllabusUpload}
+            className="hidden"
+            id="syllabus-upload"
+          />
+          <label htmlFor="syllabus-upload" className="cursor-pointer">
+            {syllabusImage ? (
+              <div className="space-y-4">
+                <img src={syllabusImage} alt="Syllabus preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
+                <p className="text-success font-medium">Syllabus uploaded successfully!</p>
+              </div>
+            ) : (
+              <>
+                <FileText className="w-12 h-12 mx-auto text-accent mb-4" />
+                <p className="text-text-primary font-medium">Click to upload your syllabus</p>
+                <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
+              </>
+            )}
+          </label>
         </div>
-      </nav>
+      </CardContent>
+    </Card>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <Card className="mb-8 bg-gradient-card border-accent/20">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center space-x-2 text-primary">
-              <FileText className="w-5 h-5" />
-              <span>Upload Syllabus (Optional)</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleSyllabusUpload}
-                className="hidden"
-                id="syllabus-upload"
-              />
-              <label htmlFor="syllabus-upload" className="cursor-pointer">
-                {syllabusImage ? (
-                  <div className="space-y-4">
-                    <img src={syllabusImage} alt="Syllabus preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
-                    <p className="text-success font-medium">Syllabus uploaded successfully!</p>
-                  </div>
-                ) : (
-                  <>
-                    <FileText className="w-12 h-12 mx-auto text-accent mb-4" />
-                    <p className="text-text-primary font-medium">Click to upload your syllabus</p>
-                    <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
-                  </>
-                )}
-              </label>
-            </div>
-          </CardContent>
-        </Card>
+    {/* Header Image Upload Card */}
+    <Card className="bg-gradient-card border-accent/20">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center space-x-2 text-primary">
+          <Image className="w-5 h-5" />
+          <span>Upload Custom Header Image (Optional)</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleHeaderImageUpload}
+            className="hidden"
+            id="header-upload"
+          />
+          <label htmlFor="header-upload" className="cursor-pointer">
+            {headerImage ? (
+              <div className="space-y-4">
+                <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
+                <p className="text-success font-medium">Header image uploaded successfully!</p>
+              </div>
+            ) : (
+              <>
+                <Image className="w-12 h-12 mx-auto text-accent mb-4" />
+                <p className="text-text-primary font-medium">Click to upload your university/institution header</p>
+                <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
+              </>
+            )}
+          </label>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+</div>
 
-        <Card className="mb-8 bg-gradient-card border-accent/20">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center space-x-2 text-primary">
-              <Image className="w-5 h-5" />
-              <span>Upload Custom Header Image (Optional)</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleHeaderImageUpload}
-                className="hidden"
-                id="header-upload"
-              />
-              <label htmlFor="header-upload" className="cursor-pointer">
-                {headerImage ? (
-                  <div className="space-y-4">
-                    <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
-                    <p className="text-success font-medium">Header image uploaded successfully!</p>
-                  </div>
-                ) : (
-                  <>
-                    <Image className="w-12 h-12 mx-auto text-accent mb-4" />
-                    <p className="text-text-primary font-medium">Click to upload your university/institution header</p>
-                    <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
-                  </>
-                )}
-              </label>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card className="mb-8">
+<div className="max-w-4xl mx-auto mb-8">
+  <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <FileText className="w-5 h-5" />
@@ -549,6 +567,7 @@ const MCQGenerator = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
 
         <div className="text-center">
           <Button 
@@ -561,7 +580,6 @@ const MCQGenerator = () => {
           </Button>
         </div>
       </div>
-    </div>
   );
 };
 
