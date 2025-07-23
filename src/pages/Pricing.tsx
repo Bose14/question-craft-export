@@ -60,20 +60,26 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Navigation */}
-      <nav className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
-            </Link>
-            <div className="flex items-center space-x-2">
-              <div className="text-3xl">📝</div>
-              <span className="text-xl font-semibold">QuestionPaper AI</span>
-            </div>
-          </div>
-        </div>
-      </nav>
+<nav className="bg-white border-b border-slate-200 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      {/* Left - Back link */}
+      <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back to Home</span>
+      </Link>
+
+      {/* Right - Logo */}
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal%20logo.jpg"
+          alt="Vinathaal Logo"
+          className="h-16 w-auto object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Header */}

@@ -363,16 +363,26 @@ const Generator = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <nav className="bg-gradient-primary text-white border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
-            <Link to="/" className="flex items-center space-x-2 text-white hover:text-white/80">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
+<nav className="bg-white border-b border-slate-200 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      {/* Left - Back link */}
+      <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back to Home</span>
+      </Link>
+
+      {/* Right - Logo */}
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal%20logo.jpg"
+          alt="Vinathaal Logo"
+          className="h-16 w-auto object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Upload Syllabus */}

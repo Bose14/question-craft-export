@@ -62,7 +62,11 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">
-              <FileText className="w-8 h-8 text-primary" />
+              <img
+                src="/vinathaal_icon.png"
+                alt="Vinathaal Logo"
+                className="w-14 h-14 object-contain"
+              />
               <span className="text-xl font-bold text-foreground">Vinathaal</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -101,10 +105,12 @@ const Index = () => {
             </div>
             <div className="flex items-center space-x-4">
               <Link to="/login">
-                <Button variant="outline">Login</Button>
+                <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button>Sign Up</Button>
+                <Button className="px-8 py-3 bg-gradient-primary hover:opacity-90">
+                  Sign Up
+                </Button>
               </Link>
             </div>
           </div>
@@ -132,7 +138,7 @@ const Index = () => {
         </Button>
       </Link>
       <Link to="/mcq-generator">
-        <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+        <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground">
           <Brain className="w-5 h-5 mr-2" />
           MCQ Generator
         </Button>
