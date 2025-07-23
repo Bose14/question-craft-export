@@ -146,156 +146,62 @@ const Index = () => {
       <DashboardStats />
 
       {/* Popular Question Papers Section - Enhanced */}
-      <section className="py-20 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
-            <p className="text-xl text-muted-foreground">Get started with these commonly used subjects and boost your productivity</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { 
-                subject: "Mathematics", 
-                topic: "Calculus & Linear Algebra", 
-                difficulty: "Medium", 
-                duration: "3 Hours",
-                questions: 15,
-                rating: 4.8,
-                downloads: "2.1k",
-                preview: "/placeholder.svg"
-              },
-              { 
-                subject: "Computer Science", 
-                topic: "Data Structures & Algorithms", 
-                difficulty: "Hard", 
-                duration: "3 Hours",
-                questions: 12,
-                rating: 4.9,
-                downloads: "1.8k",
-                preview: "/placeholder.svg"
-              },
-              { 
-                subject: "Physics", 
-                topic: "Mechanics & Thermodynamics", 
-                difficulty: "Medium", 
-                duration: "3 Hours",
-                questions: 18,
-                rating: 4.7,
-                downloads: "1.5k",
-                preview: "/placeholder.svg"
-              },
-              { 
-                subject: "Chemistry", 
-                topic: "Organic & Inorganic Chemistry", 
-                difficulty: "Medium", 
-                duration: "3 Hours",
-                questions: 16,
-                rating: 4.6,
-                downloads: "1.3k",
-                preview: "/placeholder.svg"
-              },
-              { 
-                subject: "English", 
-                topic: "Literature & Grammar", 
-                difficulty: "Easy", 
-                duration: "2 Hours",
-                questions: 20,
-                rating: 4.5,
-                downloads: "2.5k",
-                preview: "/placeholder.svg"
-              },
-              { 
-                subject: "Economics", 
-                topic: "Microeconomics & Macroeconomics", 
-                difficulty: "Medium", 
-                duration: "3 Hours",
-                questions: 14,
-                rating: 4.8,
-                downloads: "1.1k",
-                preview: "/placeholder.svg"
-              }
-            ].map((template, index) => (
-              <Card key={index} className="hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer border-accent/20 bg-white group relative overflow-hidden">
-                {/* Template Preview Image */}
-                <div className="relative h-48 bg-gradient-to-br from-primary/10 to-accent/10 overflow-hidden">
-                  <img 
-                    src={template.preview} 
-                    alt={`${template.subject} template preview`}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                  
-                  {/* Rating Badge */}
-                  <div className="absolute top-3 right-3 flex items-center space-x-1 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    <span className="text-xs font-semibold text-foreground">{template.rating}</span>
-                  </div>
-                  
-                  {/* Difficulty Badge */}
-                  <div className="absolute top-3 left-3">
-                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                      template.difficulty === 'Easy' ? 'bg-success/90 text-white' :
-                      template.difficulty === 'Medium' ? 'bg-accent/90 text-white' :
-                      'bg-error/90 text-white'
-                    }`}>
-                      {template.difficulty}
-                    </span>
-                  </div>
-                </div>
-                
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-xl text-primary group-hover:text-accent transition-colors">
-                    {template.subject}
-                  </CardTitle>
-                  <CardDescription className="text-text-secondary font-medium">
-                    {template.topic}
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent>
-                  <div className="space-y-4 mb-6">
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex items-center space-x-1 text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        <span>{template.duration}</span>
-                      </div>
-                      <span className="text-muted-foreground">{template.downloads} Downloads</span>
-                    </div>
-                    
-                    <div className="text-sm text-muted-foreground">
-                      <span className="font-medium">{template.questions}</span> Questions
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <Link to="/generator">
-                      <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5">
-                        Choose Template
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                    <Button variant="outline" size="sm" className="w-full text-sm border-primary/20 hover:border-primary/40">
-                      Preview Template
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <Link to="/generator">
-              <Button variant="outline" size="lg" className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5">
-                View All Templates
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+<section className="py-20 bg-secondary/30">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
+      <p className="text-xl text-muted-foreground">Select a template to begin creating your question paper</p>
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[
+        { preview: "/placeholder.svg" },
+        { preview: "/placeholder.svg" },
+        { preview: "/placeholder.svg" },
+        { preview: "/placeholder.svg" },
+        { preview: "/placeholder.svg" },
+        { preview: "/placeholder.svg" },
+      ].map((template, index) => (
+        <div key={index} className="flex justify-center">
+          <div className="relative w-full max-w-[300px] h-[340px] rounded-lg overflow-hidden group shadow-md">
+            {/* Template Image */}
+            <img
+              src={template.preview}
+              alt="Template Preview"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10" />
+
+            {/* Button at Bottom */}
+            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 px-4 w-full">
+              <Link to="/generator">
+                <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5">
+                  Choose Template
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
 
-      {/* How It Works Section */}
+    {/* View All Templates Button */}
+    <div className="text-center mt-12">
+      <Link to="/generator">
+        <Button variant="outline" size="lg" className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5">
+          View All Templates
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </Link>
+    </div>
+  </div>
+</section>
+
+
+  {/* How It Works Section */}
       <HowItWorks />
 
       {/* Recent Papers Section */}
@@ -329,6 +235,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+
 
       {/* Features Grid */}
       <section className="py-20 bg-gradient-features">

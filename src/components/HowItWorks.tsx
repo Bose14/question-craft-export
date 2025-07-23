@@ -52,58 +52,37 @@ const HowItWorks = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          {/* Connection lines for desktop */}
-          <div className="hidden lg:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
-          
-          {steps.map((step, index) => (
-            <div key={index} className="relative">
-              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-card border-accent/20 group">
-                <CardHeader className="text-center">
-                  {/* Step number */}
-                  <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-elegant relative z-10">
-                    {step.step}
-                  </div>
-                  
-                  {/* Icon */}
-                  <div className={`w-16 h-16 bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <div className="text-white">
-                      {step.icon}
-                    </div>
-                  </div>
-                  
-                  <CardTitle className="text-xl font-semibold text-primary group-hover:text-accent transition-colors">
-                    {step.title}
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="text-center">
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    {step.description}
-                  </p>
-                  
-                  <ul className="space-y-2 mb-6">
-                    {step.details.map((detail, detailIndex) => (
-                      <li key={detailIndex} className="flex items-center text-sm text-muted-foreground">
-                        <CheckCircle className="w-4 h-4 text-success mr-2 flex-shrink-0" />
-                        {detail}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-              
-              {/* Arrow for mobile */}
-              {index < steps.length - 1 && (
-                <div className="lg:hidden flex justify-center my-4">
-                  <div className="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center">
-                    <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-accent" />
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+<div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-0 py-10">
+  {steps.map((step, index) => (
+    <div key={index} className="relative flex flex-col items-center text-center px-4">
+      
+      {/* Icon with background blob */}
+      <div className="relative w-16 h-16 mb-4">
+        <div className={`absolute inset-0 rounded-md z-0 ${step.color}`} />
+        <div className="relative z-10 flex items-center justify-center w-full h-full text-black text-2xl">
+          {step.icon}
         </div>
+      </div>
+
+      {/* Title */}
+      <p className="text-base font-semibold text-black mb-1">
+        {`Step ${step.step}`}
+      </p>
+
+      {/* Description */}
+      <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+        {step.description}
+      </p>
+
+      {/* Right-aligned dashed line */}
+      {index < steps.length - 1 && (
+        <div className="hidden lg:block absolute top-8 left-full ml-2 w-20 border-t-2 border-dashed border-gray-400" />
+      )}
+    </div>
+  ))}
+</div>
+
+
 
         <div className="text-center mt-12">
           <Link to="/generator">
