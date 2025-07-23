@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -8,8 +8,38 @@ import FeatureCard from "@/components/FeatureCard";
 import DashboardStats from "@/components/DashboardStats";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
+import { useState, useEffect } from "react";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check login status (you can replace this with your actual auth logic)
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      // For demo purposes, checking localStorage. Replace with your auth logic
+      const authToken = localStorage.getItem('authToken');
+      const userSession = sessionStorage.getItem('userSession');
+      setIsLoggedIn(!!(authToken || userSession));
+    };
+
+    checkAuthStatus();
+    
+    // Listen for storage changes to update login status
+    window.addEventListener('storage', checkAuthStatus);
+    return () => window.removeEventListener('storage', checkAuthStatus);
+  }, []);
+
+  const handleGeneratorClick = (path: string) => {
+    if (!isLoggedIn) {
+      // Store the intended destination
+      sessionStorage.setItem('redirectAfterLogin', path);
+      navigate('/login');
+      return;
+    }
+    navigate(path);
+  };
+
   const recentPapers = [
     {
       id: 1,
@@ -100,12 +130,31 @@ const Index = () => {
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="outline">Login</Button>
-              </Link>
-              <Link to="/signup">
-                <Button>Sign Up</Button>
-              </Link>
+              {isLoggedIn ? (
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-muted-foreground">Welcome back!</span>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      localStorage.removeItem('authToken');
+                      sessionStorage.removeItem('userSession');
+                      setIsLoggedIn(false);
+                      navigate('/');
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant="outline">Login</Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button>Sign Up</Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -125,24 +174,69 @@ const Index = () => {
             and automated answer keys. Perfect for educators and institutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/generator">
-              <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90">
-                <FileText className="w-5 h-5 mr-2" />
-                Start Generating
-              </Button>
-            </Link>
-            <Link to="/mcq-generator">
-              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Brain className="w-5 h-5 mr-2" />
-                MCQ Generator
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="px-8 py-3 bg-gradient-primary hover:opacity-90"
+              onClick={() => handleGeneratorClick('/generator')}
+            >
+              <FileText className="w-5 h-5 mr-2" />
+              Start Generating
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8 py-3 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              onClick={() => handleGeneratorClick('/mcq-generator')}
+            >
+              <Brain className="w-5 h-5 mr-2" />
+              MCQ Generator
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Dashboard Stats Section */}
-      <DashboardStats />
+      {/* Dashboard Stats Section - Only show before login */}
+      {!isLoggedIn && <DashboardStats />}
+
+      {/* How It Works Section - Only show before login */}
+      {!isLoggedIn && <HowItWorks />}
+
+      {/* Recent Papers Section - Only show after login */}
+      {isLoggedIn && (
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
+              <Button 
+                variant="outline"
+                onClick={() => handleGeneratorClick('/generator')}
+              >
+                Create New
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {recentPapers.map((paper) => (
+                <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{paper.subject}</CardTitle>
+                    <CardDescription>{paper.university}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between text-sm text-muted-foreground mb-4">
+                      <span>Marks: {paper.marks}</span>
+                      <span>Sections: {paper.sections}</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground/80">
+                      Created: {new Date(paper.date).toLocaleDateString()}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Popular Question Papers Section - Enhanced */}
       <section className="py-20 bg-secondary/30">
@@ -268,12 +362,13 @@ const Index = () => {
                   </div>
                   
                   <div className="space-y-3">
-                    <Link to="/generator">
-                      <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5">
-                        Choose Template
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                    <Button 
+                      className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5"
+                      onClick={() => handleGeneratorClick('/generator')}
+                    >
+                      Choose Template
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
                     <Button variant="outline" size="sm" className="w-full text-sm border-primary/20 hover:border-primary/40">
                       Preview Template
                     </Button>
@@ -284,47 +379,15 @@ const Index = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Link to="/generator">
-              <Button variant="outline" size="lg" className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5">
-                View All Templates
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <HowItWorks />
-
-      {/* Recent Papers Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
-            <Link to="/generator">
-              <Button variant="outline">Create New</Button>
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {recentPapers.map((paper) => (
-              <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">{paper.subject}</CardTitle>
-                  <CardDescription>{paper.university}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between text-sm text-muted-foreground mb-4">
-                    <span>Marks: {paper.marks}</span>
-                    <span>Sections: {paper.sections}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground/80">
-                    Created: {new Date(paper.date).toLocaleDateString()}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5"
+              onClick={() => handleGeneratorClick('/generator')}
+            >
+              View All Templates
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </div>
       </section>
@@ -400,11 +463,13 @@ const Index = () => {
           <p className="text-xl text-white/80 mb-8">
             Join thousands of educators who have already made the switch to AI-powered question generation.
           </p>
-          <Link to="/generator">
-            <Button size="lg" className="px-8 py-3 bg-white text-primary hover:bg-white/90">
-              Get Started for Free
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="px-8 py-3 bg-white text-primary hover:bg-white/90"
+            onClick={() => handleGeneratorClick('/generator')}
+          >
+            Get Started for Free
+          </Button>
         </div>
       </section>
 

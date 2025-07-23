@@ -1,19 +1,54 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText } from "lucide-react";
+import { toast } from "sonner";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempt:", { email, password });
+    
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    // Simulate login process
+    setTimeout(() => {
+      // For demo purposes, accept any email/password
+      // In real app, you'd validate against your backend
+      
+      // Set auth token (replace with real token from your backend)
+      localStorage.setItem('authToken', 'demo-token-' + Date.now());
+      sessionStorage.setItem('userSession', JSON.stringify({
+        email,
+        loginTime: new Date().toISOString()
+      }));
+      
+      toast.success("Login successful!");
+      
+      // Check if there's a redirect path stored
+      const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      } else {
+        navigate('/');
+      }
+      
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -62,7 +97,7 @@ const Login = () => {
                 />
               </div>
               <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90">
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
             
