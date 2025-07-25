@@ -26,5 +26,4 @@ jobs:
             git pull origin main
             pnpm install
             pm2 restart backend
-EOF
 
