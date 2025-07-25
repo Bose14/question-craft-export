@@ -37,7 +37,7 @@ const Signup = () => {
     {/* Back to Home - Top Left Corner */}
     <Link
       to="/"
-      className="absolute top-4 left-4 inline-flex items-center space-x-2 text-primary hover:text-accent transition-colors"
+      className="absolute top-8 left-8 inline-flex items-center space-x-4 text-slate-900 hover:text-slate-700 transition-colors"
     >
       <ArrowLeft className="w-4 h-4" />
       <span className="text-sm">Back to Home</span>

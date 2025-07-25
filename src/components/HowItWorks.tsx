@@ -7,18 +7,34 @@ import { Link } from "react-router-dom";
 const HowItWorks = () => {
   const steps = [
     {
-      step: 1,
-      title: "Upload or Choose",
-      description: "Upload your syllabus image or select from our pre-built templates",
-      icon: <Upload className="w-8 h-8" />,
-      details: ["Upload syllabus PDF/image", "Or choose from 100+ templates", "Supports multiple formats"],
-      color: "from-blue-500 to-cyan-500"
-    },
+  step: 1,
+  title: "Upload or Choose",
+  description: "Upload your syllabus image or select from our pre-built templates",
+  icon: (
+    <img
+      src="upload.png"
+      alt="Upload Icon"
+      className="w-15 h-15 object-contain"
+    />
+  ),
+  details: [
+    "Upload syllabus PDF/image",
+    "Or choose from 100+ templates",
+    "Supports multiple formats"
+  ],
+  color: "from-blue-500 to-cyan-500"
+},
     {
       step: 2,
       title: "Configure Settings",
       description: "Set your preferences for difficulty, marks, sections, and question types",
-      icon: <Settings className="w-8 h-8" />,
+      icon: (
+    <img
+      src="settings.png"
+      alt="Settings Icon"
+      className="w-15 h-15 object-contain"
+    />
+  ),
       details: ["Set difficulty levels", "Configure mark distribution", "Choose question types"],
       color: "from-emerald-500 to-green-500"
     },
@@ -26,7 +42,13 @@ const HowItWorks = () => {
       step: 3,
       title: "AI Generation",
       description: "Our advanced AI analyzes your input and generates relevant questions",
-      icon: <Zap className="w-8 h-8" />,
+      icon: (
+    <img
+      src="brainstorm.png"
+      alt="Brainstorm Icon"
+      className="w-15 h-15 object-contain"
+    />
+  ),
       details: ["AI analyzes syllabus", "Generates quality questions", "Creates answer keys"],
       color: "from-orange-500 to-red-500"
     },
@@ -34,7 +56,13 @@ const HowItWorks = () => {
       step: 4,
       title: "Download & Share",
       description: "Get your professional question paper in PDF, Word or share directly",
-      icon: <Download className="w-8 h-8" />,
+      icon: (
+    <img
+      src="download.png"
+      alt="Download Icon"
+      className="w-15 h-15 object-contain"
+    />
+  ),
       details: ["Download as PDF/Word", "Share via email/WhatsApp", "Print-ready format"],
       color: "from-purple-500 to-pink-500"
     }
@@ -54,7 +82,7 @@ const HowItWorks = () => {
 
 <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-0 py-10">
   {steps.map((step, index) => (
-    <div key={index} className="relative flex flex-col items-center text-center px-4">
+    <div key={index} className="relative flex flex-col items-center text-center px-4 max-w-xs">
       
       {/* Icon with background blob */}
       <div className="relative w-16 h-16 mb-4">
@@ -69,18 +97,24 @@ const HowItWorks = () => {
         {`Step ${step.step}`}
       </p>
 
+      {/* Subtitle */}
+      <h4 className="text-sm mb-6 font-medium text-foreground ">
+        {step.title}
+      </h4>
+
       {/* Description */}
-      <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+      <p className="text-sm text-muted-foreground mb-2">
         {step.description}
       </p>
 
-      {/* Right-aligned dashed line */}
+      {/* Dashed Line */}
       {index < steps.length - 1 && (
-        <div className="hidden lg:block absolute top-8 left-full ml-2 w-20 border-t-2 border-dashed border-gray-400" />
+        <div className="hidden lg:block absolute top-8 left-full mr-0 ml-0 w-28 border-t-2 border-dashed border-gray-400" />
       )}
     </div>
   ))}
 </div>
+
 
 
 
