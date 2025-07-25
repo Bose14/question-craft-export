@@ -206,7 +206,7 @@ const Index = () => {
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Create professional question papers instantly with customizable sections, difficulty levels,
-            and automated answer keys. Perfect for educators and Institutions.
+            and automated answer keys. Perfect for educators and institutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90" onClick={() => handleGeneratorClick("/generator")}>
