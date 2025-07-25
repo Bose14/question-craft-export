@@ -26,6 +26,18 @@ jobs:
           cd ~/question-craft-export
           echo "Pulling latest code..."
           git pull origin main
+          echo "Installing pnpm if not present..."
+          if ! command -v pnpm &> /dev/null; then
+           curl -fsSL https://get.pnpm.io/install.sh | sh -
+           export PNPM_HOME="$HOME/.local/share/pnpm"
+           export PATH="$PNPM_HOME:$PATH"
+           echo 'export PNPM_HOME="$HOME/.local/share/pnpm"' >> ~/.bashrc
+           echo 'export PATH="$PNPM_HOME:$PATH"' >> ~/.bashrc
+          else
+           echo "pnpm already installed"
+          fi
+          export PNPM_HOME="$HOME/.local/share/pnpm"
+          export PATH="$PNPM_HOME:$PATH"
           echo "Installing dependencies..."
           pnpm install
           echo "Building frontend..."
