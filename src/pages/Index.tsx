@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -69,7 +68,6 @@ const Index = () => {
     navigate(path);
   };
 
-
   const recentPapers = [
     {
       id: 1,
@@ -135,7 +133,6 @@ const Index = () => {
               />
             </div>
 
-
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
@@ -146,23 +143,17 @@ const Index = () => {
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem asChild>
-                    <Link to="/mcq-generator" className="flex items-center">
-                      <Brain className="w-4 h-4 mr-2" />
-                      MCQ Generator
-                    </Link>
+                  <DropdownMenuItem onClick={() => handleGeneratorClick("/mcq-generator")}>
+                    <Brain className="w-4 h-4 mr-2" />
+                    MCQ Generator
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/generator" className="flex items-center">
-                      <Upload className="w-4 h-4 mr-2" />
-                      Generator using Syllabus
-                    </Link>
+                  <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")}>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Generator using Syllabus
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/generator" className="flex items-center">
-                      <FileText className="w-4 h-4 mr-2" />
-                      Generator using Question Bank
-                    </Link>
+                  <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Generator using Question Bank
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -191,13 +182,12 @@ const Index = () => {
                   </Link>
                 </div>
               )}
+            </div>
           </div>
-          </div>
-
-          </div>
+        </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Always shown */}
       <section
         className="relative min-h-screen py-20 flex items-center overflow-hidden"
         style={{
@@ -207,9 +197,7 @@ const Index = () => {
           backgroundSize: 'cover'
         }}
       >
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
           <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
             Generate Question Papers with{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">
@@ -221,27 +209,75 @@ const Index = () => {
             and automated answer keys. Perfect for educators and institutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/generator">
-              <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90">
-                <FileText className="w-5 h-5 mr-2" />
-                Start Generating
-              </Button>
-            </Link>
-            <Link to="/mcq-generator">
-              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground">
-                <Brain className="w-5 h-5 mr-2" />
-                MCQ Generator
-              </Button>
-            </Link>
+            <Button size="lg" className="px-8 py-3 bg-gradient-primary hover:opacity-90" onClick={() => handleGeneratorClick("/generator")}>
+              <FileText className="w-5 h-5 mr-2" />
+              Start Generating
+            </Button>
+            <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground" onClick={() => handleGeneratorClick("/mcq-generator")}>
+              <Brain className="w-5 h-5 mr-2" />
+              MCQ Generator
+            </Button>
           </div>
         </div>
       </section>
 
+      {/* Dashboard Stats Section - Only show when NOT logged in */}
+      {!user && <DashboardStats />}
 
-      {/* Dashboard Stats Section */}
-      <DashboardStats />
+      {/* How It Works Section - Only show when NOT logged in */}
+      {!user && <HowItWorks />}
 
-      {/* Popular Question Papers Section - Enhanced */}
+      {/* Recently Created Section - Only show when logged in */}
+      {user && (
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between mb-10">
+              <h2 className="text-4xl font-bold text-foreground">Recently Created</h2>
+              <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary" onClick={() => handleGeneratorClick("/generator")}>
+                Create New
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recentPapers.map((paper) => (
+                <Card
+                  key={paper.id}
+                  className="relative group p-6 border border-border rounded-2xl shadow-sm hover:shadow-xl transition-shadow bg-card cursor-pointer"
+                >
+                  <div className="mb-4">
+                    <CardTitle className="text-xl font-semibold text-primary group-hover:underline">
+                      {paper.subject}
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground">{paper.university}</CardDescription>
+                  </div>
+
+                  <CardContent className="space-y-4 text-sm text-muted-foreground">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        📝 Marks: <span className="font-medium text-foreground">{paper.marks}</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        📚 Sections: <span className="font-medium text-foreground">{paper.sections}</span>
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground/80">
+                      📅 Created: {new Date(paper.date).toLocaleDateString()}
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="px-8 py-3 w-full hover:bg-gradient-primary transition-all"
+                    >
+                      View Paper
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Popular Question Papers Section - Always shown */}
       <section className="py-20 bg-secondary/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -272,12 +308,10 @@ const Index = () => {
 
                   {/* Button at Bottom */}
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 px-4 w-full">
-                    <Link to="/generator">
-                      <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5">
-                        Choose Template
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                    <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5" onClick={() => handleGeneratorClick("/generator")}>
+                      Choose Template
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -286,136 +320,79 @@ const Index = () => {
 
           {/* View All Templates Button */}
           <div className="text-center mt-12">
-            <Link to="/generator">
-              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground">
-                View All Templates
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+            <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground" onClick={() => handleGeneratorClick("/generator")}>
+              View All Templates
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </div>
       </section>
 
+      {/* Features Grid - Only show when NOT logged in */}
+      {!user && (
+        <section className="py-20 bg-gradient-features">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-foreground mb-4">
+                Everything You Need for Question Paper Creation
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Powerful features designed for modern education
+              </p>
+            </div>
 
-      {/* How It Works Section */}
-      <HowItWorks />
-
-      {/* Recent Papers Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-4xl font-bold text-foreground">Recently Created</h2>
-            <Link to="/generator">
-              <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary">
-                Create New
-              </Button>
-            </Link>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <FeatureCard
+                icon={<Zap />}
+                title="AI-Powered Generation"
+                description="Leverage AI to create relevant, structured questions tailored to your syllabus."
+              />
+              <FeatureCard
+                icon={<Settings />}
+                title="Customizable Sections"
+                description="Configure sections with different difficulty levels, marks, and question counts."
+              />
+              <FeatureCard
+                icon={<Download />}
+                title="Multiple Export Formats"
+                description="Download your papers as PDF or Word with professional formatting."
+              />
+              <FeatureCard
+                icon={<Image />}
+                title="Custom Headers"
+                description="Upload your institution's logo for branded question papers."
+              />
+              <FeatureCard
+                icon={<FileKey />}
+                title="Answer Key Generation"
+                description="Auto-generate comprehensive answer keys with explanations."
+              />
+              <FeatureCard
+                icon={<Brain />}
+                title="MCQ Generator"
+                description="Tool for creating multiple choice question papers with options."
+              />
+              <FeatureCard
+                icon={<Share />}
+                title="Easy Sharing"
+                description="Share question papers via email, WhatsApp, or Google Drive."
+              />
+              <FeatureCard
+                icon={<Clock />}
+                title="Time Configuration"
+                description="Set exam duration and dates with automatic formatting."
+              />
+              <FeatureCard
+                icon={<BookOpen />}
+                title="Unit-wise Questions"
+                description="Organize questions by syllabus units for full coverage."
+              />
+            </div>
           </div>
+        </section>
+      )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentPapers.map((paper) => (
-              <Card
-                key={paper.id}
-                className="relative group p-6 border border-border rounded-2xl shadow-sm hover:shadow-xl transition-shadow bg-card cursor-pointer"
-              >
-                <div className="mb-4">
-                  <CardTitle className="text-xl font-semibold text-primary group-hover:underline">
-                    {paper.subject}
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground">{paper.university}</CardDescription>
-                </div>
-
-                <CardContent className="space-y-4 text-sm text-muted-foreground">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1">
-                      📝 Marks: <span className="font-medium text-foreground">{paper.marks}</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      📚 Sections: <span className="font-medium text-foreground">{paper.sections}</span>
-                    </span>
-                  </div>
-                  <div className="text-xs text-muted-foreground/80">
-                    📅 Created: {new Date(paper.date).toLocaleDateString()}
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="px-8 py-3 w-full hover:bg-gradient-primary transition-all"
-                  >
-                    View Paper
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-20 bg-gradient-features">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Everything You Need for Question Paper Creation
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Powerful features designed for modern education
-            </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <FeatureCard
-              icon={<Zap />}
-              title="AI-Powered Generation"
-              description="Leverage AI to create relevant, structured questions tailored to your syllabus."
-            />
-            <FeatureCard
-              icon={<Settings />}
-              title="Customizable Sections"
-              description="Configure sections with different difficulty levels, marks, and question counts."
-            />
-            <FeatureCard
-              icon={<Download />}
-              title="Multiple Export Formats"
-              description="Download your papers as PDF or Word with professional formatting."
-            />
-            <FeatureCard
-              icon={<Image />}
-              title="Custom Headers"
-              description="Upload your institution's logo for branded question papers."
-            />
-            <FeatureCard
-              icon={<FileKey />}
-              title="Answer Key Generation"
-              description="Auto-generate comprehensive answer keys with explanations."
-            />
-            <FeatureCard
-              icon={<Brain />}
-              title="MCQ Generator"
-              description="Tool for creating multiple choice question papers with options."
-            />
-            <FeatureCard
-              icon={<Share />}
-              title="Easy Sharing"
-              description="Share question papers via email, WhatsApp, or Google Drive."
-            />
-            <FeatureCard
-              icon={<Clock />}
-              title="Time Configuration"
-              description="Set exam duration and dates with automatic formatting."
-            />
-            <FeatureCard
-              icon={<BookOpen />}
-              title="Unit-wise Questions"
-              description="Organize questions by syllabus units for full coverage."
-            />
-          </div>
-        </div>
-      </section>
-
-
-
-
-      {/* CTA Section */}
+      {/* CTA Section - Always shown */}
       <section className="py-20 bg-gradient-cta">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl font-bold text-white mb-6">
@@ -424,11 +401,9 @@ const Index = () => {
           <p className="text-xl text-white/80 mb-8">
             Join thousands of educators who have already made the switch to AI-powered question generation.
           </p>
-          <Link to="/generator">
-            <Button size="lg" className="px-8 py-3 bg-white text-primary hover:bg-white/90">
-              Get Started for Free
-            </Button>
-          </Link>
+          <Button size="lg" className="px-8 py-3 bg-white text-primary hover:bg-white/90" onClick={() => handleGeneratorClick("/generator")}>
+            Get Started for Free
+          </Button>
         </div>
       </section>
 
@@ -436,6 +411,5 @@ const Index = () => {
     </div>
   );
 };
-
 
 export default Index;
