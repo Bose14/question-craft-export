@@ -32,4 +32,3 @@ jobs:
           pnpm run build
           echo "Restarting backend..."
           pm2 restart backend || pm2 start backend.js --name backend
-EOF
