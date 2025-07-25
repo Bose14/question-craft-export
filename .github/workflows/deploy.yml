@@ -22,8 +22,14 @@ jobs:
       - name: Deploy via SSH
         run: |
           ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd ~/question-craft-export
-            git pull origin main
-            pnpm install
-            pm2 restart backend
-
+          set -e # Stop script on error
+          cd ~/question-craft-export
+          echo "Pulling latest code..."
+          git pull origin main
+          echo "Installing dependencies..."
+          pnpm install
+          echo "Building frontend..."
+          pnpm run build
+          echo "Restarting backend..."
+          pm2 restart backend || pm2 start backend.js --name backend
+EOF
