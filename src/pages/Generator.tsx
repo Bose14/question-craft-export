@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState ,useEffect } from "react";
+import { Link, useNavigate} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,6 +55,24 @@ interface Section {
 
 const Generator = () => {
   const navigate = useNavigate();
+
+    // Check authentication on component mount
+  useEffect(() => {
+    const checkAuth = () => {
+      const authToken = localStorage.getItem('authToken');
+      const userData = localStorage.getItem('user');
+      
+      if (!authToken || !userData) {
+        // Store current path for redirect after login
+        sessionStorage.setItem('redirectAfterLogin', '/generator');
+        navigate('/login');
+        return;
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
+
   const [subjectName, setSubjectName] = useState("");
   const [university, setUniversity] = useState("");
   const [examDate, setExamDate] = useState("");
