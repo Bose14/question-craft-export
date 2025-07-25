@@ -17,7 +17,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("${import.meta.env.VITE_API_URL}/forgot-password", {
+      const res = await fetch("https://vinathaal.azhizen.com/api/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
