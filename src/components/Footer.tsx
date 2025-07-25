@@ -9,10 +9,17 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">Q</span>
-              </div>
-              <h3 className="text-xl font-bold">QUESTION PAPER GENERATOR</h3>
+              <div
+                className="rounded-lg flex items-center justify-center overflow-hidden"
+                style={{ width: "154px", height: "154px" }} 
+                      >
+                        <img
+                          src="/vinathaal_icon.png"
+                          alt="Vinathaal Logo"
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+
             </div>
             <p className="text-blue-200 leading-relaxed max-w-md">
               Elevating minds, shaping futures through excellence in education and transformative learning experiences.
@@ -75,18 +82,10 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-blue-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-center items-center">
             <p className="text-blue-200 text-sm">
               © 2024 Question Paper Generator. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link to="/portfolio" className="text-accent hover:text-white transition-colors text-sm">
-                Generator Portfolio
-              </Link>
-              <Link to="/media" className="text-accent hover:text-white transition-colors text-sm">
-                Generator Media
-              </Link>
-            </div>
           </div>
         </div>
       </div>

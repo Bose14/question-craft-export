@@ -58,17 +58,24 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Navigation */}
-      <nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <img
-                src="/vinathaal_icon.png"
-                alt="Vinathaal Logo"
-                className="w-14 h-14 object-contain"
-              />
-              <span className="text-xl font-bold text-foreground">Vinathaal</span>
-            </div>
+<nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+    
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal_icon.png"
+          alt="Vinathaal Icon"
+          className="w-14 h-14 object-contain"
+        />
+        <img
+          src="/vinathaal-heading-black.png"
+          alt="Vinathaal Heading"
+          className="h-[45px] w-30 object-contain -ml-40"
+        />
+      </div>
+
+
             <div className="hidden md:flex items-center space-x-8">
                <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
@@ -95,7 +102,7 @@ const Index = () => {
                     <Link to="/generator" className="flex items-center">
                       <FileText className="w-4 h-4 mr-2" />
                       Generator using Question Bank
-                    </Link>
+                          </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -118,9 +125,19 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-     <section className="min-h-screen py-20 flex items-center">
+      <section 
+        className="relative min-h-screen py-20 flex items-center overflow-hidden"
+        style={{
+          backgroundColor: '#ffffff',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%25' gradientTransform='rotate(240)'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='1' stop-color='%234FE'/%3E%3C/linearGradient%3E%3Cpattern patternUnits='userSpaceOnUse' id='b' width='540' height='450' x='0' y='0' viewBox='0 0 1080 900'%3E%3Cg fill-opacity='0.1'%3E%3Cpolygon fill='%23444' points='90 150 0 300 180 300'/%3E%3Cpolygon points='90 150 180 0 0 0'/%3E%3Cpolygon fill='%23AAA' points='270 150 360 0 180 0'/%3E%3Cpolygon fill='%23DDD' points='450 150 360 300 540 300'/%3E%3Cpolygon fill='%23999' points='450 150 540 0 360 0'/%3E%3Cpolygon points='630 150 540 300 720 300'/%3E%3Cpolygon fill='%23DDD' points='630 150 720 0 540 0'/%3E%3Cpolygon fill='%23444' points='810 150 720 300 900 300'/%3E%3Cpolygon fill='%23FFF' points='810 150 900 0 720 0'/%3E%3Cpolygon fill='%23DDD' points='990 150 900 300 1080 300'/%3E%3Cpolygon fill='%23444' points='990 150 1080 0 900 0'/%3E%3Cpolygon fill='%23DDD' points='90 450 0 600 180 600'/%3E%3Cpolygon points='90 450 180 300 0 300'/%3E%3Cpolygon fill='%23666' points='270 450 180 600 360 600'/%3E%3Cpolygon fill='%23AAA' points='270 450 360 300 180 300'/%3E%3Cpolygon fill='%23DDD' points='450 450 360 600 540 600'/%3E%3Cpolygon fill='%23999' points='450 450 540 300 360 300'/%3E%3Cpolygon fill='%23999' points='630 450 540 600 720 600'/%3E%3Cpolygon fill='%23FFF' points='630 450 720 300 540 300'/%3E%3Cpolygon points='810 450 720 600 900 600'/%3E%3Cpolygon fill='%23DDD' points='810 450 900 300 720 300'/%3E%3Cpolygon fill='%23AAA' points='990 450 900 600 1080 600'/%3E%3Cpolygon fill='%23444' points='990 450 1080 300 900 300'/%3E%3Cpolygon fill='%23222' points='90 750 0 900 180 900'/%3E%3Cpolygon points='270 750 180 900 360 900'/%3E%3Cpolygon fill='%23DDD' points='270 750 360 600 180 600'/%3E%3Cpolygon points='450 750 540 600 360 600'/%3E%3Cpolygon points='630 750 540 900 720 900'/%3E%3Cpolygon fill='%23444' points='630 750 720 600 540 600'/%3E%3Cpolygon fill='%23AAA' points='810 750 720 900 900 900'/%3E%3Cpolygon fill='%23666' points='810 750 900 600 720 600'/%3E%3Cpolygon fill='%23999' points='990 750 900 900 1080 900'/%3E%3Cpolygon fill='%23999' points='180 0 90 150 270 150'/%3E%3Cpolygon fill='%23444' points='360 0 270 150 450 150'/%3E%3Cpolygon fill='%23FFF' points='540 0 450 150 630 150'/%3E%3Cpolygon points='900 0 810 150 990 150'/%3E%3Cpolygon fill='%23222' points='0 300 -90 450 90 450'/%3E%3Cpolygon fill='%23FFF' points='0 300 90 150 -90 150'/%3E%3Cpolygon fill='%23FFF' points='180 300 90 450 270 450'/%3E%3Cpolygon fill='%23666' points='180 300 270 150 90 150'/%3E%3Cpolygon fill='%23222' points='360 300 270 450 450 450'/%3E%3Cpolygon fill='%23FFF' points='360 300 450 150 270 150'/%3E%3Cpolygon fill='%23444' points='540 300 450 450 630 450'/%3E%3Cpolygon fill='%23222' points='540 300 630 150 450 150'/%3E%3Cpolygon fill='%23AAA' points='720 300 630 450 810 450'/%3E%3Cpolygon fill='%23666' points='720 300 810 150 630 150'/%3E%3Cpolygon fill='%23FFF' points='900 300 810 450 990 450'/%3E%3Cpolygon fill='%23999' points='900 300 990 150 810 150'/%3E%3Cpolygon points='0 600 -90 750 90 750'/%3E%3Cpolygon fill='%23666' points='0 600 90 450 -90 450'/%3E%3Cpolygon fill='%23AAA' points='180 600 90 750 270 750'/%3E%3Cpolygon fill='%23444' points='180 600 270 450 90 450'/%3E%3Cpolygon fill='%23444' points='360 600 270 750 450 750'/%3E%3Cpolygon fill='%23999' points='360 600 450 450 270 450'/%3E%3Cpolygon fill='%23666' points='540 600 630 450 450 450'/%3E%3Cpolygon fill='%23222' points='720 600 630 750 810 750'/%3E%3Cpolygon fill='%23FFF' points='900 600 810 750 990 750'/%3E%3Cpolygon fill='%23222' points='900 600 990 450 810 450'/%3E%3Cpolygon fill='%23DDD' points='0 900 90 750 -90 750'/%3E%3Cpolygon fill='%23444' points='180 900 270 750 90 750'/%3E%3Cpolygon fill='%23FFF' points='360 900 450 750 270 750'/%3E%3Cpolygon fill='%23AAA' points='540 900 630 750 450 750'/%3E%3Cpolygon fill='%23FFF' points='720 900 810 750 630 750'/%3E%3Cpolygon fill='%23222' points='900 900 990 750 810 750'/%3E%3Cpolygon fill='%23222' points='1080 300 990 450 1170 450'/%3E%3Cpolygon fill='%23FFF' points='1080 300 1170 150 990 150'/%3E%3Cpolygon points='1080 600 990 750 1170 750'/%3E%3Cpolygon fill='%23666' points='1080 600 1170 450 990 450'/%3E%3Cpolygon fill='%23DDD' points='1080 900 1170 750 990 750'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect x='0' y='0' fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect x='0' y='0' fill='url(%23b)' width='100%25' height='100%25'/%3E%3C/svg%3E")`,
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover'
+        }}
+      >
+
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
+
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
       Generate Question Papers with{" "}
       <span className="bg-gradient-primary bg-clip-text text-transparent">
         AI Precision
@@ -197,7 +214,7 @@ const Index = () => {
     {/* View All Templates Button */}
     <div className="text-center mt-12">
       <Link to="/generator">
-        <Button variant="outline" size="lg" className="px-8 py-3 border-primary/30 hover:border-primary text-primary hover:bg-primary/5">
+        <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground">
           View All Templates
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
@@ -210,101 +227,120 @@ const Index = () => {
   {/* How It Works Section */}
       <HowItWorks />
 
-      {/* Recent Papers Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Recently Created</h2>
-            <Link to="/generator">
-              <Button variant="outline">Create New</Button>
-            </Link>
+{/* Recent Papers Section */}
+<section className="py-20 bg-background">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="flex items-center justify-between mb-10">
+      <h2 className="text-4xl font-bold text-foreground">Recently Created</h2>
+      <Link to="/generator">
+        <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary">
+          Create New
+        </Button>
+      </Link>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {recentPapers.map((paper) => (
+        <Card
+          key={paper.id}
+          className="relative group p-6 border border-border rounded-2xl shadow-sm hover:shadow-xl transition-shadow bg-card cursor-pointer"
+        >
+          <div className="mb-4">
+            <CardTitle className="text-xl font-semibold text-primary group-hover:underline">
+              {paper.subject}
+            </CardTitle>
+            <CardDescription className="text-muted-foreground">{paper.university}</CardDescription>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {recentPapers.map((paper) => (
-              <Card key={paper.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">{paper.subject}</CardTitle>
-                  <CardDescription>{paper.university}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between text-sm text-muted-foreground mb-4">
-                    <span>Marks: {paper.marks}</span>
-                    <span>Sections: {paper.sections}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground/80">
-                    Created: {new Date(paper.date).toLocaleDateString()}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+
+          <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                📝 Marks: <span className="font-medium text-foreground">{paper.marks}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                📚 Sections: <span className="font-medium text-foreground">{paper.sections}</span>
+              </span>
+            </div>
+            <div className="text-xs text-muted-foreground/80">
+              📅 Created: {new Date(paper.date).toLocaleDateString()}
+            </div>
+            <Button
+              variant="outline"
+              className="px-8 py-3 w-full hover:bg-gradient-primary transition-all"
+            >
+              View Paper
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* Features Grid */}
+<section className="py-20 bg-gradient-features">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-bold text-foreground mb-4">
+        Everything You Need for Question Paper Creation
+      </h2>
+      <p className="text-xl text-muted-foreground">
+        Powerful features designed for modern education
+      </p>
+    </div>
+
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <FeatureCard
+        icon={<Zap />}
+        title="AI-Powered Generation"
+        description="Leverage AI to create relevant, structured questions tailored to your syllabus."
+      />
+      <FeatureCard
+        icon={<Settings />}
+        title="Customizable Sections"
+        description="Configure sections with different difficulty levels, marks, and question counts."
+      />
+      <FeatureCard
+        icon={<Download />}
+        title="Multiple Export Formats"
+        description="Download your papers as PDF or Word with professional formatting."
+      />
+      <FeatureCard
+        icon={<Image />}
+        title="Custom Headers"
+        description="Upload your institution's logo for branded question papers."
+      />
+      <FeatureCard
+        icon={<FileKey />}
+        title="Answer Key Generation"
+        description="Auto-generate comprehensive answer keys with explanations."
+      />
+      <FeatureCard
+        icon={<Brain />}
+        title="MCQ Generator"
+        description="Tool for creating multiple choice question papers with options."
+      />
+      <FeatureCard
+        icon={<Share />}
+        title="Easy Sharing"
+        description="Share question papers via email, WhatsApp, or Google Drive."
+      />
+      <FeatureCard
+        icon={<Clock />}
+        title="Time Configuration"
+        description="Set exam duration and dates with automatic formatting."
+      />
+      <FeatureCard
+        icon={<BookOpen />}
+        title="Unit-wise Questions"
+        description="Organize questions by syllabus units for full coverage."
+      />
+    </div>
+  </div>
+</section>
 
 
 
-      {/* Features Grid */}
-      <section className="py-20 bg-gradient-features">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Everything You Need for Question Paper Creation
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Powerful features designed for modern education
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard
-              icon={<Zap />}
-              title="AI-Powered Generation"
-              description="Leverage advanced AI to create relevant, well-structured questions tailored to your syllabus"
-            />
-            <FeatureCard
-              icon={<Settings />}
-              title="Customizable Sections"
-              description="Configure multiple sections with different difficulty levels, marks, and question counts"
-            />
-            <FeatureCard
-              icon={<Download />}
-              title="Multiple Export Formats"
-              description="Download your question papers as PDF or Word documents with professional formatting"
-            />
-            <FeatureCard
-              icon={<Image />}
-              title="Custom Headers"
-              description="Upload your institution's logo and create branded question papers"
-            />
-            <FeatureCard
-              icon={<FileKey />}
-              title="Answer Key Generation"
-              description="Automatically generate comprehensive answer keys with explanations"
-            />
-            <FeatureCard
-              icon={<Brain />}
-              title="MCQ Generator"
-              description="Specialized tool for creating multiple choice question papers with options"
-            />
-            <FeatureCard
-              icon={<Share />}
-              title="Easy Sharing"
-              description="Share question papers via email, WhatsApp, or export to Google Drive"
-            />
-            <FeatureCard
-              icon={<Clock />}
-              title="Time Configuration"
-              description="Set exam duration and dates with automatic formatting"
-            />
-            <FeatureCard
-              icon={<BookOpen />}
-              title="Unit-wise Questions"
-              description="Organize questions by syllabus units for comprehensive coverage"
-            />
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-cta">

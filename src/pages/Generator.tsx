@@ -375,7 +375,7 @@ const Generator = () => {
       {/* Right - Logo */}
       <div className="flex items-center space-x-2">
         <img
-          src="/vinathaal%20logo.jpg"
+          src="/vinathaal%20logo.png"
           alt="Vinathaal Logo"
           className="h-16 w-auto object-contain"
         />
