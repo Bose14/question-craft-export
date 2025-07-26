@@ -1,4 +1,4 @@
-{/*const express = require("express");
+const express = require("express");
 const db = require("../awsdb"); // replace with actual DB config
 const bcrypt = require("bcryptjs");
 
@@ -33,4 +33,4 @@ router.post("/reset-password/:token", async (req, res) => {
   }
 });
 
-module.exports = router;*/}
+module.exports = router;
