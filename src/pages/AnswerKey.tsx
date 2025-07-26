@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Download, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import ShareDialog from "@/components/ShareDialog";
-import { generatePDF, generateWordDocument } from "@/utils/pdfGenerator";
+import { generatePDF, /*generateWordDocument*/ } from "@/utils/pdfGenerator";
 
 interface AnswerKeyItem {
   questionNumber: string;
@@ -54,11 +54,11 @@ const AnswerKey = () => {
     toast.success("Answer key PDF exported successfully!");
   };
 
-  const handleWordGenerate = () => {
-    const filename = `${config?.subjectName || 'question-paper'}-answer-key`;
-    generateWordDocument('answer-key-content', filename);
-    toast.success("Answer key Word document downloaded successfully!");
-  };
+  // const handleWordGenerate = () => {
+  //   const filename = `${config?.subjectName || 'question-paper'}-answer-key`;
+  //   generateWordDocument('answer-key-content', filename);
+  //   toast.success("Answer key Word document downloaded successfully!");
+  // };
 
   if (loading) {
     return (
@@ -113,7 +113,7 @@ const AnswerKey = () => {
               title={`${config.subjectName} - Answer Key`} 
               content="Answer key generated successfully" 
             />
-            <Button onClick={handleWordGenerate} variant="outline" size="sm" className="text-xs sm:text-sm">
+            <Button onClick={/*handleWordGenerate*/ null} variant="outline" size="sm" className="text-xs sm:text-sm">
               <Download className="w-4 h-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Word</span>
               <span className="sm:hidden">DOC</span>
