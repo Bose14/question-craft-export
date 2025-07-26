@@ -7,12 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Plus, Trash2, Upload, FileText, Image, Settings, Wand2, Brain } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, FileText, Image, Settings, Wand2, Brain } from "lucide-react";
 import { toast } from "sonner";
 
 interface QuestionConfig {
   id: string;
-  text?: string; // Optional for AI-generated questions
+  text?: string;
   marks: number;
   difficulty: string;
   unit: string;
@@ -155,7 +155,6 @@ const Generator = () => {
           ...section,
           individualConfig: { ...section.individualConfig, [field]: value }
         };
-        // Auto-generate questions when counts change
         if (field === 'aiQuestionCount' || field === 'manualQuestionCount') {
           newSection.questions = generateIndividualQuestions(newSection);
         }
@@ -169,7 +168,6 @@ const Generator = () => {
     const questions: QuestionConfig[] = [];
     const { aiQuestionCount, manualQuestionCount, defaultMarks, defaultDifficulty, defaultUnit, defaultSubQuestionsCount } = section.individualConfig;
     
-    // Generate AI questions
     for (let i = 0; i < aiQuestionCount; i++) {
       questions.push({
         id: `ai-${Date.now()}-${i}`,
@@ -181,7 +179,6 @@ const Generator = () => {
       });
     }
     
-    // Generate manual questions
     for (let i = 0; i < manualQuestionCount; i++) {
       questions.push({
         id: `manual-${Date.now()}-${i}`,
@@ -237,7 +234,6 @@ const Generator = () => {
     }));
   };
 
-  // Smart AI Question Configuration
   const generateSmartQuestions = (sectionId: string) => {
     setSections(sections.map(section => {
       if (section.id === sectionId) {
@@ -308,7 +304,6 @@ const Generator = () => {
     const questions: QuestionConfig[] = [];
     
     if (section.isAutoGenerate) {
-      // Use bulk auto-generation
       for (let i = 0; i < section.autoConfig.questionCount; i++) {
         const unitIndex = i % section.autoConfig.units.length;
         questions.push({
@@ -322,7 +317,6 @@ const Generator = () => {
         });
       }
     } else {
-      // Use individual question configurations
       questions.push(...section.questions.map(q => ({
         ...q,
         text: q.isAIGenerated 
@@ -380,103 +374,100 @@ const Generator = () => {
   const units = ["UNIT I", "UNIT II", "UNIT III", "UNIT IV", "UNIT V"];
 
   return (
-    <div className="min-h-screen bg-background">
-<nav className="bg-white border-b border-slate-200 shadow-sm">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex items-center justify-between h-16">
-      {/* Left - Back link */}
-      <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
-        <ArrowLeft className="w-5 h-5" />
-        <span>Back to Home</span>
-      </Link>
+    <div className="min-h-screen bg-gradient-hero">
+      <nav className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back to Home</span>
+            </Link>
+            <div className="flex items-center space-x-2">
+              <img
+                src="/vinathaal%20logo.png"
+                alt="Vinathaal Logo"
+                className="h-16 w-auto object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      {/* Right - Logo */}
-      <div className="flex items-center space-x-2">
-        <img
-          src="/vinathaal%20logo.png"
-          alt="Vinathaal Logo"
-          className="h-16 w-auto object-contain"
-        />
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="bg-gradient-card border-accent/20">
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2 text-primary">
+                <FileText className="w-5 h-5" />
+                <span>Upload Syllabus</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.txt"
+                  onChange={handleSyllabusUpload}
+                  className="hidden"
+                  id="syllabus-upload"
+                />
+                <label htmlFor="syllabus-upload" className="cursor-pointer">
+                  {syllabusFile ? (
+                    <div className="space-y-4">
+                      <FileText className="w-12 h-12 mx-auto text-accent" />
+                      <p className="text-success font-medium">Syllabus uploaded: {syllabusFile.name}</p>
+                      <p className="text-sm text-text-secondary">AI will generate questions based on your syllabus</p>
+                    </div>
+                  ) : (
+                    <>
+                      <FileText className="w-12 h-12 mx-auto text-accent mb-4" />
+                      <p className="text-text-primary font-medium">Click to upload your syllabus</p>
+                      <p className="text-sm text-text-secondary mt-2">PDF, DOC, DOCX, TXT up to 10MB</p>
+                    </>
+                  )}
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-card border-accent/20">
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2 text-primary">
+                <Image className="w-5 h-5" />
+                <span>Upload Header Image (Optional)</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-gradient-subtle">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleHeaderImageUpload}
+                  className="hidden"
+                  id="header-upload"
+                />
+                <label htmlFor="header-upload" className="cursor-pointer">
+                  {headerImage ? (
+                    <div className="space-y-4">
+                      <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded-lg shadow-md" />
+                      <p className="text-success font-medium">Header image uploaded successfully!</p>
+                    </div>
+                  ) : (
+                    <>
+                      <Image className="w-12 h-12 mx-auto text-accent mb-4" />
+                      <p className="text-text-primary font-medium">Click to upload your university/institution header</p>
+                      <p className="text-sm text-text-secondary mt-2">PNG, JPG up to 10MB</p>
+                    </>
+                  )}
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
-  </div>
-</nav>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Upload Syllabus */}
-        <Card className="mb-8">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center space-x-2">
-              <Upload className="w-5 h-5" />
-              <span>Upload Syllabus</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.txt"
-                onChange={handleSyllabusUpload}
-                className="hidden"
-                id="syllabus-upload"
-              />
-              <label htmlFor="syllabus-upload" className="cursor-pointer">
-                {syllabusFile ? (
-                  <div className="space-y-4">
-                    <FileText className="w-12 h-12 mx-auto text-success" />
-                    <p className="text-success">Syllabus uploaded: {syllabusFile.name}</p>
-                    <p className="text-sm text-muted-foreground">AI will generate questions based on your syllabus</p>
-                  </div>
-                ) : (
-                  <>
-                    <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-foreground">Click to upload your course syllabus</p>
-                    <p className="text-sm text-muted-foreground mt-2">PDF, DOC, DOCX, TXT up to 10MB</p>
-                    <p className="text-xs text-accent mt-2">This helps AI generate relevant questions for your course</p>
-                  </>
-                )}
-              </label>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Upload Header Image */}
-        <Card className="mb-8">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center space-x-2">
-              <Image className="w-5 h-5" />
-              <span>Upload Custom Header Image (Optional)</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleHeaderImageUpload}
-                className="hidden"
-                id="header-upload"
-              />
-              <label htmlFor="header-upload" className="cursor-pointer">
-                {headerImage ? (
-                  <div className="space-y-4">
-                    <img src={headerImage} alt="Header preview" className="max-h-32 mx-auto rounded" />
-                    <p className="text-success">Header image uploaded!</p>
-                  </div>
-                ) : (
-                  <>
-                    <Image className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-foreground">Click to upload your university/institution header</p>
-                    <p className="text-sm text-muted-foreground mt-2">PNG, JPG up to 10MB</p>
-                  </>
-                )}
-              </label>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Configure Question Paper */}
-        <Card className="mb-8">
+      <div className="max-w-4xl mx-auto mb-8">
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <FileText className="w-5 h-5" />
@@ -484,7 +475,6 @@ const Generator = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="university">University/Institution</Label>
@@ -524,7 +514,6 @@ const Generator = () => {
               </div>
             </div>
 
-            {/* Sections Configuration */}
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Sections Configuration</h3>
@@ -577,7 +566,6 @@ const Generator = () => {
                     </div>
 
                     {section.isAutoGenerate ? (
-                      /* Bulk AI Generation */
                       <div className="space-y-4 bg-gradient-hero p-4 rounded-lg border border-accent/20">
                         <h5 className="font-medium text-foreground flex items-center">
                           <Wand2 className="w-4 h-4 mr-2 text-accent" />
@@ -655,7 +643,6 @@ const Generator = () => {
                         </div>
                       </div>
                     ) : (
-                      /* Individual Question Configuration */
                       <div className="space-y-4 bg-gradient-hero p-4 rounded-lg border border-accent/20">
                         <h5 className="font-medium text-foreground flex items-center">
                           <Brain className="w-4 h-4 mr-2 text-accent" />
@@ -663,7 +650,6 @@ const Generator = () => {
                         </h5>
                         <p className="text-sm text-muted-foreground">Specify how many AI and manual questions you need, then configure each one individually</p>
                         
-                        {/* Question Count Configuration */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-card/50 p-4 rounded-lg">
                           <div>
                             <Label>AI Questions</Label>
@@ -871,7 +857,6 @@ const Generator = () => {
           </CardContent>
         </Card>
 
-        {/* Generate Button */}
         <div className="text-center">
           <Button 
             onClick={handleGenerate}
