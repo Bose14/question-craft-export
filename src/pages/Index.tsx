@@ -116,76 +116,117 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Navigation */}
-      <nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+<nav className="bg-card/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      
+      {/* Logo */}
+      <div className="flex items-center space-x-2">
+        <img
+          src="/vinathaal_icon.png"
+          alt="Vinathaal Icon"
+          className="w-14 h-14 object-contain"
+        />
+        <img
+          src="/vinathaal-heading-black.png"
+          alt="Vinathaal Heading"
+          className="h-[45px] w-30 object-contain"
+        />
+      </div>
 
-            <div className="flex items-center space-x-2">
-              <img
-                src="/vinathaal_icon.png"
-                alt="Vinathaal Icon"
-                className="w-14 h-14 object-contain"
-              />
-              <img
-                src="/vinathaal-heading-black.png"
-                alt="Vinathaal Heading"
-                className="h-[45px] w-30 object-contain -ml-40"
-              />
-            </div>
+      {/* Navigation Links */}
+      <div className="hidden md:flex items-center space-x-8">
+        <Link
+          to="/pricing"
+          className="relative font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground
+            after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-[5px]
+            after:bg-gradient-primary after:rounded-full after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform"
+        >
+          Pricing
+        </Link>
 
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className="relative font-medium flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors
+              after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-[5px]
+              after:bg-gradient-primary after:rounded-full after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform"
+          >
+            <span>Generator</span>
+            <ChevronDown className="w-4 h-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-64 p-2 rounded-xl shadow-lg border border-border bg-popover"
+          >
+            <DropdownMenuItem onClick={() => handleGeneratorClick("/mcq-generator")} asChild>
+              <Link
+                to="/mcq-generator"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gradient-primary text-sm transition-all text-foreground"
+              >
+                <Brain className="w-4 h-4" />
+                MCQ Generator
               </Link>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <span>Generator</span>
-                  <ChevronDown className="w-4 h-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={() => handleGeneratorClick("/mcq-generator")}>
-                    <Brain className="w-4 h-4 mr-2" />
-                    MCQ Generator
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Generator using Syllabus
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")}>
-                    <FileText className="w-4 h-4 mr-2" />
-                    Generator using Question Bank
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Link to="/support" className="text-muted-foreground hover:text-foreground transition-colors">
-                Support
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")} asChild>
+              <Link
+                to="/generator"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gradient-primary text-sm transition-all text-foreground"
+              >
+                <Upload className="w-4 h-4" />
+                Generator using Syllabus
               </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <User className="w-4 h-4" />
-                  <span className="hidden md:inline">Hi, {user.name || user.email}</span>
-                  <Button variant="outline" size="sm" onClick={handleLogout}>
-                    <LogOut className="w-4 h-4 mr-1" /> Logout
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-4">
-                  <Link to="/login">
-                    <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary">Login</Button>
-                  </Link>
-                  <Link to="/signup">
-                    <Button className="px-8 py-3 bg-gradient-primary hover:opacity-90">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleGeneratorClick("/generator")} asChild>
+              <Link
+                to="/generator"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gradient-primary text-sm transition-all text-foreground"
+              >
+                <FileText className="w-4 h-4" />
+                Generator using Question Bank
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Link
+          to="/support"
+          className="relative font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground
+            after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-[5px]
+            after:bg-gradient-primary after:rounded-full after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform"
+        >
+          Support
+        </Link>
+      </div>
+
+      {/* Auth Buttons / User Info */}
+      <div className="flex items-center space-x-4">
+        {user ? (
+          <div className="flex items-center space-x-2 text-muted-foreground">
+            <User className="w-4 h-4" />
+            <span className="hidden md:inline">Hi, {user.name || user.email}</span>
+            <Button variant="outline" className="hover:bg-gradient-primary" size="sm" onClick={handleLogout}>
+              <LogOut className="w-4 h-4 mr-1" /> Logout
+            </Button>
           </div>
-        </div>
-      </nav>
+        ) : (
+          <div className="flex items-center space-x-4">
+            <Link to="/login">
+              <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary">Login</Button>
+            </Link>
+            <Link to="/signup">
+              <Button className="px-8 py-3 bg-gradient-primary hover:brightness-110 transition-all">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
 
       {/* Hero Section - Always shown */}
       <section
@@ -221,61 +262,74 @@ const Index = () => {
         </div>
       </section>
 
+{user && (
+  <section className="py-20 bg-background">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {/* Title */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold text-foreground mb-2">Your Recently Created Papers</h2>
+        <p className="text-muted-foreground text-lg">
+          Continue editing or reviewing your previously generated question papers.
+        </p>
+      </div>
+
+      {/* Paper Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {recentPapers.map((paper) => (
+          <Card
+            key={paper.id}
+            className="relative group p-6 border border-border rounded-2xl shadow-sm hover:shadow-xl transition-shadow bg-card cursor-pointer"
+          >
+            {/* Header */}
+            <div className="mb-4">
+              <CardTitle className="text-xl font-semibold text-primary group-hover:underline">
+                {paper.subject}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">{paper.university}</CardDescription>
+            </div>
+
+            {/* Details */}
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    📝 Marks:{" "}
+                    <span className="font-medium text-foreground">{paper.marks}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    📚 Sections:{" "}
+                    <span className="font-medium text-foreground">{paper.sections}</span>
+                  </span>
+                </div>
+                <div className="text-xs text-muted-foreground/80">
+                  📅 Created: {new Date(paper.date).toLocaleDateString()}
+                </div>
+              </div>
+
+              {/* View Button */}
+              <Button
+                variant="outline"
+                className="px-8 py-3 w-full hover:bg-gradient-primary transition-all"
+              >
+                View Paper
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+
+
       {/* Dashboard Stats Section - Only show when NOT logged in */}
       {!user && <DashboardStats />}
 
       {/* How It Works Section - Only show when NOT logged in */}
       {!user && <HowItWorks />}
 
-      {/* Recently Created Section - Only show when logged in */}
-      {user && (
-        <section className="py-20 bg-background">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-10">
-              <h2 className="text-4xl font-bold text-foreground">Recently Created</h2>
-              <Button variant="outline" className="px-8 py-3 hover:bg-gradient-primary" onClick={() => handleGeneratorClick("/generator")}>
-                Create New
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {recentPapers.map((paper) => (
-                <Card
-                  key={paper.id}
-                  className="relative group p-6 border border-border rounded-2xl shadow-sm hover:shadow-xl transition-shadow bg-card cursor-pointer"
-                >
-                  <div className="mb-4">
-                    <CardTitle className="text-xl font-semibold text-primary group-hover:underline">
-                      {paper.subject}
-                    </CardTitle>
-                    <CardDescription className="text-muted-foreground">{paper.university}</CardDescription>
-                  </div>
-
-                  <CardContent className="space-y-4 text-sm text-muted-foreground">
-                    <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-1">
-                        📝 Marks: <span className="font-medium text-foreground">{paper.marks}</span>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        📚 Sections: <span className="font-medium text-foreground">{paper.sections}</span>
-                      </span>
-                    </div>
-                    <div className="text-xs text-muted-foreground/80">
-                      📅 Created: {new Date(paper.date).toLocaleDateString()}
-                    </div>
-                    <Button
-                      variant="outline"
-                      className="px-8 py-3 w-full hover:bg-gradient-primary transition-all"
-                    >
-                      View Paper
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Popular Question Papers Section - Always shown */}
       <section className="py-20 bg-secondary/30">
@@ -285,38 +339,28 @@ const Index = () => {
             <p className="text-xl text-muted-foreground">Select a template to begin creating your question paper</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { preview: "/placeholder.svg" },
-              { preview: "/placeholder.svg" },
-              { preview: "/placeholder.svg" },
-              { preview: "/placeholder.svg" },
-              { preview: "/placeholder.svg" },
-              { preview: "/placeholder.svg" },
-            ].map((template, index) => (
-              <div key={index} className="flex justify-center">
-                <div className="relative w-full max-w-[300px] h-[340px] rounded-lg overflow-hidden group shadow-md">
-                  {/* Template Image */}
-                  <img
-                    src={template.preview}
-                    alt="Template Preview"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10" />
-
-                  {/* Button at Bottom */}
-                  <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-20 px-4 w-full">
-                    <Button className="w-full bg-gradient-primary hover:opacity-90 group-hover:shadow-lg transition-all font-semibold py-2.5" onClick={() => handleGeneratorClick("/generator")}>
-                      Choose Template
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-100 gap-y-6">
+  {[
+    { preview: "question-paper.jpg" },
+    { preview: "question-paper1.jpg" },
+    { preview: "question-paper.jpg" },
+    { preview: "question-paper1.jpg" },
+    { preview: "question-paper.jpg" },
+    { preview: "question-paper1.jpg" },
+  ].map((template, index) => (
+    <div key={index} className="flex justify-center">
+      <Link to="/generator" className="w-full max-w-[300px] group transition-transform duration-300 hover:scale-105">
+        <div className="relative w-full h-[340px] rounded-xl overflow-hidden border border-border/100 transition-all duration-300 bg-white/10 dark:bg-slate-800/20 backdrop-blur-md">
+          <img
+            src={template.preview}
+            alt="Template Preview"
+            className="w-full h-full object-cover object-top rounded-xl"
+          />
+        </div>
+      </Link>
+    </div>
+  ))}
+</div>
 
           {/* View All Templates Button */}
           <div className="text-center mt-12">

@@ -9,18 +9,34 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div
-                className="rounded-lg flex items-center justify-center overflow-hidden"
-                style={{ width: "154px", height: "154px" }} 
-                      >
-                        <img
-                          src="/vinathaal_icon.png"
-                          alt="Vinathaal Logo"
-                          className="object-contain w-full h-full"
-                        />
-                      </div>
+<div className="flex items-center gap-4">
+  {/* Vinathaal Icon */}
+  <div
+    className="rounded-lg flex items-center justify-center overflow-hidden"
+    style={{ width: "114px", height: "114px" }}
+  >
+    <img
+      src="/vinathaal_icon.png"
+      alt="Vinathaal Logo"
+      className="object-contain w-full h-full"
+    />
+  </div>
 
-            </div>
+  {/* Vinathaal Heading Logo */}
+  <div
+    className="flex items-center"
+    style={{ height: "54px" }}
+  >
+    <img
+      src="vinathaal-heading-white.png" 
+      alt="Vinathaal Heading"
+      className="object-contain h-full"
+    />
+  </div>
+</div>
+</div>
+
+
             <p className="text-blue-200 leading-relaxed max-w-md">
               Elevating minds, shaping futures through excellence in education and transformative learning experiences.
             </p>
