@@ -1,4 +1,4 @@
-const express = require("express");
+{/*const express = require("express");
 const crypto = require("crypto");
 const db = require("../awsdb"); // Replace with actual DB file path
 const { sendResetEmail } = require("../utils/mailer"); // <-- Import this!
@@ -39,4 +39,4 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;*/}
