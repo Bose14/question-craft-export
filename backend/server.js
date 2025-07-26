@@ -5,7 +5,8 @@ require('dotenv').config();
 
 
 const authRoutes = require('./routes/auth');
-const forgotPasswordRoute = require('./routes/forgotPassword'); // ✅ New Import
+const forgotPasswordRoute = require('./routes/forgotPassword');
+const statsRoutes = require("./routes/stats") 
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use((req, res, next) => {
 
 // API routes
 app.use('/api', authRoutes);
-app.use('/api', forgotPasswordRoute); // ✅ New Route Added
+app.use('/api', forgotPasswordRoute); 
+app.use('/api', statsRoutes);
 
 const resetPasswordRoute = require('./routes/resetPassword');
 app.use('/api', resetPasswordRoute);
