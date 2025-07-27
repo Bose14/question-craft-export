@@ -106,7 +106,7 @@ const Result = () => {
       console.log("Extracted questions:", questions);
       
       // Simulate AI API call (replace with actual API)
-      const response = await fetch('http://localhost:3001/api/generate-answer-key', {
+      const response = await fetch('https://vinathaal.azhizen.com/api/generate-answer-key', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

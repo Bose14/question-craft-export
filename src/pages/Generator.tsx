@@ -117,7 +117,7 @@ const Generator = () => {
     formData.append("image", file);
   
     try {
-      const res = await fetch("http://localhost:3001/api/extract-syllabus", {
+      const res = await fetch("https://vinathaal.azhizen.com/api/extract-syllabus", {
         method: "POST",
         body: formData,
       });
@@ -429,7 +429,7 @@ const Generator = () => {
     // 3. Send the data to the backend API
     try {
       // The endpoint should be your actual backend API URL
-      const res = await fetch("http://localhost:3001/api/generate-questions", {
+      const res = await fetch("https://vinathaal.azhizen.com/api/generate-questions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
