@@ -7,6 +7,9 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const forgotPasswordRoute = require('./routes/forgotPassword');
 const statsRoutes = require("./routes/stats") 
+const extractRoute = require('./routes/extract');
+const generateRoute = require('./routes/generate');
+const answerKeyRoute = require('./routes/generateAnswer');
 
 const app = express();
 
@@ -29,6 +32,9 @@ app.use((req, res, next) => {
 app.use('/api', authRoutes);
 app.use('/api', forgotPasswordRoute); 
 app.use('/api', statsRoutes);
+app.use('/api/extract-syllabus', extractRoute);
+app.use("/api", generateRoute);
+app.use('/api', answerKeyRoute);
 
 const resetPasswordRoute = require('./routes/resetPassword');
 app.use('/api', resetPasswordRoute);
