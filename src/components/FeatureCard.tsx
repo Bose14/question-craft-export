@@ -1,26 +1,26 @@
 
-import { ReactNode } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LucideIcon } from "lucide-react";
 
 interface FeatureCardProps {
-  icon: ReactNode;
+  icon: LucideIcon;
   title: string;
   description: string;
 }
 
-const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
+const FeatureCard = ({ icon: Icon, title, description }: FeatureCardProps) => {
   return (
-    <Card className="h-full hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-card border-accent/20 group">
-      <CardHeader className="relative">
-        <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-elegant">
-          <div className="text-white">
-            {icon}
-          </div>
+    <Card className="bg-gradient-card border-accent/20 hover:shadow-elegant transition-all duration-300 h-full">
+      <CardHeader className="text-center pb-4">
+        <div className="bg-accent/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+          <Icon className="w-8 h-8 text-accent" />
         </div>
-        <CardTitle className="text-xl font-semibold text-primary group-hover:text-accent transition-colors">{title}</CardTitle>
+        <CardTitle className="text-xl text-primary">{title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-text-secondary leading-relaxed">{description}</p>
+      <CardContent className="text-center">
+        <CardDescription className="text-text-secondary text-sm sm:text-base">
+          {description}
+        </CardDescription>
       </CardContent>
     </Card>
   );
