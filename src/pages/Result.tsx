@@ -66,86 +66,157 @@ const Result = () => {
     }
   }, []);
 
-  const handlePDFGenerate = async () => {
-    try {
+  // const handlePDFGenerate = async () => {
+  //   try {
 
-      setUploading(true);
+  //     setUploading(true);
 
-      try {
+  //     try {
 
-        const filename = (config?.subjectName || 'Question Paper') + ".pdf";
-        console.log(filename);
+  //       const filename = (config?.subjectName || 'Question Paper') + ".pdf";
+  //       console.log(filename);
 
-        const blob = await generatePDF("question-paper-content", filename);
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = `${filename}.pdf`;
-          link.click();
-          URL.revokeObjectURL(url);
-        }
-
-
-        toast.success("PDF export initiated - check your downloads folder");
-
-        const file = new File([blob], filename, { type: blob.type });
-        console.log(file.name);
-        console.log(file.type);
-
-        const payload = {
-          filename: file.name,
-          filetype: file.type
-        };
-
-        const response = await axios.get(`http://localhost:3001/get-upload-url`, {
-          params: payload
-        });
-
-        const uploadUrl = response.data.uploadURL;
-        console.log(uploadUrl);
-
-        const ObjectUrl = response.data.objectURL;
-        console.log(ObjectUrl);
+  //       const blob = await generatePDF("question-paper-content", filename);
+  //       if (blob) {
+  //         const url = URL.createObjectURL(blob);
+  //         const link = document.createElement("a");
+  //         link.href = url;
+  //         link.download = `${filename}.pdf`;
+  //         link.click();
+  //         URL.revokeObjectURL(url);
+  //       }
 
 
-        await axios.put(uploadUrl, blob, {
-          headers: {
-            'Content-Type': 'application/pdf',
-          },
-        });
+  //       toast.success("PDF export initiated - check your downloads folder");
 
-        alert('✅ File uploaded to S3 successfully!');
+  //       const file = new File([blob], filename, { type: blob.type });
+  //       console.log(file.name);
+  //       console.log(file.type);
+
+  //       const payload = {
+  //         filename: file.name,
+  //         filetype: file.type
+  //       };
+
+  //       const response = await axios.get(`http://localhost:3001/get-upload-url`, {
+  //         params: payload
+  //       });
+
+  //       const uploadUrl = response.data.uploadURL;
+  //       console.log(uploadUrl);
+
+  //       const ObjectUrl = response.data.objectURL;
+  //       console.log(ObjectUrl);
 
 
-      } catch (err) {
-        console.error('❌ Upload failed:', err);
-        alert('Failed to upload file');
-      }
+  //       await axios.put(uploadUrl, blob, {
+  //         headers: {
+  //           'Content-Type': 'application/pdf',
+  //         },
+  //       });
 
-      alert('File Generated Succesfully');
-    } catch (err) {
-      console.error('error in generating', err);
+  //       alert('✅ File uploaded to S3 successfully!');
 
-    } finally {
-      setUploading(false);
-    }
 
-  };
+  //     } catch (err) {
+  //       console.error('❌ Upload failed:', err);
+  //       alert('Failed to upload file');
+  //     }
 
-  const handleDownload = () => {
+  //     alert('File Generated Succesfully');
+  //   } catch (err) {
+  //     console.error('error in generating', err);
+
+  //   } finally {
+  //     setUploading(false);
+  //   }
+
+  // };
+
+  // const handleDownload = () => {
+  //   const element = paperRef.current;
+  //   console.log("Downloading PDF for element:", element);
+  //   if (element) {
+  //     html2pdf().from(element).set({
+  //       margin: [0.5, 0.5, 0.5, 0.5],
+  //       filename: `${config.subjectName.replace(/\s+/g, '_')}_Question_Paper.pdf`,
+  //       image: { type: 'jpeg', quality: 0.98 },
+  //       html2canvas: { scale: 2 },
+  //       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  //     }).save();
+  //   }
+  // };
+
+
+
+  const handleDownload = async () => {
+  try {
+    setUploading(true);
+
+    const filename = (config?.subjectName || 'Question Paper') + ".pdf";
     const element = paperRef.current;
-    console.log("Downloading PDF for element:", element);
-    if (element) {
-      html2pdf().from(element).set({
-        margin: [0.5, 0.5, 0.5, 0.5],
-        filename: `${config.subjectName.replace(/\s+/g, '_')}_Question_Paper.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }).save();
+
+    if (!element) {
+      console.error("Element for PDF generation not found.");
+      return;
     }
-  };
+
+    // Step 1: Generate blob from html2pdf
+    const opt = {
+      margin: [0.5, 0.5, 0.5, 0.5],
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    const blob = await html2pdf().from(element).set(opt).outputPdf('blob');
+
+    if (blob) {
+      // Step 2: Manual download using blob
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      toast.success("PDF downloaded and upload started...");
+
+      // Step 3: Prepare file for S3
+      const file = new File([blob], filename, { type: blob.type });
+
+      const payload = {
+        filename: file.name,
+        filetype: file.type
+      };
+
+      const response = await axios.get(`http://localhost:3001/get-upload-url`, {
+        params: payload
+      });
+
+      const uploadUrl = response.data.uploadURL;
+      const objectUrl = response.data.objectURL;
+
+      // Step 4: Upload to S3
+      await axios.put(uploadUrl, blob, {
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      });
+
+      alert('✅ File uploaded to S3 successfully!');
+      console.log('S3 URL:', objectUrl);
+    }
+
+  } catch (err) {
+    console.error('❌ PDF generation/upload failed:', err);
+    alert('Something went wrong!');
+  } finally {
+    setUploading(false);
+  }
+};
+
 
   const handleWordGenerate = () => {
     const filename = config?.subjectName || 'question-paper';
