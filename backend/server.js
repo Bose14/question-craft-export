@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
+const AWS = require('aws-sdk')
 
 
 const authRoutes = require('./routes/auth');
@@ -51,14 +52,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error' });
 });
 
-// Start the server
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`📍 Health check: http://localhost:${PORT}/health`);
-});
-
-
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -67,4 +60,53 @@ const transporter = nodemailer.createTransport({
     pass: process.env.MAIL_PASSWORD
   }
 });
+
+
+
+app.use(cors());
+const s3 = new AWS.S3({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+app.get('/get-upload-url', async (req, res) => {
+
+  try {
+    const { filename, filetype } = req.query;
+
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: filename,
+      Expires: 300,
+      ContentType: filetype,
+    };
+
+
+
+    const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+
+    // Logs ObjectURL and the UploadUrl for testing and reference
+    const objectURL = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${filename}`;
+    console.log('Public S3 Object URL:', objectURL);
+
+    console.log(uploadURL);
+    res.send({ uploadURL, objectURL });
+  } catch (err) {
+    console.error('Error:' + err);
+
+  }
+
+})
+
+
+// Start the server
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`📍 Health check: http://localhost:${PORT}/health`);
+});
+
 
