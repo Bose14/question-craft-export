@@ -188,131 +188,169 @@ const Support = () => {
         </div>
       </section>
 
-      <section id="form" className="py-16 bg-gradient-subtle">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Still Need Help?</h2>
-            <p className="text-lg text-muted-foreground">Send us a message and we'll get back to you promptly</p>
-          </div>
+<section className="py-24 bg-gradient-to-b from-background to-background/80">
+  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    {/* Heading */}
+    <div className="text-center mb-16">
+      <h2 className="text-5xl font-extrabold text-foreground mb-4 tracking-tight">
+        Need Assistance?
+      </h2>
+      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        Reach out to our team, and we’ll respond promptly to help you succeed.
+      </p>
+    </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="bg-gradient-card border-accent/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <MessageCircle className="w-6 h-6 mr-2" />
-                  Get in Touch
-                </CardTitle>
-                <CardDescription>We're here to help you succeed</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-accent" />
-                  <div>
-                    <p className="font-medium text-foreground">Email Support</p>
-                    <p className="text-muted-foreground">support@questioncraft.com</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-accent" />
-                  <div>
-                    <p className="font-medium text-foreground">Phone Support</p>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                <div className="bg-accent/10 p-4 rounded-lg">
-                  <p className="text-sm text-accent font-medium">Response Time</p>
-                  <p className="text-sm text-muted-foreground">We typically respond within 24 hours</p>
-                </div>
-              </CardContent>
-            </Card>
+    {/* Grid Layout */}
+    <div className="grid lg:grid-cols-2 gap-12">
+      {/* Contact Info Card */}
+      <div className="relative bg-gradient-card border border-border/10 shadow-lg rounded-3xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent rounded-3xl" />
+        <div className="relative">
+          <h3 className="flex items-center text-2xl font-semibold text-primary mb-4">
+            <MessageCircle className="w-7 h-7 mr-3 text-accent" />
+            Get in Touch
+          </h3>
+          <p className="text-muted-foreground mb-8">We’re here to support you every step of the way.</p>
 
-            <Card className="bg-gradient-card border-accent/20">
-              <CardHeader>
-                <CardTitle className="text-primary">Send us a Message</CardTitle>
-                <CardDescription>Fill out the form below and we'll get back to you</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter your full name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="Enter your email" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      name="subject"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subject</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter your subject" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Message</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Tell us how we can help you..."
-                              className="min-h-[120px]"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <Button
-                      type="submit"
-                      className="w-full bg-gradient-primary hover:opacity-90"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Sending Message...
-                        </>
-                      ) : (
-                        "Send Message"
-                      )}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4 group">
+              <Mail className="w-6 h-6 text-accent transition-transform duration-300 group-hover:scale-110" />
+              <div>
+                <p className="font-medium text-foreground">Email Support</p>
+                <a
+                  href="mailto:support@questioncraft.com"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  support@questioncraft.com
+                </a>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 group">
+              <Phone className="w-6 h-6 text-accent transition-transform duration-300 group-hover:scale-110" />
+              <div>
+                <p className="font-medium text-foreground">Phone Support</p>
+                <a
+                  href="tel:+15551234567"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  +1 (555) 123-4567
+                </a>
+              </div>
+            </div>
+            <div className="bg-accent/5 p-5 rounded-xl border border-accent/10">
+              <p className="text-sm font-semibold text-accent">Response Time</p>
+              <p className="text-sm text-muted-foreground">Expect a reply within 24 hours.</p>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Contact Form Card */}
+      <div className="bg-gradient-card border border-border/10 shadow-lg rounded-3xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <h3 className="text-2xl font-semibold text-primary mb-4">Send us a Message</h3>
+        <p className="text-muted-foreground mb-6">Fill out the form, and we’ll get back to you soon.</p>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Full Name */}
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-foreground font-medium">Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your full name"
+                      className="bg-background/50 border-border/20 focus:ring-2 focus:ring-accent transition-all"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-foreground font-medium">Email Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="bg-background/50 border-border/20 focus:ring-2 focus:ring-accent transition-all"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Subject */}
+            <FormField
+              control={form.control}
+              name="subject"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-foreground font-medium">Subject</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="What's this about?"
+                      className="bg-background/50 border-border/20 focus:ring-2 focus:ring-accent transition-all"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Message */}
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-foreground font-medium">Message</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us how we can help you..."
+                      className="min-h-[140px] bg-background/50 border-border/20 focus:ring-2 focus:ring-accent transition-all"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full bg-primary text-white hover:bg-primary/90 font-semibold py-3 rounded-xl transition-all duration-300 hover:shadow-md"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Sending Message...
+                </>
+              ) : (
+                "Send Message"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <Footer />
     </div>

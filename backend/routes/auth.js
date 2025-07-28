@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const db = require('../awsdb');
-
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const generateResetToken = () => crypto.randomBytes(32).toString('hex');
 
 // Helper: Send reset email (with fallback for development)
 const sendResetEmail = async (email, token) => {
-  const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:8080'}/reset-password?token=${token}`;
+  const resetLink = `${process.env.FRONTEND_URL || 'https://vinathaal.azhizen.com/api'}/reset-password?token=${token}`;
   
   // Check if email is configured
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {

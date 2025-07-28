@@ -5,13 +5,17 @@ require('dotenv').config();
 
 
 const authRoutes = require('./routes/auth');
-const forgotPasswordRoute = require('./routes/forgotPassword'); // ✅ New Import
+const forgotPasswordRoute = require('./routes/forgotPassword');
+const statsRoutes = require("./routes/stats") 
+const extractRoute = require('./routes/extract');
+const generateRoute = require('./routes/generate');
+const answerKeyRoute = require('./routes/generateAnswer');
 
 const app = express();
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:3000'],
+  origin: ['http://localhost:8080', 'http://localhost:3000', 'https://vinathaal.azhizen.com'],
   credentials: true
 }));
 
@@ -26,7 +30,11 @@ app.use((req, res, next) => {
 
 // API routes
 app.use('/api', authRoutes);
-app.use('/api', forgotPasswordRoute); // ✅ New Route Added
+app.use('/api', forgotPasswordRoute); 
+app.use('/api', statsRoutes);
+app.use('/api/extract-syllabus', extractRoute);
+app.use("/api", generateRoute);
+app.use('/api', answerKeyRoute);
 
 const resetPasswordRoute = require('./routes/resetPassword');
 app.use('/api', resetPasswordRoute);

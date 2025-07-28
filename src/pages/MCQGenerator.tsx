@@ -257,7 +257,7 @@ const MCQGenerator = () => {
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center space-x-2 text-primary">
           <FileText className="w-5 h-5" />
-          <span>Upload Syllabus (Optional)</span>
+          <span>Upload Syllabus </span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -292,7 +292,7 @@ const MCQGenerator = () => {
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center space-x-2 text-primary">
           <Image className="w-5 h-5" />
-          <span>Upload Custom Header Image (Optional)</span>
+          <span>Upload Header Image (Optional)</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
