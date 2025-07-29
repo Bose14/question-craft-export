@@ -20,13 +20,11 @@ async function getSecret(parameterName) {
   });
 
   try {
-    console.log(`Fetching parameter: ${parameterName}...`);
 
     // Use the single, shared client to send the command.
     const response = await ssmClient.send(command);
 
     if (response.Parameter && response.Parameter.Value) {
-      console.log(`✅ Successfully fetched parameter: ${parameterName}`);
       return response.Parameter.Value;
     } else {
       // This is a critical failure, so we throw an error.
