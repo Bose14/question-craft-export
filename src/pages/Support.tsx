@@ -59,11 +59,24 @@ const Support = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
+  // Get user data from localStorage if logged in
+  const getUserData = () => {
+    try {
+      const userData = localStorage.getItem("user");
+      console.log(userData);
+      return userData ? JSON.parse(userData) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const user = getUserData();
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
+      fullName: user?.name || "",
+      email: user?.email || "",
       subject: "",
       message: "",
     },
@@ -141,15 +154,16 @@ const Support = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
-      <nav className="bg-white border-b border-slate-200 shadow-sm">
+      <nav className="bg-background border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center space-x-2 text-slate-900 hover:text-slate-700">
+            <Link to="/" className="flex items-center space-x-2 text-foreground hover:text-muted-foreground">
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Home</span>
             </Link>
             <div className="flex items-center space-x-2">
-              <img src="/vinathaal%20logo.png" alt="Vinathaal Logo" className="h-16 w-auto object-contain" />
+              <FileText className="w-8 h-8 text-primary" />
+              <span className="text-xl font-bold text-primary">Vinathaal</span>
             </div>
           </div>
         </div>
@@ -170,7 +184,7 @@ const Support = () => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
-            <p className="text-lg text-muted-foreground">Quick answers to common questions about QuestionCraft</p>
+            <p className="text-lg text-muted-foreground">Quick answers to common questions about Vinathaal</p>
           </div>
 
           <Accordion type="single" collapsible className="space-y-4">
@@ -209,7 +223,7 @@ const Support = () => {
                   <Mail className="w-5 h-5 text-accent" />
                   <div>
                     <p className="font-medium text-foreground">Email Support</p>
-                    <p className="text-muted-foreground">support@questioncraft.com</p>
+                    <p className="text-muted-foreground">support@vinathaal.com</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -263,19 +277,30 @@ const Support = () => {
                     />
 
                     <FormField
+                      control={form.control}
                       name="subject"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Subject</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter your subject" {...field} />
-                          </FormControl>
+                          <FormLabel>Purpose</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Purpose" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Technical Issues">Technical Issues</SelectItem>
+                              <SelectItem value="Subscription Enquiry">Subscription Enquiry</SelectItem>
+                              <SelectItem value="Others">Others</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
                     <FormField
+                      control={form.control}
                       name="message"
                       render={({ field }) => (
                         <FormItem>
