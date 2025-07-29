@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Download, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import ShareDialog from "@/components/ShareDialog";
-import { generatePDF, generateWordDocument } from "@/utils/pdfGenerator";
+import { generatePDF, /*generateWordDocument */} from "@/utils/pdfGenerator";
 import html2pdf from 'html2pdf.js';
 
 interface AnswerKeyItem {
@@ -55,11 +55,11 @@ const AnswerKey = () => {
     toast.success("Answer key PDF exported successfully!");
   };
 
-  const handleWordGenerate = () => {
-    const filename = `${config?.subjectName || 'question-paper'}-answer-key`;
-    generateWordDocument('answer-key-content', filename);
-    toast.success("Answer key Word document downloaded successfully!");
-  };
+  // const handleWordGenerate = () => {
+  //   const filename = `${config?.subjectName || 'question-paper'}-answer-key`;
+  //   generateWordDocument('answer-key-content', filename);
+  //   toast.success("Answer key Word document downloaded successfully!");
+  // };
 
   const handleDownload = () => {
     const element = paperRef.current;
@@ -133,7 +133,7 @@ const AnswerKey = () => {
               title={`${config.subjectName} - Answer Key`}
               content="Answer key generated successfully"
             />
-            <Button onClick={handleWordGenerate} variant="outline" size="sm">
+            <Button onClick={/*handleWordGenerate*/ null} variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Word</span>
               <span className="sm:hidden">DOC</span>
