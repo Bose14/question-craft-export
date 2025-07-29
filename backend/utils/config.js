@@ -15,7 +15,10 @@ try {
     ACCESS_KEY_ID_AWS: await getSecret('ACCESS_KEY_ID_AWS'),
     SECRET_ACCESS_KEY_AWS: await getSecret('SECRET_ACCESS_KEY_AWS'),
     S3_BUCKET_NAME: await getSecret('S3_BUCKET_NAME'),
-    FRONTEND_URL: await getSecret('FRONTEND_URL')
+    FRONTEND_URL: await getSecret('FRONTEND_URL'),
+    PERPLEXITY_API_KEY: await getSecret('PERPLEXITY_API_KEY'),
+    PERPLEXITY_ENDPOINT: await getSecret('PERPLEXITY_ENDPOINT'),
+    PERPLEXITY_MODEL: await getSecret('PERPLEXITY_MODEL')
   };
   
   return config;

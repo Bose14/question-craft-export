@@ -11,11 +11,34 @@ module.exports = function(db, transporter, config) {
   const sendResetEmail = async (email, token) => {
     const resetLink = `${config.FRONTEND_URL}/reset-password?token=${token}`;
     const mailOptions = {
-      from: `QuestionPaper AI <${config.EMAIL_USER}>`,
+      from: `Vinathaal AI <${config.EMAIL_USER}>`,
       to: email,
       subject: 'Password Reset Request',
-      html: `<p>You requested a password reset. Click the link to proceed: <a href="${resetLink}">Reset Password</a>. This link expires in 1 hour.</p>`,
-    };
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Password Reset</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+            <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px;">
+              <h2>Password Reset Request</h2>
+              <p>You requested a password reset. Click the button below to proceed:</p>
+              <p>
+                <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                  Reset Password
+                </a>
+              </p>
+              <p>This link will expire in 1 hour.</p>
+              <hr />
+              <p style="font-size: 0.9em; color: #555;">If you did not request this, you can safely ignore this email.</p>
+            </div>
+          </body>
+        </html>
+      `,
+    };  
     await transporter.sendMail(mailOptions);
     console.log('Reset email sent successfully to:', email);
   };
@@ -28,14 +51,14 @@ module.exports = function(db, transporter, config) {
         return res.status(400).json({ message: 'Name, email, and password are required.' });
       }
 
-      const existingUsers = await db.query('SELECT email FROM users WHERE email = ?', [email]);
-      if (existingUsers.length > 0) {
+      const [rows] = await db.query('SELECT email FROM users WHERE email = ?', [email]);
+      if (rows && rows.length > 0) {
         return res.status(409).json({ message: 'Email already exists.' });
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
       await db.query('INSERT INTO users SET ?', { name, email, password_hash: passwordHash, role: 'user' });
-      
+
       res.status(201).json({ message: 'User registered successfully.' });
     } catch (error) {
       console.error('Signup Error:', error);
@@ -51,47 +74,56 @@ module.exports = function(db, transporter, config) {
         return res.status(400).json({ message: 'Email and password are required.' });
       }
 
-      const results = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-      if (results.length === 0) {
+      const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+      if (!rows || rows.length === 0) {
         return res.status(401).json({ message: 'Invalid credentials.' });
       }
-
-      const user = results[0];
+      const user = rows;
       const isMatch = await bcrypt.compare(password, user.password_hash);
       if (!isMatch) {
         return res.status(401).json({ message: 'Invalid credentials.' });
       }
-      
-      res.json({ message: 'Login successful', user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+      res.json({
+        message: 'Login successful',
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      });
     } catch (error) {
-      console.error('Login Error:', error);
+      console.error('Login Error:', error.stack || error.message || error);
       res.status(500).json({ message: 'Server error during login.' });
     }
   });
 
   // FORGOT PASSWORD
   router.post('/forgot-password', async (req, res) => {
-    const successMessage = 'If an account with that email exists, a reset link has been sent.';
     try {
       const { email } = req.body;
       if (!email) {
         return res.status(400).json({ message: 'Email is required.' });
       }
       
-      const results = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-      if (results.length > 0) {
-        const user = results[0];
-        const resetToken = crypto.randomBytes(32).toString('hex');
-        const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour
-
-        await db.query('UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?', [resetToken, resetTokenExpires, user.id]);
-        await sendResetEmail(email, resetToken);
+      const [user] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+      if (!user.length) {
+        return res.status(404).json({ message: "User not found" });
       }
-      
-      res.json({ message: successMessage });
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetTokenExpires = new Date(Date.now() + 3600000);
+
+      await db.promise().query(
+        "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
+        [resetToken, resetTokenExpires, user[0].id]
+      );
+
+      await sendResetEmail(email, resetToken); 
+
+      res.status(200).json({ message: 'Password reset link sent successfully.' });
     } catch (error) {
       console.error('Forgot Password Error:', error);
-      res.json({ message: successMessage }); // Always return success for security
+      res.status(500).json({ message: 'Failed to process request. The email could not be sent.' });
     }
   });
 
@@ -103,16 +135,23 @@ module.exports = function(db, transporter, config) {
         return res.status(400).json({ message: 'Valid token and a password of at least 6 characters are required.' });
       }
 
-      const results = await db.query('SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > NOW()', [token]);
-      if (results.length === 0) {
-        return res.status(400).json({ message: 'Invalid or expired token.' });
+      const [result] = await db.promise().query(
+        "SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > NOW()",
+        [token]
+      );
+  
+      if (!result.length) {
+        return res.status(400).json({ message: "Invalid or expired token" });
       }
 
-      const user = results[0];
-      const passwordHash = await bcrypt.hash(newPassword, 10);
-      await db.query('UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?', [passwordHash, user.id]);
-      
-      res.json({ message: 'Password has been reset successfully.' });
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      await db.promise().query(
+        "UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
+        [hashedPassword, result[0].id]
+      );
+
+      res.status(200).json({ message: 'Password has been reset successfully.' });
     } catch (error) {
       console.error('Reset Password Error:', error);
       res.status(500).json({ message: 'Server error during password reset.' });

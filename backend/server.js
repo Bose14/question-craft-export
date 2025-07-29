@@ -9,11 +9,10 @@ const createDbPool = require('./awsdb');      // Factory for the DB pool
 const createTransporter = require('./utils/mailer'); // Factory for the mail transporter
 const createPerplexityService = require('./services/generateWithPerplexity'); 
 const authRoutes = require('./routes/auth');       // Auth router factory
-
-// You would also import other router factories here
-// const statsRoutes = require('./routes/stats');
-// const extractRoute = require('./routes/extract');
-// ... and so on
+const statsRoutes = require('./routes/stats');     // Stats router factory
+const extractRoute = require('./routes/extract');  // Extract router factory
+const generateRoute = require('./routes/generate'); // Generate router factory
+const answerKeyRoute = require('./routes/generateAnswer'); // Answer Key router factory
 
 /**
  * Main function to initialize services and start the Express server.
@@ -29,7 +28,6 @@ async function startServer() {
     // Create dependencies that rely on the loaded configuration.
     const db = createDbPool(config);
     const transporter = createTransporter(config);
-    const { generateWithPerplexity } = createPerplexityService(config);
 
     // 3. CREATE EXPRESS APP
     const app = express();
@@ -48,14 +46,13 @@ async function startServer() {
       next();
     });
 
-    // 5. SET UP ROUTES WITH DEPENDENCY INJECTION
-    // Pass the initialized services (db, transporter, etc.) to your router files.
+    const perplexityService = createPerplexityService(config);
+
     app.use('/api/auth', authRoutes(db, transporter, config));
-    
-    // NOTE: You would do the same for your other routes.
-    // Make sure they are also converted to the factory pattern.
-    // app.use('/api/stats', statsRoutes(db, config));
-    // app.use('/api/extract-syllabus', extractRoute(db, config));
+    app.use('/api', statsRoutes(db, config));
+    app.use('/api', extractRoute);
+    app.use('/api', generateRoute(perplexityService));
+    app.use('/api', answerKeyRoute(perplexityService));
     
     // --- System Routes ---
     app.get('/health', (req, res) => {
