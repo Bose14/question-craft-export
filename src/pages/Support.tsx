@@ -63,7 +63,6 @@ const Support = () => {
   const getUserData = () => {
     try {
       const userData = localStorage.getItem("user");
-      console.log(userData);
       return userData ? JSON.parse(userData) : null;
     } catch {
       return null;
@@ -83,6 +82,33 @@ const Support = () => {
   });
 
   useEffect(() => {
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    try {
+      const response = await fetch("http://vinathaal.azhizen.com/api/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch");
+
+      const userData = await response.json();
+
+      // Set values in the form
+      form.setValue("fullName", userData.full_name || "");
+      form.setValue("email", userData.email || "");
+    } catch (err) {
+      console.error("Error fetching user profile:", err);
+    }
+  };
+
+  fetchUserProfile();
+}, []);
+
+  useEffect(() => {
     if (location.hash) {
       const scrollToSection = () => {
         const target = document.querySelector(location.hash);
@@ -97,11 +123,36 @@ const Support = () => {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await fetch("http://vinathaal.azhizen.com/api/support", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+
+      await fetch("http://vinathaal.azhizen.com/api/slack-alert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: data.fullName,
+          email: data.email,
+          subject: data.subject,
+          message: data.message,
+        }),
+      });
+
       toast({
         title: "Message Sent Successfully!",
         description: "We'll get back to you within 24 hours.",
       });
+
       form.reset();
     } catch (error) {
       toast({
@@ -113,6 +164,7 @@ const Support = () => {
       setIsSubmitting(false);
     }
   };
+
 
   const faqs = [
     {

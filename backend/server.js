@@ -10,7 +10,7 @@ const statsRoutes = require("./routes/stats")
 const extractRoute = require('./routes/extract');
 const generateRoute = require('./routes/generate');
 const answerKeyRoute = require('./routes/generateAnswer');
-
+const slackRoute=require('./routes/slack');
 const app = express();
 
 // Enhanced CORS configuration
@@ -35,6 +35,11 @@ app.use('/api', statsRoutes);
 app.use('/api/extract-syllabus', extractRoute);
 app.use("/api", generateRoute);
 app.use('/api', answerKeyRoute);
+app.use('/api',slackRoute);
+
+const supportRoutes = require('./routes/support');
+app.use('/api', supportRoutes);
+
 
 const resetPasswordRoute = require('./routes/resetPassword');
 app.use('/api', resetPasswordRoute);
@@ -61,10 +66,29 @@ app.listen(PORT, '0.0.0.0', () => {
 
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use SSL
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD
-  }
+    user: process.env.OWNER_EMAIL_USER,
+    pass: process.env.OWNER_EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
+
+// GET /api/user/profile
+app.get("/api/user/profile",  async (req, res) => {
+  try {
+    const userId = req.user.id; // from token
+    const [rows] = await db.query("SELECT full_name, email FROM users WHERE id = ?", [userId]);
+
+    if (rows.length === 0) return res.status(404).json({ error: "User not found" });
+
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});

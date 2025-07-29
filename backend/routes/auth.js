@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const db = require('../awsdb');
 require("dotenv").config();
+const nodemailer = require('nodemailer');
 
 const router = express.Router();
 
@@ -29,7 +30,6 @@ const sendResetEmail = async (email, token) => {
     const nodemailer = require('nodemailer');
     
     const transporter = nodemailer.createTransport({
-
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -39,7 +39,8 @@ const sendResetEmail = async (email, token) => {
         rejectUnauthorized: false // Allow self-signed certificates
       },
     });
-    
+
+  
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
