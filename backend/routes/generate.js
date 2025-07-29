@@ -1,10 +1,11 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
+const generateWithPerplexity = require("../services/generateWithPerplexity");
 require("dotenv").config();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+// const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+// const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
 
 function formatUnitLabel(unit) {
   if (typeof unit === "string" && unit.toLowerCase().startsWith("unit")) {
@@ -169,17 +170,19 @@ ${unitContent}
         `;
 
         try {
-          const response = await axios.post(GEMINI_ENDPOINT, {
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-              temperature: 0.7,
-              topK: 40,
-              topP: 0.95,
-              maxOutputTokens: 1024
-            }
-          });
+          // const response = await axios.post(GEMINI_ENDPOINT, {
+          //   contents: [{ parts: [{ text: prompt }] }],
+          //   generationConfig: {
+          //     temperature: 0.7,
+          //     topK: 40,
+          //     topP: 0.95,
+          //     maxOutputTokens: 1024
+          //   }
+          // });
 
-          const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          // const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+          const text = await generateWithPerplexity(prompt);
 
           const questions = text.split(/\n+/).filter(line => line.trim()).map(line => {
             const match = line.match(/^\d+[\).]?\s*(.*)$/);
