@@ -7,7 +7,7 @@ const db = require('../awsdb');
 
 require('dotenv').config();
 
-
+module.exports = function(transporter, config) {
 // 🔹 Email + Slack handler
 router.post('/support', async (req, res) => {
   const { fullName, email, subject, message } = req.body;
@@ -17,22 +17,9 @@ router.post('/support', async (req, res) => {
   }
 
   try {
-    // 1️⃣ Send Email to Owner
-    const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false, // ✅ Allow self-signed certs
-    },
-    });
-
-
     await transporter.sendMail({
-      from: `"Support Inquiry" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Owner's email address
+      from: `"Support Enquiry" <${config.EMAIL_USER}>`,
+      to: config.EMAIL_USER, // Owner's email address
       subject: `New Support Message - ${subject}`,
       html: `
         <h2>Support Message from ${fullName}</h2>
@@ -42,9 +29,6 @@ router.post('/support', async (req, res) => {
       `,
     });
 
-   
-
-
     res.json({ message: 'Support message sent successfully' });
   } catch (err) {
     console.error('Support message error:', err);
@@ -52,4 +36,5 @@ router.post('/support', async (req, res) => {
   }
 });
 
-module.exports = router;
+return router;
+};

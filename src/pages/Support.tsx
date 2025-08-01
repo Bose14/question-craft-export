@@ -48,7 +48,7 @@ import {
 const contactFormSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
+  subject: z.string().min(1, "Please select a purpose"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
@@ -81,32 +81,6 @@ const Support = () => {
     },
   });
 
-  useEffect(() => {
-  const fetchUserProfile = async () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
-
-    try {
-      const response = await fetch("http://vinathaal.azhizen.com/api/user/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) throw new Error("Failed to fetch");
-
-      const userData = await response.json();
-
-      // Set values in the form
-      form.setValue("fullName", userData.full_name || "");
-      form.setValue("email", userData.email || "");
-    } catch (err) {
-      console.error("Error fetching user profile:", err);
-    }
-  };
-
-  fetchUserProfile();
-}, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -123,7 +97,7 @@ const Support = () => {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("http://vinathaal.azhizen.com/api/support", {
+      const response = await fetch("https://vinathaal.azhizen.com/api/support", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +109,7 @@ const Support = () => {
         throw new Error("Server error");
       }
 
-      await fetch("http://vinathaal.azhizen.com/api/slack-alert", {
+      await fetch("https://vinathaal.azhizen.com/api/slack-alert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

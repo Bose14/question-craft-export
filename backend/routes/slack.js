@@ -3,8 +3,8 @@ const router = express.Router();
 const axios = require('axios');
 
 
-
-const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;;
+module.exports = function(  config) {
+const SLACK_WEBHOOK_URL = config.SLACK_WEBHOOK_URL;
 router.post("/slack-alert", async (req, res) => {
   const { fullName, email, subject, message } = req.body;
   try {
@@ -28,7 +28,8 @@ router.post("/slack-alert", async (req, res) => {
     res.status(500).send({ error: "Failed to send Slack alert" });
   }
 });
-module.exports = router;
+ return router;
+};
 
 
 
