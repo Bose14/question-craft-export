@@ -30,7 +30,7 @@ function App() {
           <Route path="/generator" element={<Generator />} />
           <Route path="/question-bank" element={<QuestionBankGenerator />} />
           <Route path="/mcq-generator" element={<MCQGenerator />} />
-          <Route path="/result" element={<Result />} />
+          <Route path="/result/:id" element={<Result />} />
           <Route path="/answer-key" element={<AnswerKey />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

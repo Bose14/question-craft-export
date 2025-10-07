@@ -42,9 +42,9 @@ module.exports = function S3Upload(config, db) {
 
     // To store the email, objectURL, dateTime, sbujectName to the MySql DB.
     router.post('/store-upload-metadata', async (req, res) => {
-        const { email, uploadURL, objectURL, dateTime, subjectName } = req.body;
+        const { email, uploadURL, objectURL, dateTime, subjectName, templateId } = req.body;
 
-        if (!email || !objectURL || !dateTime || !subjectName) {
+        if (!email || !objectURL || !dateTime || !subjectName || !templateId) {
             return res.status(400).json({ message: 'Missing field' });
         }
 
@@ -52,9 +52,9 @@ module.exports = function S3Upload(config, db) {
             const UsersId = await db.query("SELECT id FROM users WHERE email = ?", [email]);
             const id = UsersId[0].id;
 
-            await db.query('INSERT INTO question_papers (user_id, qp_s3_url, created_at, subjectName) VALUES (?,?,?,?)', [id, objectURL, dateTime, subjectName]);
+            await db.query('INSERT INTO question_papers (user_id, qp_s3_url, created_at, subjectName, template_id) VALUES (?,?,?,?,?)', [id, objectURL, dateTime, subjectName, templateId]);
 
-            return res.status(200).json({ message: 'Data in MySql DB Succesfully stored' });
+            return res.status(200).json({ message: 'Data successfully stored'});
         } catch (error) {
             console.error('Cannot insert', error);
             return res.status(500).json({ message: 'Databse Error' });

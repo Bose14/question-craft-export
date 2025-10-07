@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Link as ScrollLink } from "react-scroll";
 import { HelpCircle, Wallet } from "lucide-react";
 import axios from "axios";
+import { allTemplates } from "../Templatedata/QuestionPaperTemplates/TemplatesPreview";
 
 const Index = () => {
   const [user, setUser] = useState(null);
@@ -58,7 +59,6 @@ const Index = () => {
           setUserCredits(data.credits); // ✅ Set real credits
         } catch (error) {
           console.error("Error fetching credits:", error);
-          setUserCredits(0); // fallback
         }
       } else {
         setUser(null);
@@ -80,7 +80,7 @@ const Index = () => {
     navigate("/");
   };
 
-  const handleGeneratorClick = (path) => {
+  const handleGeneratorClick = (path: string, templateId?: number) => {
     const authToken = localStorage.getItem("authToken");
     const userData = localStorage.getItem("user");
 
@@ -96,7 +96,13 @@ const Index = () => {
       return;
     }
 
-    navigate(path);
+    // ✅ Include templateId if provided
+    if (templateId) {
+      console.log("Selected Template:",templateId);
+      navigate(path, {state: {templateID: templateId || 0}});      
+    } else {
+      navigate(path);
+    }
   };
 
 
@@ -498,34 +504,36 @@ const Index = () => {
       {/* Popular Question Papers Section - Always shown */}
       <section className="py-20 bg-secondary/30">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Section Header */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Question Paper Templates</h2>
-            <p className="text-xl text-muted-foreground">Select a template to begin creating your question paper</p>
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Popular Question Paper Templates
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Select a template to begin creating your question paper
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-100 gap-y-6">
-            {[
-              { preview: "question-paper.jpg" },
-              { preview: "question-paper1.jpg" },
-              { preview: "question-paper.jpg" },
-              { preview: "question-paper1.jpg" },
-              { preview: "question-paper.jpg" },
-              { preview: "question-paper1.jpg" },
-            ].map((template, index) => (
-              <div key={index} className="flex flex-col items-center">
+          {/* Template Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-6">
+            {allTemplates.slice(0, 6).map((template) => ( // show only 6 popular
+              <div key={template.id} className="flex flex-col items-center">
                 <div className="w-full max-w-[300px] group transition-transform duration-300 hover:scale-105">
                   <div className="relative w-full h-[340px] rounded-xl overflow-hidden border border-border/100 transition-all duration-300 bg-white/10 dark:bg-slate-800/20 backdrop-blur-md">
                     <img
                       src={template.preview}
-                      alt="Template Preview"
+                      alt={template.title}
                       className="w-full h-full object-cover object-top rounded-xl"
                     />
                   </div>
                 </div>
+                <p className="mt-2 text-sm text-center font-medium text-foreground">
+                  {template.title}
+                </p>
                 <Button
                   size="sm"
-                  className="mt-4 px-6 py-2 bg-gradient-primary hover:opacity-90"
-                  onClick={() => handleGeneratorClick("/generator")}
+                  className="mt-3 px-6 py-2 bg-gradient-primary hover:opacity-90"
+                  onClick={() => handleGeneratorClick("/generator", template.id)}
                 >
                   Choose Template
                 </Button>
@@ -536,7 +544,11 @@ const Index = () => {
           {/* View All Templates Button */}
           <div className="text-center mt-12">
             <Link to="/templates">
-              <Button size="lg" variant="outline" className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground">
+              <Button
+                size="lg"
+                variant="outline"
+                className="px-8 py-3 border-primary text-primary hover:bg-gradient-primary hover:text-primary-foreground"
+              >
                 View All Templates
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>

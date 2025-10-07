@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,6 +58,8 @@ const Generator = () => {
   const navigate = useNavigate();
   const api_token = localStorage.getItem('apiToken');
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const location = useLocation();
+  const templateId = location.state?.templateID || 0;  
 
   // Check authentication on component mount
   useEffect(() => {
@@ -516,8 +518,7 @@ const Generator = () => {
         } catch (deductErr) {
           console.error("Error calling deduct API:", deductErr);
         }
-
-        navigate("/result");
+        navigate(`/result/${templateId}`, {state: {templateID: templateId}});
       } else {
         toast.error(result.message || "Failed to generate question paper.");
       }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Edit, Download, Upload, FileKey } from "lucide-react";
@@ -42,7 +42,8 @@ const Result = () => {
   const token = sessionStorage.getItem("token");
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
   const [protectedBlob, setProtectedBlob] = useState<Blob | null>(null);
-
+  const location = useLocation();
+  const templateId = location.state?.templateID || 0;
 
   useEffect(() => {
     const savedConfig = sessionStorage.getItem("questionPaperConfig");
@@ -87,7 +88,7 @@ const Result = () => {
             // 🔹 Step 2: Upload to S3 if required
             if (shouldUpload === "true") {
               setUploading(true);
-              S3Upload(savedConfig, token)
+              S3Upload(savedConfig, token, templateId)
                 .then(() => {
                   toast.success("Uploaded to S3 successfully");
                 })
@@ -333,6 +334,7 @@ const Result = () => {
         <Card className="bg-white shadow-lg">
           <CardContent ref={paperRef} className="p-4 sm:p-8">
             <EditableQuestionPaper
+              templateId={templateId}
               config={config}
               token={token}
               onSave={handleQuestionsSave}

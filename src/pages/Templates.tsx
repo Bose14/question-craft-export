@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, FileText } from "lucide-react";
 import Footer from "@/components/Footer";
+import { allTemplates } from "../Templatedata/QuestionPaperTemplates/TemplatesPreview";
 
 const Templates = () => {
   const [user, setUser] = useState<any>(null);
@@ -41,95 +42,44 @@ const Templates = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const handleGeneratorClick = (path: string) => {
+  // const handleGeneratorClick = (path: string) => {
+  //   const authToken = localStorage.getItem("authToken");
+  //   const userData = localStorage.getItem("user");
+
+  //   if (!user || !authToken || !userData) {
+  //     sessionStorage.setItem("redirectAfterLogin", path);
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   navigate(path);
+  // };
+  
+    const handleGeneratorClick = (path: string, templateId?: number) => {
     const authToken = localStorage.getItem("authToken");
     const userData = localStorage.getItem("user");
 
-    if (!user || !authToken || !userData) {
+    if (!user) {
       sessionStorage.setItem("redirectAfterLogin", path);
       navigate("/login");
       return;
     }
 
-    navigate(path);
+    if (!authToken || !userData) {
+      sessionStorage.setItem("redirectAfterLogin", path);
+      navigate("/login");
+      return;
+    }
+
+    // ✅ Include templateId if provided
+    if (templateId) {
+      console.log("Selected Template:",templateId);
+      navigate(path, {state: {templateID: templateId || 0}});      
+    } else {
+      navigate(path);
+    }
   };
 
-  const allTemplates = [
-    {
-      id: 1,
-      preview: "question-paper.jpg",
-      title: "Standard University Format",
-      description:
-        "Traditional format with multiple sections and varied question types",
-    },
-    {
-      id: 2,
-      preview: "question-paper1.jpg",
-      title: "Professional Academic Layout",
-      description:
-        "Clean, professional layout ideal for engineering and science subjects",
-    },
-    {
-      id: 3,
-      preview: "question-paper.jpg",
-      title: "Engineering Format",
-      description: "Structured format perfect for technical subjects and problem-solving",
-    },
-    {
-      id: 4,
-      preview: "question-paper1.jpg",
-      title: "Mathematics Template",
-      description: "Optimized for mathematical equations and numerical problems",
-    },
-    {
-      id: 5,
-      preview: "question-paper.jpg",
-      title: "Science Template",
-      description: "Designed for physics, chemistry, and biology examinations",
-    },
-    {
-      id: 6,
-      preview: "question-paper1.jpg",
-      title: "Liberal Arts Format",
-      description: "Ideal for humanities, literature, and social science subjects",
-    },
-    {
-      id: 7,
-      preview: "question-paper.jpg",
-      title: "Business Studies Template",
-      description: "Professional format for business and management courses",
-    },
-    {
-      id: 8,
-      preview: "question-paper1.jpg",
-      title: "Computer Science Format",
-      description: "Tailored for programming and technical computing subjects",
-    },
-    {
-      id: 9,
-      preview: "question-paper.jpg",
-      title: "Medical Template",
-      description: "Specialized format for medical and healthcare examinations",
-    },
-    {
-      id: 10,
-      preview: "question-paper1.jpg",
-      title: "Research Paper Format",
-      description: "Academic format for research-based questions and essays",
-    },
-    {
-      id: 11,
-      preview: "question-paper.jpg",
-      title: "Entrance Exam Template",
-      description: "Optimized for competitive and entrance examinations",
-    },
-    {
-      id: 12,
-      preview: "question-paper1.jpg",
-      title: "Assignment Format",
-      description: "Perfect for take-home assignments and project evaluations",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -193,7 +143,7 @@ const Templates = () => {
                   <Button
                     size="sm"
                     className="w-full bg-gradient-to-r from-primary to-accent text-white hover:opacity-90 transition-all"
-                    onClick={() => handleGeneratorClick("/generator")}
+                    onClick={() => handleGeneratorClick("/generator", template.id)}
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Choose Template
