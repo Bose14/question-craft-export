@@ -20,6 +20,9 @@ const slackAlertRoute = require('./routes/slack'); // Slack alert router factory
 const userRoutes = require('./routes/user'); // User management router factory
 const s3Upload = require('./routes/s3Upload');
 const createTokenAuthMiddleware = require('./utils/middleware'); 
+const EncryptPDF = require("./routes/EncryptPDF")
+const sendPDFEmail = require("./routes/sendPDFEmail")
+const creditsHandling = require("./routes/creditsHandling");
 
 /**
  * Main function to initialize services and start the Express server.
@@ -36,9 +39,6 @@ async function startServer() {
     const db = createDbPool(config);
     const transporter = createTransporter(config);
     const protect = createTokenAuthMiddleware(db);
-    // After config loaded successfully
-const perplexityService = createPerplexityService(config);
-
     // 3. CREATE EXPRESS APP
     const app = express();
 
@@ -61,7 +61,14 @@ app.use(cors({
       next();
     });
 
-    // CRITICAL: Ensure Health Check is defined before app.listen()
+    const perplexityService = createPerplexityService(config);
+
+    //api's which doesn't require authorization
+    app.use("/api", creditsHandling(db));
+    app.use("/api", sendPDFEmail(config));
+    app.use('/api/auth', authRoutes(db, transporter, config));
+    app.use("/api", EncryptPDF());
+    app.use('/api', statsRoutes(db, config));
     app.get('/health', (req, res) => {
       res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
     });

@@ -5,7 +5,7 @@ import { generatePDF } from "./pdfGenerator"
 
 
 // const [uploding, setUploading] = useState(false);
-export const S3Upload = async (config, token) => {
+export const S3Upload = async (config, token, templateId) => {
     const api_token = localStorage.getItem("apiToken");
     try {
 
@@ -73,27 +73,29 @@ export const S3Upload = async (config, token) => {
             uploadURL: uploadUrl,
             objectURL: ObjectUrl,
             subjectName: subjectName,
+            templateId: templateId,
             dateTime,
         });
-        
 
-        await axios.post("https://vinathaal-backend-905806810470.asia-south1.run.app/api/store-upload-metadata", {
-        email,
-        uploadURL: uploadUrl,
-        objectURL: ObjectUrl,
-        subjectName: subjectName,
-        dateTime,
-    }, {
-        headers: {
-            'Authorization': `Bearer ${api_token}`
-        }
-    })
-    .then(res => {
-        console.log(res.data.message);
-    })
-    .catch(err => {
-        console.error('❌ Error storing upload metadata:', err);
-    });
+
+        await axios.post("https://vinathaal.azhizen.com/api/store-upload-metadata", {
+            email,
+            uploadURL: uploadUrl,
+            objectURL: ObjectUrl,
+            subjectName: subjectName,
+            templateId: templateId,
+            dateTime,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${api_token}`
+            }
+        })
+            .then(res => {
+                console.log(res.data.message);
+            })
+            .catch(err => {
+                console.error('❌ Error storing upload metadata:', err);
+            });
 
     } catch (err) {
         console.error('❌ Upload failed:', err);
