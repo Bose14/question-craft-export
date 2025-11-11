@@ -82,16 +82,25 @@
 
 
 
+// import { useState } from "react";
+// import { Button } from "@/components/ui/button";
+// import { toast } from "sonner";
+// import { S3Upload } from "@/utils/S3Uploads";
+import { TemplateRegistry } from "../Templatedata/QuestionPaperTemplates/TemplateRegistry";
+// import { Edit, Plus, Save, Trash2, X } from "lucide-react";
+// import { Input } from "./ui/input";
+// import { Textarea } from "./ui/textarea";
+import { generatePDF } from "../utils/pdfGenerator";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Edit, Save, X, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { S3Upload } from "@/utils/S3Uploads";
-import { TemplateRegistry } from "../Templatedata/QuestionPaperTemplates/TemplateRegistry";
-import { Edit, Plus, Save, Trash2, X } from "lucide-react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { generatePDF } from "../utils/pdfGenerator";
+import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 
+// Interfaces (assuming they are defined as in your original code)
 interface SubQuestion {
   id: string;
   text: string;
@@ -319,7 +328,7 @@ const EditableQuestionPaper = ({ templateId, config, token, questions = [], onSa
       return "Invalid Date";
     }
   };
-
+  
   return (
     <div id="question-paper-content" className="relative p-4 md:p-8 bg-white shadow-lg rounded-md">
       {!isEditing ? (

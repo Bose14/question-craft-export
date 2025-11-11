@@ -39,8 +39,8 @@ export const S3Upload = async (config, token, templateId) => {
             filetype: file.type
         };
 
-        // const response = await axios.get(`https://vinathaal.azhizen.com/api/get-upload-url`, {
-        const response = await axios.get(`https://vinathaal.azhizen.com/api/get-upload-url`, {
+        // const response = await axios.get(`https://vinathaal-backend-905806810470.asia-south1.run.app/api/get-upload-url`, {
+        const response = await axios.get(`https://vinathaal-backend-905806810470.asia-south1.run.app/api/get-upload-url`, {
             params: payload,
             headers: {
                 'Authorization': `Bearer ${api_token}`

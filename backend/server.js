@@ -1,18 +1,20 @@
-// server.js
+// server.js - CORRECTED VERSION FOR CLOUD RUN DEPLOYMENT
 
 const express = require('express');
 const cors = require('cors');
 
 // --- Import Factory Functions & Routers ---
-const loadConfig = require('./utils/config'); // Your async config loader
-const createDbPool = require('./awsdb');      // Factory for the DB pool
-const createTransporter = require('./utils/mailer'); // Factory for the mail transporter
+const loadConfig = require('./utils/config'); 
+const createDbPool = require('./awsdb');      
+const createTransporter = require('./utils/mailer'); 
 const createPerplexityService = require('./services/generateWithPerplexity'); 
 const authRoutes = require('./routes/auth');       // Auth router factory
 const statsRoutes = require('./routes/stats');     // Stats router factory
 const extractRoute = require('./routes/extract');  // Extract router factory
-const generateRoute = require('./routes/generate'); // Generate router factory
+const generateRoute = require('./routes/generate'); // Generate router factory (descriptive)
+const mcqGenerateRoute = require('./routes/generate-mcq'); // New MCQ router factory
 const answerKeyRoute = require('./routes/generateAnswer'); // Answer Key router factory
+const mcqAnswerKeyRoute = require('./routes/generate-mcq-answer');
 const supportRoute = require('./routes/support'); // Support router factory 
 const slackAlertRoute = require('./routes/slack'); // Slack alert router factory
 const userRoutes = require('./routes/user'); // User management router factory
@@ -41,10 +43,15 @@ async function startServer() {
     const app = express();
 
     // 4. SET UP GLOBAL MIDDLEWARE
-    app.use(cors({
-      origin: ['http://localhost:8080', 'http://localhost:3000', config.FRONTEND_URL],
-      credentials: true
-    }));
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    config.FRONTEND_URL
+  ],
+  credentials: true
+}));
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
@@ -70,14 +77,14 @@ async function startServer() {
 
     app.use(protect);
     app.use('/api', extractRoute);
-    app.use('/api', generateRoute(perplexityService));
+    app.use('/api', generateRoute(perplexityService)); // Original descriptive route
+    app.use('/api', mcqGenerateRoute(perplexityService)); // New MCQ route
     app.use('/api', answerKeyRoute(perplexityService));
+    app.use('/api', mcqAnswerKeyRoute(perplexityService));
     app.use('/api', supportRoute(transporter, config));
     app.use('/api', slackAlertRoute(config));
     app.use('/api/user', userRoutes(db));
     app.use('/api', s3Upload(config, db));
-    
-    // --- System Routes ---
     
     // 6. SET UP FINAL ERROR HANDLING MIDDLEWARE
     // This should be the last middleware you use.
@@ -87,10 +94,12 @@ async function startServer() {
     });
 
     // 7. START THE SERVER
-    const PORT = config.PORT || 3001;
+    const PORT = process.env.PORT || 8080;
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`✅ Server is running on port ${PORT}`);
       console.log(`📍 Health check available at http://localhost:${PORT}/health`);
+      console.log(`📍 Descriptive questions: http://localhost:${PORT}/api/generate-questions`);
+      console.log(`📍 MCQ questions: http://localhost:${PORT}/api/generate-mcq-questions`);
     });
 
   } catch (error) {

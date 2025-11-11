@@ -249,107 +249,59 @@ import jsPDF from "jspdf";
 
 
 
-export const generateDocx  = (elementId: string, filename: string) => {
+
+
+// 
+
+
+
+export const generatePDF = async (
+  elementId: string,
+  filename: string
+): Promise<Blob | undefined> => {
   const element = document.getElementById(elementId);
   if (!element) {
     console.error(`Element with id "${elementId}" not found`);
     return;
   }
 
-  let htmlContent = element.innerHTML;
-
-  // Clean up the HTML for Word
-  htmlContent = htmlContent.replace(/class="[^"]*"/g, ''); // Remove CSS classes
-  htmlContent = htmlContent.replace(/<button[^>]*>.*?<\/button>/gs, ''); // Remove buttons
-  htmlContent = htmlContent.replace(/class="no-print"[^>]*>.*?<\/[^>]*>/gs, ''); // Remove no-print elements
-
-  const wordDocument = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-    <head>
-      <meta charset="utf-8">
-      <title>${filename}</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          margin: 40px;
-          line-height: 1.4;
-        }
-        .header {
-          text-align: center;
-          margin-bottom: 30px;
-        }
-        .question {
-          margin-bottom: 15px;
-        }
-        .section-title {
-          font-weight: bold;
-          text-decoration: underline;
-          margin: 20px 0 10px 0;
-        }
-        .sub-questions {
-          margin-left: 20px;
-        }
-      </style>
-    </head>
-    <body>
-      ${htmlContent}
-    </body>
-    </html>
-  `;
-
-  const blob = new Blob([wordDocument], { type: 'application/msword' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `${filename}.doc`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-};
-
-export const generatePDF = async (elementId: string, filename: string): Promise<Blob | undefined> => {
-  const element = document.getElementById(elementId);
-  if (!element) {
-    console.error(`Element with id "${elementId}" not found`);
-    return;
-  }
-
-  // Your custom styling equivalent to html2pdf config
+  // Define margins and PDF configuration
   const marginInInches = 0.5;
   const pdf = new jsPDF({
-    unit: 'in',
-    format: 'letter', // equivalent to A4 in US
-    orientation: 'portrait',
+    unit: "in",
+    format: "letter", // A4 alternative for US
+    orientation: "portrait",
   });
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
 
-  // Convert element to canvas with scale and CORS support
+  // Capture element as canvas with good quality
   const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
+    logging: false,
   });
 
-  const imgData = canvas.toDataURL('image/jpeg', 0.98);
-
+  const imgData = canvas.toDataURL("image/jpeg", 0.98);
   const imgWidth = pageWidth - 2 * marginInInches;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  let y = marginInInches;
+  let heightLeft = imgHeight;
+  let position = marginInInches;
 
-  pdf.addImage(imgData, 'JPEG', marginInInches, y, imgWidth, imgHeight);
+  // Add first image
+  pdf.addImage(imgData, "JPEG", marginInInches, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight - 2 * marginInInches;
 
-  // Add pages if image overflows
-  while (y + imgHeight > pageHeight) {
-    y -= pageHeight - 2 * marginInInches;
+  // Add extra pages if content overflows
+  while (heightLeft > 0) {
     pdf.addPage();
-    pdf.addImage(imgData, 'JPEG', marginInInches, y, imgWidth, imgHeight);
+    position = -(imgHeight - heightLeft) + marginInInches;
+    pdf.addImage(imgData, "JPEG", marginInInches, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight - 2 * marginInInches;
   }
 
-  // Save or return as Blob
-  return pdf.output('blob') as Blob;
+  // Return PDF as Blob
+  return pdf.output("blob") as Blob;
 };
-
-
